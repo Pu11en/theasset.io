@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Target, Zap, BarChart3, Lightbulb } from 'lucide-react';
 import Card from '@/components/ui/Card';

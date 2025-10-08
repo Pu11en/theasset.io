@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Star, TrendingUp, Users, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -104,7 +106,7 @@ const SocialProof: React.FC = () => {
               Trusted by Industry Leaders
             </h3>
             <p className="text-gray-600">
-              Join the hundreds of companies that trust ASSET Marketing Studio
+              Join the hundreds of companies that trust The Asset Studio
             </p>
           </div>
 

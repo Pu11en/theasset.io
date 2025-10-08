@@ -19,25 +19,6 @@ export interface AccordionItemProps {
   onClick?: () => void;
 }
 
-export interface ServiceProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
-
-export interface BenefitProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
-
-export interface ProcessStepProps {
-  number: number;
-  title: string;
-  description: string;
-  icon?: React.ReactNode;
-}
-
 export interface PricingPlan {
   name: string;
   price: string;

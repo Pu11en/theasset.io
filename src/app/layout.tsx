@@ -8,33 +8,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ASSET Marketing Studio | Double Your Sales in 90 Days or It's Free",
-  description: "ASSET Marketing Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do. Trusted by 500+ businesses.",
+  title: "The Asset Studio | Double Your Sales in 90 Days or It's Free",
+  description: "The Asset Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do. Trusted by 500+ businesses.",
   keywords: ["marketing agency", "performance marketing", "sales growth", "digital marketing", "ROI guarantee"],
-  authors: [{ name: "ASSET Marketing Studio" }],
-  creator: "ASSET Marketing Studio",
-  publisher: "ASSET Marketing Studio",
+  authors: [{ name: "The Asset Studio" }],
+  creator: "The Asset Studio",
+  publisher: "The Asset Studio",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://assetmarketing.com"),
+  metadataBase: new URL("https://theassetstudio.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://assetmarketing.com",
-    title: "ASSET Marketing Studio | Double Your Sales in 90 Days or It's Free",
-    description: "ASSET Marketing Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do.",
-    siteName: "ASSET Marketing Studio",
+    url: "https://theassetstudio.com",
+    title: "The Asset Studio | Double Your Sales in 90 Days or It's Free",
+    description: "The Asset Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do.",
+    siteName: "The Asset Studio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ASSET Marketing Studio | Double Your Sales in 90 Days or It's Free",
-    description: "ASSET Marketing Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do.",
+    title: "The Asset Studio | Double Your Sales in 90 Days or It's Free",
+    description: "The Asset Studio builds 90-day performance campaigns that deliver measurable results. Double your sales in 90 days or we work for free until you do.",
   },
   robots: {
     index: true,

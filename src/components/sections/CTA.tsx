@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ArrowRight, Calendar } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -18,7 +20,7 @@ const CTA: React.FC = () => {
           </h2>
           
           <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-            Join hundreds of businesses that have transformed their growth with ASSET Marketing Studio. 
+            Join hundreds of businesses that have transformed their growth with The Asset Studio.
             Book your free consultation today and start your journey to remarkable results.
           </p>
           
@@ -72,7 +74,7 @@ const CTA: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <p className="text-green-100 italic">
-            "ASSET Marketing Studio delivered results beyond our expectations. 
+            "The Asset Studio delivered results beyond our expectations.
             We saw a 180% increase in sales in just 75 days. The best marketing investment we've ever made!"
           </p>
           <p className="text-white font-semibold mt-4">

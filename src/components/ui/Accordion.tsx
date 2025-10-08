@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { AccordionItemProps } from '@/types';
 import { ChevronDown } from 'lucide-react';

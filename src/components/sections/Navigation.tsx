@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -24,42 +26,33 @@ const Navigation: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Solutions', href: '#solutions' },
-    { name: 'Pricing', href: '#pricing' },
-  ];
+  const navItems: Array<{ name: string; href: string }> = [];
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-md' : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <motion.div
-              className="text-2xl font-bold text-blue-600"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            >
-              ASSET
-            </motion.div>
+            <a href="#home" aria-label="Go to home" className="text-2xl font-bold transition-colors duration-300 font-serif tracking-wide text-white" style={{ color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+              The Asset Studio
+            </a>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map((item) => (
+              {navItems.length > 0 && navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  className="px-3 py-2 text-sm font-medium text-white transition-colors duration-200 hover:text-yellow-400"
                 >
                   {item.name}
                 </a>
@@ -69,7 +62,12 @@ const Navigation: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <Button href="#contact" size="sm">
+            <Button
+              href="#contact"
+              size="sm"
+              variant="secondary"
+              className={scrolled ? "text-black" : "text-white"}
+            >
               Book Call
             </Button>
           </div>
@@ -78,7 +76,7 @@ const Navigation: React.FC = () => {
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-inset text-white hover:text-yellow-400 focus:ring-yellow-400"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -98,7 +96,7 @@ const Navigation: React.FC = () => {
             transition={{ duration: 0.3 }}
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navItems.map((item) => (
+              {navItems.length > 0 && navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
@@ -109,7 +107,7 @@ const Navigation: React.FC = () => {
                 </a>
               ))}
               <div className="pt-4 pb-2">
-                <Button href="#contact" size="sm" className="w-full">
+                <Button href="#contact" size="sm" variant="secondary" className="w-full">
                   Book Call
                 </Button>
               </div>

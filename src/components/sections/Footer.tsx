@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -66,8 +68,8 @@ const Footer: React.FC = () => {
                 transition={{ duration: 0.5 }}
               >
                 <div className="flex items-center mb-4">
-                  <div className="text-2xl font-bold text-blue-400">
-                    ASSET
+                  <div className="text-2xl font-bold text-white font-serif tracking-wide">
+                    The Asset Studio
                   </div>
                 </div>
                 <p className="text-gray-300 mb-6 max-w-md">
@@ -131,7 +133,7 @@ const Footer: React.FC = () => {
               className="mb-4 md:mb-0"
             >
               <p className="text-gray-400 text-sm">
-                © {currentYear} ASSET Marketing Studio. All rights reserved.
+                © {currentYear} The Asset Studio. All rights reserved.
               </p>
               <p className="text-gray-400 text-sm">
                 Website: <a href="https://wecreatebrand.com" className="text-blue-400 hover:text-blue-300 transition-colors duration-200">wecreatebrand.com</a>

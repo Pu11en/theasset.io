@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { CheckCircle, TrendingUp, Clock, Shield, Users, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -62,7 +64,7 @@ const Benefits: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Why Choose ASSET Marketing Studio?
+            Why Choose The Asset Studio?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We deliver measurable results that transform your business growth trajectory
@@ -110,7 +112,7 @@ const Benefits: React.FC = () => {
             Ready to Double Your Sales?
           </h3>
           <p className="text-xl mb-6 opacity-90">
-            Join 500+ businesses that have transformed their growth with ASSET
+            Join 500+ businesses that have transformed their growth with The Asset Studio
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <div className="bg-white text-blue-600 font-bold py-3 px-6 rounded-lg">

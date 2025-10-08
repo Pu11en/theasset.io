@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Star, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -8,7 +10,7 @@ const Testimonials: React.FC = () => {
       name: "Sarah Johnson",
       title: "CEO",
       company: "TechStart Inc.",
-      content: "ASSET Marketing Studio transformed our business. We doubled our sales in just 75 days, and the ROI has been incredible. Their team is professional, responsive, and delivers real results.",
+      content: "The Asset Studio transformed our business. We doubled our sales in just 75 days, and the ROI has been incredible. Their team is professional, responsive, and delivers real results.",
       rating: 5,
       image: null
     },
@@ -16,7 +18,7 @@ const Testimonials: React.FC = () => {
       name: "Michael Chen",
       title: "Marketing Director",
       company: "Growth Labs",
-      content: "I've worked with many marketing agencies, but ASSET is by far the best. Their 90-day performance guarantee is real - they delivered results faster than promised and continue to optimize our campaigns.",
+      content: "I've worked with many marketing agencies, but The Asset Studio is by far the best. Their 90-day performance guarantee is real - they delivered results faster than promised and continue to optimize our campaigns.",
       rating: 5,
       image: null
     },
@@ -24,7 +26,7 @@ const Testimonials: React.FC = () => {
       name: "Emily Rodriguez",
       title: "Founder",
       company: "EcoBeauty Co.",
-      content: "The team at ASSET understood our brand perfectly and created campaigns that resonated with our target audience. Our sales increased by 180% in the first 90 days. Highly recommend!",
+      content: "The team at The Asset Studio understood our brand perfectly and created campaigns that resonated with our target audience. Our sales increased by 180% in the first 90 days. Highly recommend!",
       rating: 5,
       image: null
     }
@@ -131,7 +133,7 @@ const Testimonials: React.FC = () => {
                 Join 500+ Happy Clients
               </h3>
               <p className="text-gray-700 max-w-md">
-                See why businesses trust ASSET Marketing Studio to deliver consistent, measurable growth.
+                See why businesses trust The Asset Studio to deliver consistent, measurable growth.
               </p>
             </div>
           </div>

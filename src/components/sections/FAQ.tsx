@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Accordion from '@/components/ui/Accordion';
 import { motion } from 'framer-motion';
@@ -5,7 +7,7 @@ import { motion } from 'framer-motion';
 const FAQ: React.FC = () => {
   const faqItems = [
     {
-      title: "What makes ASSET Marketing Studio different from other agencies?",
+      title: "What makes The Asset Studio different from other agencies?",
       content: "We offer a unique 90-day performance guarantee - if you don't see results, we work for free until you do. Our data-driven approach focuses on measurable outcomes rather than vanity metrics, and we specialize in doubling sales within 90 days for our clients."
     },
     {
