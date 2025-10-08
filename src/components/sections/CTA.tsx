@@ -74,8 +74,8 @@ const CTA: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <p className="text-green-100 italic">
-            "The Asset Studio delivered results beyond our expectations.
-            We saw a 180% increase in sales in just 75 days. The best marketing investment we've ever made!"
+            &quot;The Asset Studio delivered results beyond our expectations.
+            We saw a 180% increase in sales in just 75 days. The best marketing investment we&apos;ve ever made!&quot;
           </p>
           <p className="text-white font-semibold mt-4">
             — Sarah Johnson, CEO of TechStart Inc.

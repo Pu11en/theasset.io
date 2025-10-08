@@ -68,7 +68,7 @@ const SocialProof: React.FC = () => {
               Proven Results That Speak for Themselves
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We've helped hundreds of businesses transform their marketing and achieve remarkable growth
+              We&apos;ve helped hundreds of businesses transform their marketing and achieve remarkable growth
             </p>
           </div>
 

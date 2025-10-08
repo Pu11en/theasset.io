@@ -106,7 +106,7 @@ const Solutions: React.FC = () => {
                 90-Day Performance Guarantee
               </h4>
               <p className="text-gray-700">
-                If you don't see results in 90 days, we work for free until you do.
+                If you don&apos;t see results in 90 days, we work for free until you do.
               </p>
             </div>
           </div>

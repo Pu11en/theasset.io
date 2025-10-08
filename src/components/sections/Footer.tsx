@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
                   </div>
                 </div>
                 <p className="text-gray-300 mb-6 max-w-md">
-                  Double your sales in 90 days or it's free. We build performance campaigns that deliver measurable results.
+                  Double your sales in 90 days or it&apos;s free. We build performance campaigns that deliver measurable results.
                 </p>
                 
                 <div className="space-y-3">

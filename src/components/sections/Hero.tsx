@@ -4,7 +4,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+
 
 const Hero: React.FC = () => {
   return (
@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Double your sells in <span className="text-yellow-400">90 days</span> or it's free
+            Double your sells in <span className="text-yellow-400">90 days</span> or it&apos;s free
           </motion.h1>
 
           <motion.p
