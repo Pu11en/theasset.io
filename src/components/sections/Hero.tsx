@@ -1,12 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 
 
 const Hero: React.FC = () => {
+  const [iframeSrc, setIframeSrc] = useState('');
+
+  useEffect(() => {
+    // Set the iframe src with a timestamp only on the client side
+    setIframeSrc(`https://www.youtube.com/embed/4K4xOtBcuTo?cb=${Date.now()}`);
+  }, []);
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -50,14 +56,16 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <div className="relative w-full h-0 pb-[56.25%] rounded-lg overflow-hidden shadow-xl">
-              <iframe
-                className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/XeIx4S6YvGo"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              {iframeSrc && (
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={iframeSrc}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              )}
             </div>
           </motion.div>
 
@@ -67,11 +75,11 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Button href="#contact" size="lg" variant="secondary" className="group">
+            <Button href="#contact" size="lg" variant="secondary" className="group text-white">
               Book Call
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="ml-2 h-5 w-5 text-white group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
-            <Button variant="outline" size="lg" href="#solutions" className="border-white text-white hover:bg-white hover:text-gray-900">
+            <Button variant="outline" size="lg" href="#solutions" className="border-white text-white hover:bg-black hover:text-white">
               Learn More
             </Button>
           </motion.div>

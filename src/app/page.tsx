@@ -1,6 +1,5 @@
 import Navigation from '@/components/sections/Navigation';
 import Hero from '@/components/sections/Hero';
-import SocialProof from '@/components/sections/SocialProof';
 import Solutions from '@/components/sections/Solutions';
 import Benefits from '@/components/sections/Benefits';
 import Process from '@/components/sections/Process';
@@ -15,7 +14,6 @@ export default function Home() {
     <div className="min-h-screen">
       <Navigation />
       <Hero />
-      <SocialProof />
       <Solutions />
       <Benefits />
       <Process />

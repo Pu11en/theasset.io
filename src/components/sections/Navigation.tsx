@@ -64,7 +64,7 @@ const Navigation: React.FC = () => {
           <div className="hidden md:block">
             <Button
               href="#contact"
-              size="sm"
+              size="lg"
               variant="secondary"
               className={scrolled ? "text-black" : "text-white"}
             >
@@ -107,7 +107,7 @@ const Navigation: React.FC = () => {
                 </a>
               ))}
               <div className="pt-4 pb-2">
-                <Button href="#contact" size="sm" variant="secondary" className="w-full">
+                <Button href="#contact" size="lg" variant="secondary" className="w-full text-gray-900">
                   Book Call
                 </Button>
               </div>

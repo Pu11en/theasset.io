@@ -1,14 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary Colors */
+  --deep-blue: #0F172A;
+  --electric-blue: #3B82F6;
+  --accent-yellow: #FCD34D;
+  --success-green: #10B981;
+  
+  /* Extended Palette */
+  --dark-gray: #1F2937;
+  --light-gray: #F9FAFB;
+  --vibrant-purple: #8B5CF6;
+  --warm-orange: #F97316;
+  
+  /* Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, var(--electric-blue) 0%, var(--vibrant-purple) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-yellow) 0%, var(--warm-orange) 100%);
+  --gradient-text: linear-gradient(135deg, var(--electric-blue) 0%, var(--vibrant-purple) 100%);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --glass-shadow-hover: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+  
+  /* Shadows */
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Animation Timing */
+  --animation-fast: 0.2s;
+  --animation-normal: 0.3s;
+  --animation-slow: 0.5s;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
+}
+
+/* Typography Scale */
+.text-hero {
+  font-family: var(--font-inter-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.text-section {
+  font-family: var(--font-inter-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.text-card-title {
+  font-family: var(--font-inter);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.text-body {
+  font-family: var(--font-inter);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-fine {
+  font-family: var(--font-inter);
+  font-size: clamp(0.75rem, 1.25vw, 0.875rem);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-mono {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Typography Animations */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: 3px solid var(--electric-blue);
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
 }
 
 /* Smooth scrolling */
@@ -86,4 +186,25 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Glassmorphism utility classes */
+.bg-glass-bg {
+  background-color: var(--glass-bg);
+}
+
+.border-glass-border {
+  border-color: var(--glass-border);
+}
+
+.shadow-glass {
+  box-shadow: var(--glass-shadow);
+}
+
+.shadow-glass-hover {
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
 }

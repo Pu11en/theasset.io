@@ -1,15 +1,19 @@
 export interface ButtonProps {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'outline' | 'glass' | 'gradient';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   href?: string;
   onClick?: () => void;
   className?: string;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface CardProps {
   children: React.ReactNode;
   className?: string;
+  hover?: boolean;
+  glass?: boolean;
 }
 
 export interface AccordionItemProps {
