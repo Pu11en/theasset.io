@@ -75,10 +75,17 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Button href="#contact" size="lg" variant="secondary" className="group text-white">
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 hover:opacity-90"
+              style={{
+                color: 'black',
+                backgroundColor: '#FFD700'
+              }}
+            >
               Book Call
-              <ArrowRight className="ml-2 h-5 w-5 text-white group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
+              <ArrowRight className="ml-2 h-5 w-5" style={{ color: 'black' }} />
+            </a>
             <Button variant="outline" size="lg" href="#solutions" className="border-white text-white hover:bg-black hover:text-white">
               Learn More
             </Button>

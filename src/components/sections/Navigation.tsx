@@ -62,14 +62,16 @@ const Navigation: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <Button
+            <a
               href="#contact"
-              size="lg"
-              variant="secondary"
-              className={scrolled ? "text-black" : "text-white"}
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 hover:opacity-90"
+              style={{
+                color: 'black',
+                backgroundColor: '#FFD700'
+              }}
             >
               Book Call
-            </Button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -107,9 +109,16 @@ const Navigation: React.FC = () => {
                 </a>
               ))}
               <div className="pt-4 pb-2">
-                <Button href="#contact" size="lg" variant="secondary" className="w-full text-gray-900">
+                <a
+                  href="#contact"
+                  className="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 hover:opacity-90"
+                  style={{
+                    color: 'black',
+                    backgroundColor: '#FFD700'
+                  }}
+                >
                   Book Call
-                </Button>
+                </a>
               </div>
             </div>
           </motion.div>
