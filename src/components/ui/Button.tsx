@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   disabled = false,
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
     primary: 'bg-electric-blue text-white hover:bg-blue-700 focus:ring-electric-blue shadow-medium hover:shadow-large',
@@ -23,13 +23,14 @@ const Button: React.FC<ButtonProps> = ({
     outline: 'border-2 border-electric-blue text-electric-blue hover:bg-electric-blue hover:text-white focus:ring-electric-blue',
     glass: 'bg-glass-bg border border-glass-border text-white hover:bg-white/20 focus:ring-white backdrop-blur-md',
     gradient: 'bg-gradient-primary text-white hover:opacity-90 focus:ring-electric-blue shadow-medium hover:shadow-large',
+    cta: 'bg-warm-orange text-black hover:bg-orange-600 focus:ring-warm-orange shadow-medium hover:shadow-lg [&>*]:text-black',
   };
   
   const sizeClasses = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
-    xl: 'px-10 py-5 text-xl',
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+    xl: 'px-8 py-4 text-xl',
   };
   
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
@@ -47,9 +48,9 @@ const Button: React.FC<ButtonProps> = ({
   );
   
   const animationProps = {
-    whileHover: disabled ? {} : { scale: 1.05, y: -2 },
-    whileTap: disabled ? {} : { scale: 0.98 },
-    transition: { duration: 0.2 },
+    whileHover: disabled ? {} : {},
+    whileTap: disabled ? {} : {},
+    transition: { duration: 0 },
   };
   
   if (href) {

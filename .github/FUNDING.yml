@@ -1,0 +1,25 @@
+# These are the funding platforms for the Asset Marketing Studio project
+
+# GitHub Sponsors
+github: [asset-io]
+
+# Open Collective
+open_collective: asset-io
+
+# Tidelift
+tidelift: npm/asset-marketing-studio
+
+# Community Bridge
+community_bridge: asset-marketing-studio
+
+# Liberapay
+liberapay: asset-io
+
+# Issuehunt
+issuehunt: asset-io
+
+# Otechie
+otechie: asset-io
+
+# Custom funding URLs
+custom: ["https://asset.io/sponsor", "https://patreon.com/asset-io"]

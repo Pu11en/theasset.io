@@ -1,0 +1,33 @@
+# Code Owners file for Asset Marketing Studio
+
+# Default owners for the entire repository
+* @asset-io/core-team
+
+# Specific owners for different sections
+
+# Frontend code
+/src/ @asset-io/frontend-team
+
+# Configuration files
+*.json @asset-io/devops-team
+*.config.* @asset-io/devops-team
+*.yml @asset-io/devops-team
+*.yaml @asset-io/devops-team
+
+# Documentation
+/docs/ @asset-io/docs-team
+*.md @asset-io/docs-team
+
+# Design assets
+/public/ @asset-io/design-team
+
+# GitHub Actions and workflows
+.github/workflows/ @asset-io/devops-team
+
+# Security related files
+SECURITY.md @asset-io/security-team
+
+# Project management
+PROJECT_STRUCTURE.md @asset-io/project-managers
+EXECUTION_PLAN.md @asset-io/project-managers
+CLEANUP_PLAN.md @asset-io/project-managers

@@ -1,12 +1,17 @@
 {
   "name": "asset-marketing-studio",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "A modern marketing website for Asset.io, showcasing digital asset management solutions with a sleek, professional design.",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit",
+    "export": "next build && next export",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "framer-motion": "^12.23.22",
@@ -25,5 +30,38 @@
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "keywords": [
+    "asset-management",
+    "digital-assets",
+    "marketing",
+    "next.js",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "framer-motion",
+    "responsive-design",
+    "modern-ui",
+    "business-solutions",
+    "asset.io",
+    "marketing-website"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/asset-marketing-studio.git"
+  },
+  "homepage": "https://your-domain.com",
+  "bugs": {
+    "url": "https://github.com/your-username/asset-marketing-studio/issues"
+  },
+  "author": {
+    "name": "Asset.io Team",
+    "email": "team@asset.io",
+    "url": "https://asset.io"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.20.0",
+    "npm": ">=9.0.0"
   }
 }

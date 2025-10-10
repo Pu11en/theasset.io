@@ -1,6 +1,6 @@
 export interface ButtonProps {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline' | 'glass' | 'gradient';
+  variant?: 'primary' | 'secondary' | 'outline' | 'glass' | 'gradient' | 'cta';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   href?: string;
   onClick?: () => void;
@@ -14,6 +14,17 @@ export interface CardProps {
   className?: string;
   hover?: boolean;
   glass?: boolean;
+}
+
+export interface SpotlightCardProps {
+  children: React.ReactNode;
+  className?: string;
+  glowColor?: 'blue' | 'purple' | 'green' | 'red' | 'orange';
+  size?: 'sm' | 'md' | 'lg';
+  customSize?: {
+    width?: string;
+    height?: string;
+  };
 }
 
 export interface AccordionItemProps {
