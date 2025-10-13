@@ -1,34 +1,50 @@
 "use client";
 
-import { Carousel } from "@/components/ui/carousel";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
-
-export function CarouselDemo() {
-  const slideData = [
-    {
-      title: "Mystic Mountains",
-      button: "Explore Component",
-      src: "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Urban Dreams",
-      button: "Explore Component",
-      src: "https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Neon Nights",
-      button: "Explore Component",
-      src: "https://images.unsplash.com/photo-1590041794748-2d8eb73a571c?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Desert Whispers",
-      button: "Explore Component",
-      src: "https://images.unsplash.com/photo-1679420437432-80cfbf88986c?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+export function FlickeringGridDemo() {
   return (
-    <div className="relative overflow-hidden w-full h-full py-20">
-      <Carousel slides={slideData} />
+    <div className="relative w-full h-screen bg-gray-900 overflow-hidden">
+      <div className="absolute inset-0">
+        <FlickeringGrid
+          squareSize={4}
+          gridGap={6}
+          flickerChance={0.3}
+          color="rgb(59, 130, 246)"
+          maxOpacity={0.3}
+          className="w-full h-full"
+        />
+      </div>
+      
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
+        <h1 className="text-6xl font-bold mb-4">Flickering Grid Demo</h1>
+        <p className="text-xl max-w-2xl text-center mb-8">
+          A beautiful animated grid background with customizable squares that flicker at random intervals
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <h3 className="text-xl font-semibold mb-2">Customizable</h3>
+            <p className="text-sm opacity-80">
+              Adjust square size, grid gap, colors, and animation speed
+            </p>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <h3 className="text-xl font-semibold mb-2">Performance Optimized</h3>
+            <p className="text-sm opacity-80">
+              Uses Canvas API and intersection observer for smooth performance
+            </p>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <h3 className="text-xl font-semibold mb-2">Responsive</h3>
+            <p className="text-sm opacity-80">
+              Automatically adapts to container size and screen resolution
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
