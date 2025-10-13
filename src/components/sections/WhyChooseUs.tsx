@@ -40,7 +40,7 @@ const WhyChooseUs: React.FC = () => {
   ];
 
   return (
-    <section id="why-choose-us" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="why-choose-us" className="relative min-h-screen overflow-hidden">
       {/* Background Component */}
       <div className="absolute inset-0">
         <BackgroundPaths title="Why Choose the Asset Studio" />
@@ -49,15 +49,15 @@ const WhyChooseUs: React.FC = () => {
       <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
       
       {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 w-full">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-24"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
             Why Choose the Asset Studio?
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
@@ -66,7 +66,7 @@ const WhyChooseUs: React.FC = () => {
         </motion.div>
 
         <motion.div
-          className="flex justify-center items-center"
+          className="relative z-10 flex justify-center items-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
