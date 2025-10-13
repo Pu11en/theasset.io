@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Target, Zap, BarChart3, Users, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { Target, Zap, BarChart3, Users, TrendingUp, CheckCircle } from 'lucide-react';
 import SpotlightCard from '@/components/ui/spotlight-card';
 import { motion } from 'framer-motion';
 
