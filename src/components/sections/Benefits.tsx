@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle, TrendingUp, Clock, Shield, Users, Target } from 'lucide-react';
+import { CheckCircle, TrendingUp, Clock, Shield, Users, Target, Zap, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Benefits: React.FC = () => {
@@ -12,9 +12,19 @@ const Benefits: React.FC = () => {
       description: "Double your sales in 90 days or it's a refund."
     },
     {
-      icon: <TrendingUp className="h-8 w-8 text-white" />,
-      title: "237% Average ROI",
-      description: "Our clients consistently see triple-digit returns on their investment"
+      icon: <Target className="h-8 w-8 text-white" />,
+      title: "Targeted Campaigns",
+      description: "Reach your ideal customers with precision-targeted campaigns that drive engagement and conversions."
+    },
+    {
+      icon: <Zap className="h-8 w-8 text-white" />,
+      title: "Rapid Implementation",
+      description: "Custom Campaigns: Each campaign is fully customized to your brand. 90 Days of Content: A complete 90-day content plan with zero headaches — no extra work required. Plug-and-Play: We handle all creation and scheduling, so your social media is fully delegated. High Quality + High Performance: Content designed to be top quality and results-driven."
+    },
+    {
+      icon: <BarChart3 className="h-8 w-8 text-white" />,
+      title: "Performance Analysis",
+      description: "Clear Reporting: Straightforward, easy-to-understand performance reports. Proven Results: On average, clients see a 60% increase in clicks almost instantly."
     },
     {
       icon: <Shield className="h-8 w-8 text-white" />,
