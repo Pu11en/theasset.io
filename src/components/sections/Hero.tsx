@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
@@ -43,12 +43,12 @@ const Hero: React.FC = () => {
   const skipLinkRef = useRef<HTMLAnchorElement>(null);
 
   // Optimized Cloudinary URLs for different screen sizes
-  const videoUrls = {
+  const videoUrls = useMemo(() => ({
     mobile: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_640&h_360&c_fill",
     tablet: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_1024&h_576&c_fill",
     desktop: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_1920&h_1080&c_fill",
     ultrawide: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_2560&h_1080&c_fill"
-  };
+  }), []);
 
   // Static image fallback for mobile
   const staticImageFallback = "/hero-bg.png";
