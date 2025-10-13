@@ -272,11 +272,7 @@ const Hero: React.FC = () => {
         className="absolute inset-0 z-0 w-full h-full"
         style={{ backgroundColor: '#0a0a0a' }} // Dark fallback color
       >
-        {/* Semi-transparent overlay for text readability */}
-        <div
-          className="absolute inset-0 z-10 bg-black/40"
-          aria-hidden="true"
-        ></div>
+        {/* Removed semi-transparent overlay to maintain full video brightness */}
         {/* Static image fallback for mobile or when video fails */}
         {(isMobile || videoError) && (
           <div
@@ -361,24 +357,24 @@ const Hero: React.FC = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="text-center">
           <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 px-2"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-black mb-4 sm:mb-6 px-2"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Double your sells in <span className="text-yellow-400">90 days</span> or it&apos;s free
+            Double your sales in <span className="text-yellow-400">90 days</span> or it&apos;s free
           </motion.h1>
 
           <motion.p
-            className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-6 sm:mb-8 max-w-3xl mx-auto px-4"
+            className="text-lg sm:text-xl md:text-2xl text-black mb-6 sm:mb-8 max-w-3xl mx-auto px-4"
             style={{
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.5)',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(255, 255, 255, 0.5)',
             }}
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.2 }}
           >
-            High preforming marketing campaigns for brands
+            High-performing marketing campaigns for brands
           </motion.p>
 
           {/* Hide video on very small mobile screens to improve performance */}
@@ -427,7 +423,7 @@ const Hero: React.FC = () => {
               variant="outline"
               size="lg"
               href="#solutions"
-              className="border-white text-white hover:bg-black hover:text-white text-sm sm:text-base focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+              className="border-black bg-black text-white hover:bg-white hover:text-black text-sm sm:text-base focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white transition-all duration-200"
               aria-label="Learn more about our solutions"
             >
               Learn More
