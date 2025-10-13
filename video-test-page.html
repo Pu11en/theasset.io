@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Background Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .fallback-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+        .content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .status {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        .status-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: rgba(0, 128, 0, 0.3);
+            border: 1px solid #00ff00;
+        }
+        .error {
+            background-color: rgba(128, 0, 0, 0.3);
+            border: 1px solid #ff0000;
+        }
+        .warning {
+            background-color: rgba(128, 128, 0, 0.3);
+            border: 1px solid #ffff00;
+        }
+        .info {
+            background-color: rgba(0, 0, 128, 0.3);
+            border: 1px solid #0000ff;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .test-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <video
+                id="bg-video"
+                autoplay
+                loop
+                muted
+                playsInline
+                poster="/hero-background.gif"
+                preload="auto"
+            >
+                <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+            <div id="fallback-image" class="fallback-image" style="display: none; background-image: url(/hero-background.gif);"></div>
+        </div>
+        <div class="overlay"></div>
+        <div class="content">
+            <h1 class="test-text">Video Background Test</h1>
+            <div class="status">
+                <h2>Video Status</h2>
+                <div id="status-container"></div>
+            </div>
+            <div class="controls">
+                <button id="play-btn">Play Video</button>
+                <button id="pause-btn">Pause Video</button>
+                <button id="reload-btn">Reload Video</button>
+                <button id="toggle-fallback-btn">Toggle Fallback</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('bg-video');
+        const fallbackImage = document.getElementById('fallback-image');
+        const statusContainer = document.getElementById('status-container');
+        const playBtn = document.getElementById('play-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const reloadBtn = document.getElementById('reload-btn');
+        const toggleFallbackBtn = document.getElementById('toggle-fallback-btn');
+        
+        let fallbackVisible = false;
+        
+        function addStatus(message, type = 'info') {
+            const statusItem = document.createElement('div');
+            statusItem.className = `status-item ${type}`;
+            statusItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            statusContainer.appendChild(statusItem);
+            statusContainer.scrollTop = statusContainer.scrollHeight;
+        }
+        
+        // Initial status
+        addStatus('Initializing video test...', 'info');
+        
+        // Video event listeners
+        video.addEventListener('loadstart', () => {
+            addStatus('Video loading started', 'info');
+        });
+        
+        video.addEventListener('loadedmetadata', () => {
+            addStatus(`Video metadata loaded. Duration: ${video.duration}s, Dimensions: ${video.videoWidth}x${video.videoHeight}`, 'success');
+        });
+        
+        video.addEventListener('loadeddata', () => {
+            addStatus('Video data loaded, ready to play', 'success');
+        });
+        
+        video.addEventListener('canplay', () => {
+            addStatus('Video can start playing', 'success');
+        });
+        
+        video.addEventListener('canplaythrough', () => {
+            addStatus('Video can play through without stopping', 'success');
+        });
+        
+        video.addEventListener('play', () => {
+            addStatus('Video started playing', 'success');
+        });
+        
+        video.addEventListener('pause', () => {
+            addStatus('Video paused', 'warning');
+        });
+        
+        video.addEventListener('ended', () => {
+            addStatus('Video ended', 'warning');
+        });
+        
+        video.addEventListener('seeking', () => {
+            addStatus('Video seeking...', 'info');
+        });
+        
+        video.addEventListener('seeked', () => {
+            addStatus('Video seek completed', 'info');
+        });
+        
+        video.addEventListener('stalled', () => {
+            addStatus('Video loading stalled', 'warning');
+        });
+        
+        video.addEventListener('suspend', () => {
+            addStatus('Video loading suspended', 'warning');
+        });
+        
+        video.addEventListener('waiting', () => {
+            addStatus('Video waiting for data', 'warning');
+        });
+        
+        video.addEventListener('progress', () => {
+            if (video.buffered.length > 0) {
+                const bufferedPercent = (video.buffered.end(0) / video.duration) * 100;
+                if (bufferedPercent % 10 < 1) { // Log every ~10%
+                    addStatus(`Video buffered: ${bufferedPercent.toFixed(1)}%`, 'info');
+                }
+            }
+        });
+        
+        video.addEventListener('error', (e) => {
+            const errorCode = video.error ? video.error.code : 'unknown';
+            const errorMessage = video.error ? video.error.message : 'Unknown error';
+            addStatus(`Video error: Code ${errorCode}, Message: ${errorMessage}`, 'error');
+            showFallback();
+        });
+        
+        // Button event listeners
+        playBtn.addEventListener('click', () => {
+            video.play().then(() => {
+                addStatus('Play command successful', 'success');
+            }).catch(err => {
+                addStatus(`Play command failed: ${err.message}`, 'error');
+            });
+        });
+        
+        pauseBtn.addEventListener('click', () => {
+            video.pause();
+            addStatus('Pause command executed', 'info');
+        });
+        
+        reloadBtn.addEventListener('click', () => {
+            video.load();
+            addStatus('Video reload triggered', 'info');
+        });
+        
+        toggleFallbackBtn.addEventListener('click', () => {
+            fallbackVisible = !fallbackVisible;
+            if (fallbackVisible) {
+                showFallback();
+            } else {
+                hideFallback();
+            }
+            addStatus(`Fallback image ${fallbackVisible ? 'shown' : 'hidden'}`, 'info');
+        });
+        
+        function showFallback() {
+            video.style.display = 'none';
+            fallbackImage.style.display = 'block';
+            fallbackVisible = true;
+        }
+        
+        function hideFallback() {
+            video.style.display = 'block';
+            fallbackImage.style.display = 'none';
+            fallbackVisible = false;
+        }
+        
+        // Check video status after a delay
+        setTimeout(() => {
+            if (video.paused || video.ended) {
+                addStatus('Video is not playing after 5 seconds', 'error');
+                showFallback();
+            } else {
+                addStatus('Video is playing successfully after 5 seconds', 'success');
+            }
+        }, 5000);
+        
+        // Initial video load
+        addStatus('Attempting to load video...', 'info');
+        video.load();
+    </script>
+</body>
+</html>

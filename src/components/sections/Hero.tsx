@@ -8,25 +8,51 @@ import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
   const [iframeSrc, setIframeSrc] = useState('');
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     // Set the iframe src with a timestamp only on the client side
     setIframeSrc(`https://www.youtube.com/embed/4K4xOtBcuTo?cb=${Date.now()}`);
   }, []);
+
+  const handleVideoError = () => {
+    setVideoError(true);
+  };
+
+  const handleVideoLoadedData = () => {
+    setVideoLoaded(true);
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+      {/* Background Video with Fallbacks */}
       <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url('/hero-bg-new.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          height: '100%'
-        }}
+        className="absolute inset-0 z-0 w-full h-full"
+        style={{ backgroundColor: '#0a0a0a' }} // Dark fallback color
       >
+        {!videoError && (
+          <video
+            className="absolute inset-0 z-0 w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-label="Background video showing digital marketing animation"
+            onError={handleVideoError}
+            onLoadedData={handleVideoLoadedData}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: videoLoaded ? 1 : 0,
+              transition: 'opacity 0.5s ease-in-out'
+            }}
+          >
+            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">

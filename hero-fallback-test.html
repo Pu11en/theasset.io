@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Video Fallback Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .test-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .hero-fallback-test {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .hero-fallback-test .background-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+        }
+        .hero-fallback-test video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-fallback-test .fallback-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/hero-bg-new.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: none;
+        }
+        .hero-fallback-test .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .hero-fallback-test h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .hero-fallback-test p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .hero-fallback-test button {
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status.loading {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        .status.loaded {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .controls button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Hero Video Fallback Mechanism Test</h1>
+        
+        <div class="test-section">
+            <div class="test-title">Test 1: Normal Video Loading</div>
+            <div id="hero-normal" class="hero-fallback-test">
+                <div class="background-container"></div>
+                <video
+                    id="video-normal"
+                    poster="/hero-bg-new.png"
+                    autoplay
+                    loop
+                    muted
+                    playsInline
+                >
+                    <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="fallback-image"></div>
+                <div class="content">
+                    <h1>Double your sells in 90 days or it's free</h1>
+                    <p>High performing marketing campaigns for brands</p>
+                    <button>Book Call</button>
+                </div>
+            </div>
+            <div id="status-normal" class="status loading">Loading video...</div>
+            <div class="controls">
+                <button onclick="reloadVideo('video-normal', 'status-normal')">Reload Video</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Test 2: Invalid Video URL (Testing Error Fallback)</div>
+            <div id="hero-error" class="hero-fallback-test">
+                <div class="background-container"></div>
+                <video
+                    id="video-error"
+                    poster="/hero-bg-new.png"
+                    autoplay
+                    loop
+                    muted
+                    playsInline
+                >
+                    <source src="https://invalid-url-that-will-fail.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="fallback-image"></div>
+                <div class="content">
+                    <h1>Double your sells in 90 days or it's free</h1>
+                    <p>High performing marketing campaigns for brands</p>
+                    <button>Book Call</button>
+                </div>
+            </div>
+            <div id="status-error" class="status loading">Loading video...</div>
+            <div class="controls">
+                <button onclick="reloadVideo('video-error', 'status-error')">Reload Video</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Test 3: Slow Network Simulation</div>
+            <div id="hero-slow" class="hero-fallback-test">
+                <div class="background-container"></div>
+                <video
+                    id="video-slow"
+                    poster="/hero-bg-new.png"
+                    autoplay
+                    loop
+                    muted
+                    playsInline
+                >
+                    <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="fallback-image"></div>
+                <div class="content">
+                    <h1>Double your sells in 90 days or it's free</h1>
+                    <p>High performing marketing campaigns for brands</p>
+                    <button>Book Call</button>
+                </div>
+            </div>
+            <div id="status-slow" class="status loading">Loading video...</div>
+            <div class="controls">
+                <button onclick="simulateSlowNetwork('video-slow', 'status-slow')">Simulate Slow Network</button>
+                <button onclick="reloadVideo('video-slow', 'status-slow')">Reload Video</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Setup video event listeners
+        function setupVideo(videoId, statusId, heroId) {
+            const video = document.getElementById(videoId);
+            const status = document.getElementById(statusId);
+            const hero = document.getElementById(heroId);
+            const fallbackImage = hero.querySelector('.fallback-image');
+            
+            video.addEventListener('loadeddata', function() {
+                status.textContent = 'Video loaded successfully';
+                status.className = 'status loaded';
+                video.style.opacity = '1';
+            });
+            
+            video.addEventListener('error', function() {
+                status.textContent = 'Video failed to load, showing fallback image';
+                status.className = 'status error';
+                video.style.display = 'none';
+                fallbackImage.style.display = 'block';
+            });
+            
+            // Set initial opacity
+            video.style.opacity = '0';
+            video.style.transition = 'opacity 0.5s ease-in-out';
+        }
+        
+        // Initialize all videos
+        document.addEventListener('DOMContentLoaded', function() {
+            setupVideo('video-normal', 'status-normal', 'hero-normal');
+            setupVideo('video-error', 'status-error', 'hero-error');
+            setupVideo('video-slow', 'status-slow', 'hero-slow');
+        });
+        
+        // Reload video function
+        function reloadVideo(videoId, statusId) {
+            const video = document.getElementById(videoId);
+            const status = document.getElementById(statusId);
+            const hero = document.getElementById(videoId.replace('video-', 'hero-'));
+            const fallbackImage = hero.querySelector('.fallback-image');
+            
+            // Reset state
+            status.textContent = 'Loading video...';
+            status.className = 'status loading';
+            video.style.display = 'block';
+            video.style.opacity = '0';
+            fallbackImage.style.display = 'none';
+            
+            // Reload video
+            video.load();
+        }
+        
+        // Simulate slow network
+        function simulateSlowNetwork(videoId, statusId) {
+            const video = document.getElementById(videoId);
+            const status = document.getElementById(statusId);
+            
+            status.textContent = 'Simulating slow network...';
+            status.className = 'status loading';
+            
+            // Temporarily pause the video
+            video.pause();
+            
+            // After 3 seconds, resume
+            setTimeout(() => {
+                status.textContent = 'Resuming after simulated slow network...';
+                video.play().catch(e => {
+                    status.textContent = 'Error resuming video: ' + e.message;
+                    status.className = 'status error';
+                });
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
