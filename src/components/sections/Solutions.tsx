@@ -23,27 +23,27 @@ const Solutions: React.FC = () => {
     },
     {
       icon: <Zap className="h-14 w-14 text-purple-500" />,
-      title: "Rapid Implementation",
-      description: "Get your campaigns up and running in days, not weeks, with our streamlined process.",
+      title: "Customized Content Solution",
+      description: "Plug-and-play marketing with customized campaigns that run automatically.",
       features: [
-        "Custom Campaigns: Each campaign is fully customized to your brand.",
-        "90 Days of Content: A complete 90-day content plan with zero headaches — no extra work required.",
-        "Plug-and-Play: We handle all creation and scheduling, so your social media is fully delegated.",
-        "High Quality + High Performance: Content designed to be top quality and results-driven."
+        "Campaigns customized to each brand",
+        "90-day content plan that runs automatically",
+        "Plug-and-play with full delegation",
+        "High-quality, performance-driven content"
       ],
-      stats: "Launch in 48 Hours",
+      stats: "Zero Headaches Guaranteed",
       glowColor: 'purple' as const,
-      accentIcon: <Clock className="h-5 w-5 text-purple-500" />
+      accentIcon: <CheckCircle className="h-5 w-5 text-purple-500" />
     },
     {
       icon: <BarChart3 className="h-14 w-14 text-green-500" />,
-      title: "Performance Analytics",
-      description: "Real-time insights and data-driven optimizations to maximize your ROI.",
+      title: "Performance Analysis",
+      description: "Clear reporting and proven results that drive your business forward.",
       features: [
-        "Clear Reporting: Straightforward, easy-to-understand performance reports.",
-        "Proven Results: On average, clients see a 60% increase in clicks almost instantly."
+        "Clear Reporting: Simple, easy-to-understand performance reports",
+        "Proven Results: On average, clients see a 60% increase in clicks instantly"
       ],
-      stats: "40% Average ROI Increase",
+      stats: "60% Average Click Increase",
       glowColor: 'green' as const,
       accentIcon: <TrendingUp className="h-5 w-5 text-green-500" />
     }
@@ -111,11 +111,11 @@ const Solutions: React.FC = () => {
                 size="lg"
                 className="w-full max-w-sm h-full min-h-[420px] group"
               >
-                <div className="flex flex-col h-full text-center p-2">
+                <div className="flex flex-col h-full text-center p-4">
                   {/* Icon and Title Section */}
-                  <div className="flex flex-col items-center mb-6">
+                  <div className="flex flex-col items-center mb-4">
                     <motion.div
-                      className="flex justify-center mb-4 relative"
+                      className="flex justify-center mb-3 relative"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
@@ -124,7 +124,7 @@ const Solutions: React.FC = () => {
                       </div>
                       {solution.icon}
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {solution.title}
                     </h3>
                     <p className="text-gray-600 text-sm leading-relaxed px-2">
@@ -133,7 +133,7 @@ const Solutions: React.FC = () => {
                   </div>
 
                   {/* Features List */}
-                  <div className="flex-1 mb-6">
+                  <div className="flex-1 mb-4">
                     <ul className="space-y-2 text-left">
                       {solution.features.map((feature, featureIndex) => (
                         <motion.li
@@ -152,9 +152,9 @@ const Solutions: React.FC = () => {
                   </div>
 
                   {/* Stats and CTA */}
-                  <div className="border-t border-gray-200 pt-4">
+                  <div className="border-t border-gray-200 pt-3">
                     <motion.div
-                      className="flex items-center justify-center space-x-2 mb-3"
+                      className="flex items-center justify-center space-x-2"
                       whileHover={{ scale: 1.05 }}
                     >
                       {solution.accentIcon}
