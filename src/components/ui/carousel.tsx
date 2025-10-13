@@ -7,6 +7,7 @@ interface SlideData {
   title: string;
   button: string;
   src: string;
+  description?: string;
 }
 
 interface SlideProps {
@@ -63,7 +64,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     // Image opacity is handled by the Image component
   };
 
-  const { src, button, title } = slide;
+  const { src, button, title, description } = slide;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
@@ -116,6 +117,11 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold  relative">
             {title}
           </h2>
+          {description && (
+            <p className="mt-3 text-sm md:text-base text-white/90 max-w-xs mx-auto">
+              {description}
+            </p>
+          )}
           <div className="flex justify-center">
             <button className="mt-6  px-4 py-2 w-fit mx-auto sm:text-sm text-black bg-white h-12 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
               {button}
