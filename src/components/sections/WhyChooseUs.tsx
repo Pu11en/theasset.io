@@ -42,14 +42,14 @@ const WhyChooseUs: React.FC = () => {
           squareSize={4}
           gridGap={8}
           flickerChance={0.3}
-          color="#3b82f6"
-          maxOpacity={0.15}
+          color="#60a5fa"
+          maxOpacity={0.4}
           className="w-full h-full"
         />
       </div>
       
       {/* Semi-transparent overlay for better text readability */}
-      <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-10" />
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px] z-10" />
       
       {/* Content Container - positioned above everything */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
