@@ -1,15 +1,72 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-
 
 const Hero: React.FC = () => {
   const [iframeSrc, setIframeSrc] = useState('');
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [loadingState, setLoadingState] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Optimized Cloudinary URL with quality and format parameters
+  const optimizedVideoUrl = "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000";
+
+  // Check connection speed and data saver preference
+  const shouldLoadVideoBasedOnConnection = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      // Check for data saver preference
+      if ('connection' in navigator && (navigator as any).connection.saveData) {
+        return false;
+      }
+      
+      // Check for slow connection
+      if ('connection' in navigator) {
+        const connection = (navigator as any).connection;
+        const slowConnections = ['slow-2g', '2g', '3g'];
+        if (slowConnections.includes(connection.effectiveType)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }, []);
+
+  // Set up intersection observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && shouldLoadVideoBasedOnConnection()) {
+            setShouldLoadVideo(true);
+            setLoadingState('loading');
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '200px 0px', // Start loading 200px before the hero section is in view
+        threshold: 0.1
+      }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+      observerRef.current = observer;
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [shouldLoadVideoBasedOnConnection]);
 
   useEffect(() => {
     // Set the iframe src with a timestamp only on the client side
@@ -18,22 +75,43 @@ const Hero: React.FC = () => {
 
   const handleVideoError = () => {
     setVideoError(true);
+    setLoadingState('error');
   };
 
   const handleVideoLoadedData = () => {
     setVideoLoaded(true);
+    setLoadingState('loaded');
+  };
+
+  const handleVideoCanPlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.error('Video autoplay failed:', error);
+        setVideoError(true);
+        setLoadingState('error');
+      });
+    }
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={heroRef} id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Video with Fallbacks */}
       <div
         className="absolute inset-0 z-0 w-full h-full"
         style={{ backgroundColor: '#0a0a0a' }} // Dark fallback color
       >
-        {!videoError && (
+        {/* Loading indicator */}
+        {loadingState === 'loading' && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+        
+        {!videoError && shouldLoadVideo && (
           <video
+            ref={videoRef}
             className="absolute inset-0 z-0 w-full h-full object-cover"
+            preload="metadata"
             autoPlay
             loop
             muted
@@ -41,6 +119,7 @@ const Hero: React.FC = () => {
             aria-label="Background video showing digital marketing animation"
             onError={handleVideoError}
             onLoadedData={handleVideoLoadedData}
+            onCanPlay={handleVideoCanPlay}
             style={{
               width: '100%',
               height: '100%',
@@ -49,7 +128,7 @@ const Hero: React.FC = () => {
               transition: 'opacity 0.5s ease-in-out'
             }}
           >
-            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4" type="video/mp4" />
+            <source src={optimizedVideoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         )}
