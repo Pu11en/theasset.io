@@ -35,9 +35,9 @@ const WhyChooseUs: React.FC = () => {
   ];
 
   return (
-    <section id="why-choose-us" className="relative min-h-screen overflow-hidden">
-      {/* Flickering Grid Background */}
-      <div className="absolute inset-0 z-10">
+    <section id="why-choose-us" className="relative min-h-screen overflow-hidden bg-white">
+      {/* Flickering Grid Background - positioned at the back */}
+      <div className="absolute inset-0 z-0">
         <FlickeringGrid
           squareSize={4}
           gridGap={8}
@@ -48,32 +48,32 @@ const WhyChooseUs: React.FC = () => {
         />
       </div>
       
-      {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-10" />
+      {/* Semi-transparent overlay for better text readability */}
+      <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-10" />
       
-      {/* Content Container */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 w-full">
+      {/* Content Container - positioned above everything */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
         <motion.div
-          className="text-center mb-24 relative z-30"
+          className="text-center mb-24"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Why Choose the Asset Studio?
           </h2>
-          <p className="text-xl text-black max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
             Discover the key benefits that set us apart and make us the perfect partner for your business growth.
           </p>
         </motion.div>
 
         <motion.div
-          className="relative z-10 flex justify-center items-center mt-12"
+          className="flex justify-center items-center mt-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
           <div className="w-full max-w-5xl">
             <Carousel slides={slideData} />
