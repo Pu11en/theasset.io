@@ -9,7 +9,7 @@ const Benefits: React.FC = () => {
     {
       icon: <CheckCircle className="h-8 w-8 text-white" />,
       title: "Guaranteed Results",
-      description: "Double your sales in 90 days or we work for free until you do"
+      description: "Double your sales in 90 days or it's a refund."
     },
     {
       icon: <TrendingUp className="h-8 w-8 text-white" />,
@@ -17,19 +17,24 @@ const Benefits: React.FC = () => {
       description: "Our clients consistently see triple-digit returns on their investment"
     },
     {
-      icon: <Clock className="h-8 w-8 text-white" />,
-      title: "Quick Implementation",
-      description: "Get your campaigns up and running in days, not weeks"
-    },
-    {
       icon: <Shield className="h-8 w-8 text-white" />,
-      title: "Risk-Free Trial",
-      description: "Start with no commitment and see results before you pay"
+      title: "Zero Risk Guarantee",
+      description: "Hiring me comes with zero risk. If I don't make you money, you get a full refund. I only go after your customers' money, not yours."
     },
     {
-      icon: <Users className="h-8 w-8 text-white" />,
-      title: "Expert Team",
-      description: "Work with seasoned marketers who've driven 8-figure growth"
+      icon: <Clock className="h-8 w-8 text-white" />,
+      title: "Plug-and-Play Content Engine",
+      description: "After two weeks, you'll receive 90 days of high-quality content that posts automatically. No headaches, no wasted time managing content."
+    },
+    {
+      icon: <Target className="h-8 w-8 text-white" />,
+      title: "Performance-Based Expertise",
+      description: "Every business is different. I adapt campaigns to each brand using advanced AI tools—AI animation, AI research, and more."
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8 text-white" />,
+      title: "Proven ROI Potential",
+      description: "My campaigns are high-profile, high-value, and high-quality. I am confident the average ROI will be 200–300% within 90 days."
     },
     {
       icon: <Target className="h-8 w-8 text-white" />,

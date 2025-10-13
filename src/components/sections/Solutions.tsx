@@ -90,7 +90,7 @@ const Solutions: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Solutions That Drive Results
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white max-w-3xl mx-auto">
             Our comprehensive suite of marketing services designed to accelerate your business growth
           </p>
         </motion.div>
@@ -176,28 +176,6 @@ const Solutions: React.FC = () => {
               </SpotlightCard>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <p className="text-lg text-gray-600 mb-6">
-            Ready to transform your marketing strategy?
-          </p>
-          <div className="inline-flex items-center justify-center p-6 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg shadow-lg">
-            <div className="text-center">
-              <h4 className="text-2xl font-bold text-blue-600 mb-2">
-                90-Day Performance Guarantee
-              </h4>
-              <p className="text-gray-700">
-                If you don&apos;t see results in 90 days, we work for free until you do.
-              </p>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>
