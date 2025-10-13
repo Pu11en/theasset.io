@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Carousel } from '@/components/ui/carousel';
+import { BackgroundPaths } from '@/components/ui/background-paths';
 import { motion } from 'framer-motion';
 
 const WhyChooseUs: React.FC = () => {
@@ -40,13 +41,10 @@ const WhyChooseUs: React.FC = () => {
 
   return (
     <section id="why-choose-us" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/solutions-bg-new.png')"
-        }}
-      />
+      {/* Background Component */}
+      <div className="absolute inset-0">
+        <BackgroundPaths title="Why Choose the Asset Studio" />
+      </div>
       {/* Overlay for text readability */}
       <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
       
