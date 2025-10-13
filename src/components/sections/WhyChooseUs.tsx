@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Carousel } from '@/components/ui/carousel';
+import { FlickeringGrid } from '@/components/ui/flickering-grid';
 import { motion } from 'framer-motion';
 
 const WhyChooseUs: React.FC = () => {
@@ -35,8 +36,20 @@ const WhyChooseUs: React.FC = () => {
 
   return (
     <section id="why-choose-us" className="relative min-h-screen overflow-hidden">
+      {/* Flickering Grid Background */}
+      <div className="absolute inset-0 z-10">
+        <FlickeringGrid
+          squareSize={4}
+          gridGap={8}
+          flickerChance={0.3}
+          color="#3b82f6"
+          maxOpacity={0.15}
+          className="w-full h-full"
+        />
+      </div>
+      
       {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-10" />
       
       {/* Content Container */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 w-full">
