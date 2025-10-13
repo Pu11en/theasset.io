@@ -43,7 +43,7 @@ const WhyChooseUs: React.FC = () => {
     <section id="why-choose-us" className="relative min-h-screen overflow-hidden">
       {/* Background Component */}
       <div className="absolute inset-0">
-        <BackgroundPaths title="Why Choose the Asset Studio" />
+        <BackgroundPaths />
       </div>
       {/* Overlay for text readability */}
       <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
@@ -57,11 +57,11 @@ const WhyChooseUs: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 drop-shadow-lg">
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
             Why Choose the Asset Studio?
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto drop-shadow-md">
-            Discover the key benefits that set us apart and make us the perfect partner for your business growth
+          <p className="text-xl text-black max-w-3xl mx-auto">
+            Discover the key benefits that set us apart and make us the perfect partner for your business growth.
           </p>
         </motion.div>
 
