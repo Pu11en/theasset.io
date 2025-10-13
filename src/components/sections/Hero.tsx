@@ -5,6 +5,26 @@ import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 
+// Type definitions for browser APIs that don't have proper TypeScript definitions
+interface NetworkInformation {
+  saveData: boolean;
+  effectiveType: 'slow-2g' | '2g' | '3g' | '4g';
+}
+
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformation;
+  getBattery?: () => Promise<BatteryManager>;
+}
+
+interface BatteryManager {
+  level: number;
+  charging: boolean;
+  chargingTime: number;
+  dischargingTime: number;
+  addEventListener: (type: string, listener: EventListener) => void;
+  removeEventListener: (type: string, listener: EventListener) => void;
+}
+
 const Hero: React.FC = () => {
   const [iframeSrc, setIframeSrc] = useState('');
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -36,7 +56,7 @@ const Hero: React.FC = () => {
   // Get the appropriate video URL based on screen size
   const getVideoUrl = useCallback(() => {
     return videoUrls[screenSize];
-  }, [screenSize]);
+  }, [screenSize, videoUrls]);
 
   // Detect screen size and device type
   const detectScreenSize = useCallback(() => {
@@ -84,22 +104,22 @@ const Hero: React.FC = () => {
       }
       
       // Check for data saver preference
-      if ('connection' in navigator && (navigator as any).connection.saveData) {
+      if ('connection' in navigator && (navigator as NavigatorWithConnection).connection?.saveData) {
         return false;
       }
       
       // Check for slow connection
       if ('connection' in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as NavigatorWithConnection).connection;
         const slowConnections = ['slow-2g', '2g', '3g'];
-        if (slowConnections.includes(connection.effectiveType)) {
+        if (connection && slowConnections.includes(connection.effectiveType)) {
           return false;
         }
       }
       
       // Check battery level if available
       if ('getBattery' in navigator) {
-        (navigator as any).getBattery().then((battery: any) => {
+        (navigator as NavigatorWithConnection).getBattery?.().then((battery: BatteryManager) => {
           if (battery.level < 0.2) {
             return false;
           }
