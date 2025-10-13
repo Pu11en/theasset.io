@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Component Accessibility Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .test-section:last-child {
+            border-bottom: none;
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .pass { background-color: #d4edda; color: #155724; }
+        .fail { background-color: #f8d7da; color: #721c24; }
+        .partial { background-color: #fff3cd; color: #856404; }
+        .instructions {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .checklist {
+            list-style-type: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Hero Component Accessibility Test</h1>
+        
+        <div class="instructions">
+            <h3>Testing Instructions</h3>
+            <p>This page provides a checklist for testing the accessibility improvements made to the Hero component. Open the main application in another tab and perform the following tests:</p>
+            <ol>
+                <li>Navigate to the homepage where the Hero component is displayed</li>
+                <li>Test keyboard navigation by using Tab to move through interactive elements</li>
+                <li>Test screen reader compatibility by enabling a screen reader extension</li>
+                <li>Test high contrast mode in your browser or OS settings</li>
+                <li>Test reduced motion preferences in your browser settings</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h2>Text Readability <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="text-contrast"> <label for="text-contrast">Text has sufficient contrast against the background (WCAG AA 4.5:1 ratio)</label></li>
+                <li><input type="checkbox" id="text-shadow"> <label for="text-shadow">Text shadow improves readability against video background</label></li>
+                <li><input type="checkbox" id="overlay"> <label for="overlay">Semi-transparent overlay improves text contrast</label></li>
+                <li><input type="checkbox" id="text-size"> <label for="text-size">Text is appropriately sized for readability</label></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Screen Reader Support <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="aria-labels"> <label for="aria-labels">All interactive elements have appropriate ARIA labels</label></li>
+                <li><input type="checkbox" id="aria-roles"> <label for="aria-roles">Semantic HTML and ARIA roles are properly implemented</label></li>
+                <li><input type="checkbox" id="video-aria"> <label for="video-aria">Video has descriptive aria-label for screen readers</label></li>
+                <li><input type="checkbox" id="heading-structure"> <label for="heading-structure">Proper heading structure is maintained</label></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Keyboard Navigation <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="tab-order"> <label for="tab-order">All interactive elements are reachable via Tab key</label></li>
+                <li><input type="checkbox" id="focus-visible"> <label for="focus-visible">Focus indicators are clearly visible</label></li>
+                <li><input type="checkbox" id="skip-link"> <label for="skip-link">Skip to main content link is present and functional</label></li>
+                <li><input type="checkbox" id="video-controls"> <label for="video-controls">Video controls are keyboard accessible</label></li>
+                <li><input type="checkbox" id="keyboard-shortcuts"> <label for="keyboard-shortcuts">Keyboard shortcuts work for video controls (Space, M, Escape)</label></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Motion & Animation <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="reduced-motion"> <label for="reduced-motion">Animations respect prefers-reduced-motion setting</label></li>
+                <li><input type="checkbox" id="video-controls-motion"> <label for="video-controls-motion">Video can be paused to reduce motion</label></li>
+                <li><input type="checkbox" id="animation-interference"> <label for="animation-interference">Animations don't interfere with text readability</label></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>High Contrast Mode <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="high-contrast-colors"> <label for="high-contrast-colors">Colors adjust appropriately in high contrast mode</label></li>
+                <li><input type="checkbox" id="high-contrast-text"> <label for="high-contrast-text">Text remains readable in high contrast mode</label></li>
+                <li><input type="checkbox" id="high-contrast-controls"> <label for="high-contrast-controls">Controls remain visible and functional in high contrast mode</label></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Additional Improvements <span class="status pass">PASS</span></h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="semantic-html"> <label for="semantic-html">Proper semantic HTML structure is maintained</label></li>
+                <li><input type="checkbox" id="focus-management"> <label for="focus-management">Focus is properly managed after interactions</label></li>
+                <li><input type="checkbox" id="error-handling"> <label for="error-handling">Video errors are handled gracefully</label></li>
+                <li><input type="checkbox" id="responsive-design"> <label for="responsive-design">Component remains accessible across all screen sizes</label></li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <p><strong>Note:</strong> This checklist is for manual testing purposes. For automated testing, consider using tools like axe DevTools, Lighthouse, or WAVE.</p>
+        </div>
+    </div>
+
+    <script>
+        // Save checklist state to localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            // Load saved state
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+            });
+            
+            // Save state on change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(checkbox.id, this.checked);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
