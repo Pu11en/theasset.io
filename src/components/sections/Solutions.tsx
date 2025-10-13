@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Target, Zap, BarChart3, Users, TrendingUp, Clock, CheckCircle, ArrowRight } from 'lucide-react';
+import { Target, Zap, BarChart3, Users, TrendingUp, Clock, CheckCircle } from 'lucide-react';
 import SpotlightCard from '@/components/ui/spotlight-card';
 import { motion } from 'framer-motion';
 
@@ -26,10 +26,10 @@ const Solutions: React.FC = () => {
       title: "Rapid Implementation",
       description: "Get your campaigns up and running in days, not weeks, with our streamlined process.",
       features: [
-        "Quick-launch campaign templates",
-        "Automated workflow optimization",
-        "24-hour initial setup",
-        "Dedicated implementation team"
+        "Custom Campaigns: Each campaign is fully customized to your brand.",
+        "90 Days of Content: A complete 90-day content plan with zero headaches — no extra work required.",
+        "Plug-and-Play: We handle all creation and scheduling, so your social media is fully delegated.",
+        "High Quality + High Performance: Content designed to be top quality and results-driven."
       ],
       stats: "Launch in 48 Hours",
       glowColor: 'purple' as const,
@@ -40,10 +40,8 @@ const Solutions: React.FC = () => {
       title: "Performance Analytics",
       description: "Real-time insights and data-driven optimizations to maximize your ROI.",
       features: [
-        "Real-time performance dashboards",
-        "Predictive analytics engine",
-        "A/B testing automation",
-        "Custom reporting suite"
+        "Clear Reporting: Straightforward, easy-to-understand performance reports.",
+        "Proven Results: On average, clients see a 60% increase in clicks almost instantly."
       ],
       stats: "40% Average ROI Increase",
       glowColor: 'green' as const,
@@ -164,13 +162,6 @@ const Solutions: React.FC = () => {
                         {solution.stats}
                       </span>
                     </motion.div>
-                    <motion.button
-                      className="flex items-center justify-center space-x-2 text-sm text-gray-500 hover:text-gray-900 transition-colors duration-300 group"
-                      whileHover={{ x: 5 }}
-                    >
-                      <span>Learn more</span>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </motion.button>
                   </div>
                 </div>
               </SpotlightCard>
