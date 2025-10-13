@@ -51,22 +51,22 @@ const WhyChooseUs: React.FC = () => {
       {/* Content Container */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 w-full">
         <motion.div
-          className="text-center mb-24"
+          className="text-center mb-24 relative z-30"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 drop-shadow-lg">
             Why Choose the Asset Studio?
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
+          <p className="text-xl text-white max-w-3xl mx-auto drop-shadow-md">
             Discover the key benefits that set us apart and make us the perfect partner for your business growth
           </p>
         </motion.div>
 
         <motion.div
-          className="relative z-10 flex justify-center items-center"
+          className="relative z-10 flex justify-center items-center mt-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
