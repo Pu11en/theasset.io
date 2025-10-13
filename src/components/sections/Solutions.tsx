@@ -67,7 +67,17 @@ const Solutions: React.FC = () => {
   };
 
   return (
-    <section id="solutions" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white">
+    <section id="solutions" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/solutions-bg-new.png')"
+        }}
+      />
+      {/* Overlay for text readability - made more transparent to show background */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
+      
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
         <motion.div

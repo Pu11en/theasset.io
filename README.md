@@ -304,13 +304,36 @@ We welcome contributions! Please see our [Contributing Guidelines](.github/CONTR
 
 ## 📚 Documentation
 
+**🏠 [Central Documentation Hub](../../DOCUMENTATION_INDEX.md)**
+Main entry point for all project documentation, organized by category and purpose.
+
+### Getting Started
 - [Development Setup Guide](docs/DEVELOPMENT.md) - Local development environment setup
+- [Project Structure](docs/PROJECT_STRUCTURE.md) - Detailed project structure analysis
 - [Deployment Guide](docs/DEPLOYMENT.md) - Instructions for deploying the application
+
+### Technical Documentation
 - [API Documentation](docs/API.md) - Information about APIs and services used
 - [Design System](docs/DESIGN_SYSTEM.md) - Design tokens, patterns, and UI guidelines
+- [Component Library](docs/COMPONENT_LIBRARY.md) - Complete component guide with examples
+- [Testing Guide](docs/TESTING_GUIDE.md) - Comprehensive testing procedures
+
+### Design Documentation
+- [Design Strategy](../../design-strategy-document.md) - Comprehensive design strategy
+- [Design Implementation Plan](../../DESIGN_IMPLEMENTATION_PLAN.md) - Design execution plan
+- [Image Asset Requirements](../../IMAGE_ASSET_REQUIREMENTS.md) - Visual assets specifications
+
+### Project Management
+- [Technical Roadmap](../../TECHNICAL_ROADMAP.md) - Implementation roadmap with code examples
+- [Execution Plan](EXECUTION_PLAN.md) - Project execution plan with timelines
+- [Testing and Rollback Strategy](../../TESTING_ROLLBACK_STRATEGY.md) - Testing and rollback procedures
+- [Cleanup Plan](CLEANUP_PLAN.md) - Code cleanup and optimization plan
+
+### Additional Resources
 - [Contributing Guidelines](.github/CONTRIBUTING.md) - How to contribute to the project
 - [Security Policy](SECURITY.md) - Security guidelines and reporting
 - [Changelog](CHANGELOG.md) - Version history and changes
+- [Workflow](../../WORKFLOW.md) - Development workflow and collaboration guidelines
 
 ## 🔍 Keywords for Discoverability
 
