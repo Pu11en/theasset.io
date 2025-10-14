@@ -1,0 +1,182 @@
+{
+  "timestamp": "2025-10-14T21:35:47.160Z",
+  "title": "WhyChooseUs Carousel Comprehensive Device Testing Report",
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "passRate": "100.00"
+  },
+  "summaryByCategory": {
+    "responsiveBehaviorTests": {
+      "passed": 0,
+      "failed": 0
+    },
+    "videoFunctionalityTests": {
+      "passed": 2,
+      "failed": 0
+    },
+    "touchGestureTests": {
+      "passed": 1,
+      "failed": 0
+    },
+    "performanceTests": {
+      "passed": 0,
+      "failed": 0
+    },
+    "crossBrowserTests": {
+      "passed": 0,
+      "failed": 0
+    },
+    "accessibilityTests": {
+      "passed": 0,
+      "failed": 0
+    }
+  },
+  "results": [
+    {
+      "test": "tabletSmall - Videos have responsive sources",
+      "passed": true,
+      "timestamp": "2025-10-14T21:35:43.357Z",
+      "viewport": "768x1024",
+      "category": "videoFunctionality",
+      "responsiveSourceResults": [
+        {
+          "videoIndex": 0,
+          "sourceCount": 3,
+          "sources": [
+            {
+              "index": 0,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
+              "type": "video/mp4",
+              "media": ""
+            },
+            {
+              "index": 1,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/insta_post_2_1_xdaptq.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 640px)"
+            },
+            {
+              "index": 2,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760415676/insta_post_2_1_xdaptq.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 1024px)"
+            }
+          ],
+          "hasMobileSource": true,
+          "hasTabletSource": true,
+          "hasDesktopSource": true
+        },
+        {
+          "videoIndex": 1,
+          "sourceCount": 3,
+          "sources": [
+            {
+              "index": 0,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
+              "type": "video/mp4",
+              "media": ""
+            },
+            {
+              "index": 1,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760470477/carosal_6_yzdvbj.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 640px)"
+            },
+            {
+              "index": 2,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760470477/carosal_6_yzdvbj.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 1024px)"
+            }
+          ],
+          "hasMobileSource": true,
+          "hasTabletSource": true,
+          "hasDesktopSource": true
+        },
+        {
+          "videoIndex": 2,
+          "sourceCount": 3,
+          "sources": [
+            {
+              "index": 0,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
+              "type": "video/mp4",
+              "media": ""
+            },
+            {
+              "index": 1,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/proven_process_video.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 640px)"
+            },
+            {
+              "index": 2,
+              "src": "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760415676/proven_process_video.mp4",
+              "type": "video/mp4",
+              "media": "(max-width: 1024px)"
+            }
+          ],
+          "hasMobileSource": true,
+          "hasTabletSource": true,
+          "hasDesktopSource": true
+        }
+      ]
+    },
+    {
+      "test": "tabletSmall - Video error handling works",
+      "passed": true,
+      "timestamp": "2025-10-14T21:35:44.671Z",
+      "viewport": "768x1024",
+      "category": "videoFunctionality",
+      "errorHandlingResults": [
+        {
+          "videoIndex": 0,
+          "videoId": "zero-risk",
+          "hasErrorOverlay": true,
+          "hasLoadingOverlay": true,
+          "hasPoster": true,
+          "poster": "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
+        },
+        {
+          "videoIndex": 1,
+          "videoId": "expert-team",
+          "hasErrorOverlay": true,
+          "hasLoadingOverlay": true,
+          "hasPoster": true,
+          "poster": "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
+        },
+        {
+          "videoIndex": 2,
+          "videoId": "proven-process",
+          "hasErrorOverlay": true,
+          "hasLoadingOverlay": true,
+          "hasPoster": true,
+          "poster": "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg"
+        }
+      ]
+    },
+    {
+      "test": "tabletSmall - Swipe navigation works",
+      "passed": true,
+      "timestamp": "2025-10-14T21:35:45.861Z",
+      "viewport": "768x1024",
+      "category": "touchGestures",
+      "swipeResults": [
+        {
+          "hasTouchStart": true,
+          "hasTouchMove": true,
+          "hasTouchEnd": true
+        },
+        {
+          "hasTouchIndicator": true
+        },
+        {
+          "isTouchDevice": false,
+          "note": "Not a touch device, swipe simulation skipped"
+        }
+      ]
+    }
+  ]
+}
