@@ -39,7 +39,7 @@ const Navigation: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#home" aria-label="Go to home" className={`text-2xl font-bold transition-colors duration-300 font-serif tracking-wide ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            <a href="#home" aria-label="Go to home" className={`text-2xl font-normal transition-colors duration-300 tracking-wide ${scrolled ? 'text-black' : 'text-black'}`}>
               The Asset Studio
             </a>
           </div>
