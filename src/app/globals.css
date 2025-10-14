@@ -728,3 +728,267 @@ img {
 }
 
 
+
+/* Enhanced Carousel Accessibility Styles */
+
+/* High visibility focus indicators */
+.carousel:focus {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+.carousel__viewport:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: -2px;
+}
+
+.carousel__arrow:focus {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.carousel__pagination-bullet:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+  transform: scale(1.3);
+}
+
+/* Enhanced focus for active slide */
+.carousel__slide--active:focus {
+  outline: 3px solid #3B82F6;
+  outline-offset: -3px;
+  z-index: 1;
+  position: relative;
+}
+
+/* Larger touch targets for accessibility */
+.carousel__arrow {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.carousel__pagination-bullet {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.carousel__pagination-bullet::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  position: absolute;
+}
+
+/* Screen reader only autoplay control */
+.carousel__autoplay-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.carousel__autoplay-control:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Enhanced touch feedback */
+@media (hover: none) {
+  .carousel__arrow:active {
+    background-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-50%) scale(0.95);
+  }
+  
+  .carousel__pagination-bullet:active {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* High contrast mode enhancements */
+@media (prefers-contrast: high) {
+  .carousel__arrow {
+    background: white;
+    border: 3px solid black;
+    color: black;
+  }
+  
+  .carousel__arrow:focus {
+    outline: 3px solid black;
+    outline-offset: 2px;
+    background: yellow;
+  }
+  
+  .carousel__pagination-bullet {
+    background: white;
+    border: 2px solid black;
+  }
+  
+  .carousel__pagination-bullet:focus {
+    outline: 3px solid black;
+    outline-offset: 2px;
+    background: yellow;
+  }
+  
+  .carousel__autoplay-control {
+    background: black;
+    color: white;
+    border: 2px solid white;
+  }
+}
+
+/* Reduced motion with accessibility focus indicators */
+@media (prefers-reduced-motion: reduce) {
+  .carousel__arrow:focus,
+  .carousel__pagination-bullet:focus,
+  .carousel__slide--active:focus {
+    transition: none;
+  }
+}
+
+/* Skip link for keyboard users */
+.carousel-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.carousel-skip-link:focus {
+  top: 6px;
+}
+
+/* Enhanced keyboard navigation visual feedback */
+.carousel.keyboard-nav .carousel__slide {
+  transition: transform 0.2s ease;
+}
+
+.carousel.keyboard-nav .carousel__slide:hover {
+  transform: scale(1.02);
+}
+
+.carousel.keyboard-nav .carousel__slide:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+/* Touch gesture hints for accessibility */
+.carousel__touch-hint {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.carousel__touch-hint.show {
+  opacity: 1;
+}
+
+/* Focus trap indicator */
+.carousel:focus-within {
+  box-shadow: 0 0 0 2px #3B82F6;
+}
+
+/* Enhanced color contrast for controls */
+.carousel__arrow {
+  color: #1a202c;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.carousel__arrow:hover {
+  color: white;
+  background-color: #3B82F6;
+}
+
+.carousel__pagination-bullet {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.carousel__pagination-bullet:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.carousel__pagination-bullet--active {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode accessibility */
+.dark .carousel__arrow {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .carousel__arrow:hover {
+  background-color: #3B82F6;
+  border-color: #3B82F6;
+}
+
+.dark .carousel__pagination-bullet {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .carousel__pagination-bullet:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .carousel__pagination-bullet--active {
+  background-color: #3B82F6;
+  border-color: #3B82F6;
+}
+
+/* Animation for slide change announcements */
+@keyframes slide-announcement {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.carousel__slide-announcement {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 20;
+  animation: slide-announcement 3s ease-in-out;
+  pointer-events: none;
+}

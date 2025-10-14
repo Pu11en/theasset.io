@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback, Children, cloneElement, ReactNode, MouseEvent, TouchEvent } from 'react';
+import React, { useState, useEffect, useRef, useCallback, ReactNode, TouchEvent, KeyboardEvent } from 'react';
+import Image from 'next/image';
 
 // TypeScript interfaces
 interface SlideData {
@@ -98,6 +99,11 @@ interface A11yOptions {
   lastSlideMessage?: string;
   paginationBulletMessage?: string;
   notificationClass?: string;
+  slideLabel?: string;
+  containerLabel?: string;
+  playLabel?: string;
+  pauseLabel?: string;
+  liveRegionMessage?: string;
 }
 
 interface ThemeOptions {
@@ -124,6 +130,8 @@ interface CarouselState {
   touchStart: { x: number; y: number } | null;
   isDragging: boolean;
   visibleSlides: number[];
+  isFocused: boolean;
+  focusedElement: string | null;
 }
 
 // Default breakpoints
@@ -155,8 +163,20 @@ const defaultBreakpoints = {
 };
 
 // Sub-components
-const CarouselContainer: React.FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
-  <div className={`carousel ${className || ''}`} role="region" aria-roledescription="carousel">
+const CarouselContainer: React.FC<{
+  children: ReactNode;
+  className?: string;
+  label?: string;
+  labelledBy?: string;
+}> = ({ children, className, label, labelledBy }) => (
+  <div
+    className={`carousel ${className || ''}`}
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={label}
+    aria-labelledby={labelledBy}
+    tabIndex={0}
+  >
     {children}
   </div>
 );
@@ -173,12 +193,31 @@ const CarouselViewport = React.forwardRef<
     onTouchStart?: (e: TouchEvent) => void;
     onTouchMove?: (e: TouchEvent) => void;
     onTouchEnd?: (e: TouchEvent) => void;
+    onKeyDown?: (e: KeyboardEvent) => void;
+    onFocus?: () => void;
+    onBlur?: () => void;
+    ariaLive?: 'polite' | 'assertive' | 'off';
   }
->(({ children, className, onMouseDown, onMouseUp, onMouseEnter, onMouseLeave, onTouchStart, onTouchMove, onTouchEnd }, ref) => (
+>(({
+  children,
+  className,
+  onMouseDown,
+  onMouseUp,
+  onMouseEnter,
+  onMouseLeave,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd,
+  onKeyDown,
+  onFocus,
+  onBlur,
+  ariaLive = 'polite'
+}, ref) => (
   <div
     ref={ref}
     className={`carousel__viewport ${className || ''}`}
-    aria-live="polite"
+    aria-live={ariaLive}
+    aria-atomic="true"
     onMouseDown={onMouseDown}
     onMouseUp={onMouseUp}
     onMouseEnter={onMouseEnter}
@@ -186,6 +225,10 @@ const CarouselViewport = React.forwardRef<
     onTouchStart={onTouchStart}
     onTouchMove={onTouchMove}
     onTouchEnd={onTouchEnd}
+    onKeyDown={onKeyDown}
+    onFocus={onFocus}
+    onBlur={onBlur}
+    tabIndex={-1}
   >
     {children}
   </div>
@@ -200,12 +243,14 @@ const CarouselTrack = React.forwardRef<
     transform: string;
     transition: string;
     className?: string;
+    id?: string;
   }
->(({ children, transform, transition, className }, ref) => (
+>(({ children, transform, transition, className, id }, ref) => (
   <div
     ref={ref}
     className={`carousel__track ${className || ''}`}
     style={{ transform, transition }}
+    id={id}
   >
     {children}
   </div>
@@ -222,7 +267,20 @@ const CarouselSlide: React.FC<{
   lazy?: boolean;
   className?: string;
   style?: React.CSSProperties;
-}> = ({ children, isActive, index, totalSlides, aspectRatio, lazy, className, style }) => {
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
+}> = ({
+  children,
+  isActive,
+  index,
+  totalSlides,
+  aspectRatio,
+  lazy,
+  className,
+  style,
+  ariaLabel,
+  ariaDescribedBy
+}) => {
   const slideStyle: React.CSSProperties = { ...style };
   
   if (aspectRatio && aspectRatio !== 'auto') {
@@ -235,29 +293,51 @@ const CarouselSlide: React.FC<{
       style={slideStyle}
       role="group"
       aria-roledescription="slide"
-      aria-label={`${index + 1} of ${totalSlides}`}
+      aria-label={ariaLabel || `Slide ${index + 1} of ${totalSlides}`}
+      aria-describedby={ariaDescribedBy}
       data-index={index}
+      aria-hidden={!isActive}
+      tabIndex={isActive ? 0 : -1}
     >
       {children}
     </div>
   );
 };
 
-const NavigationButton: React.FC<{
-  direction: 'prev' | 'next';
-  onClick: () => void;
-  disabled: boolean;
-  className?: string;
-  children?: ReactNode;
-}> = ({ direction, onClick, disabled, className, children }) => (
+const NavigationButton = React.forwardRef<
+  HTMLButtonElement,
+  {
+    direction: 'prev' | 'next';
+    onClick: () => void;
+    disabled: boolean;
+    className?: string;
+    children?: ReactNode;
+    ariaLabel?: string;
+    ariaDescribedBy?: string;
+    tabIndex?: number;
+  }
+>(({
+  direction,
+  onClick,
+  disabled,
+  className,
+  children,
+  ariaLabel,
+  ariaDescribedBy,
+  tabIndex = 0
+}, ref) => (
   <button
     className={`carousel__arrow carousel__arrow--${direction} ${disabled ? 'carousel__arrow--disabled' : ''} ${className || ''}`}
     onClick={onClick}
     disabled={disabled}
-    aria-label={`Go to ${direction} slide`}
+    aria-label={ariaLabel || `Go to ${direction} slide`}
+    aria-describedby={ariaDescribedBy}
+    tabIndex={tabIndex}
+    aria-controls="carousel-track"
   >
+    <span className="sr-only">{direction === 'prev' ? 'Previous slide' : 'Next slide'}</span>
     {children || (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         {direction === 'prev' ? (
           <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         ) : (
@@ -266,15 +346,25 @@ const NavigationButton: React.FC<{
       </svg>
     )}
   </button>
-);
+));
 
-const PaginationBullets: React.FC<{
-  currentIndex: number;
-  totalSlides: number;
-  onClick: (index: number) => void;
-  className?: string;
-}> = ({ currentIndex, totalSlides, onClick, className }) => (
-  <div className={`carousel__pagination carousel__pagination--bullets ${className || ''}`}>
+NavigationButton.displayName = 'NavigationButton';
+
+const PaginationBullets = React.forwardRef<
+  HTMLDivElement,
+  {
+    currentIndex: number;
+    totalSlides: number;
+    onClick: (index: number) => void;
+    className?: string;
+    ariaLabel?: string;
+  }
+>(({ currentIndex, totalSlides, onClick, className, ariaLabel }, ref) => (
+  <div
+    className={`carousel__pagination carousel__pagination--bullets ${className || ''}`}
+    role="tablist"
+    aria-label={ariaLabel || "Carousel slide navigation"}
+  >
     {Array.from({ length: totalSlides }).map((_, index) => (
       <button
         key={index}
@@ -282,10 +372,16 @@ const PaginationBullets: React.FC<{
         onClick={() => onClick(index)}
         aria-label={`Go to slide ${index + 1}`}
         aria-current={index === currentIndex ? 'true' : 'false'}
+        aria-selected={index === currentIndex}
+        role="tab"
+        tabIndex={index === currentIndex ? 0 : -1}
+        aria-controls={`carousel-slide-${index}`}
       />
     ))}
   </div>
-);
+));
+
+PaginationBullets.displayName = 'PaginationBullets';
 
 // Main Carousel Component
 const Carousel: React.FC<CarouselProps> = ({
@@ -301,14 +397,26 @@ const Carousel: React.FC<CarouselProps> = ({
   pagination = true,
   breakpoints = defaultBreakpoints,
   lazy = false,
-  preloadImages = true,
   a11y = true,
   className = '',
-  theme,
   onSlideChange,
   onInit,
   onDestroy
 }) => {
+  // Accessibility options with defaults
+  const a11yOptions = typeof a11y === 'object' ? a11y : {};
+  const {
+    prevSlideMessage = 'Previous slide',
+    nextSlideMessage = 'Next slide',
+    firstSlideMessage = 'This is the first slide',
+    lastSlideMessage = 'This is the last slide',
+    paginationBulletMessage = 'Go to slide {index}',
+    containerLabel = 'Image carousel',
+    slideLabel = 'Slide {index} of {total}',
+    playLabel = 'Play autoplay',
+    pauseLabel = 'Pause autoplay',
+    liveRegionMessage = 'Slide {index} of {total}'
+  } = a11yOptions;
   const [state, setState] = useState<CarouselState>({
     currentIndex: initialSlide,
     isAnimating: false,
@@ -316,7 +424,9 @@ const Carousel: React.FC<CarouselProps> = ({
     isPaused: false,
     touchStart: null,
     isDragging: false,
-    visibleSlides: []
+    visibleSlides: [],
+    isFocused: false,
+    focusedElement: null
   });
   
   const [containerWidth, setContainerWidth] = useState(0);
@@ -325,6 +435,10 @@ const Carousel: React.FC<CarouselProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const prevButtonRef = useRef<HTMLButtonElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const paginationRef = useRef<HTMLDivElement>(null);
   
   // Get responsive config based on container width
   const getResponsiveConfig = useCallback(() => {
@@ -337,7 +451,7 @@ const Carousel: React.FC<CarouselProps> = ({
       
     for (const bp of sortedBreakpoints) {
       if (containerWidth >= bp) {
-        config = { ...config, ...(breakpoints as any)[bp] };
+        config = { ...config, ...(breakpoints as Record<number, Partial<CarouselProps>>)[bp] };
         break;
       }
     }
@@ -444,13 +558,92 @@ const Carousel: React.FC<CarouselProps> = ({
     };
   }, [state.isAutoplay, state.isPaused, state.currentIndex, slides.length, autoplay, slideNext]);
   
-  // Touch handlers
+  // Announce slide changes to screen readers
+  const announceSlideChange = useCallback((newIndex: number) => {
+    if (liveRegionRef.current) {
+      const message = liveRegionMessage
+        .replace('{index}', String(newIndex + 1))
+        .replace('{total}', String(slides.length));
+      
+      liveRegionRef.current.textContent = message;
+      
+      // Clear the announcement after a delay
+      setTimeout(() => {
+        if (liveRegionRef.current) {
+          liveRegionRef.current.textContent = '';
+        }
+      }, 1000);
+    }
+  }, [liveRegionMessage, slides.length]);
+  
+  // Toggle autoplay
+  const toggleAutoplay = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      isPaused: !prev.isPaused
+    }));
+  }, []);
+  
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        slidePrev();
+        announceSlideChange(state.currentIndex - 1);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        slideNext();
+        announceSlideChange(state.currentIndex + 1);
+        break;
+      case 'Home':
+        e.preventDefault();
+        slideTo(0);
+        announceSlideChange(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        slideTo(slides.length - 1);
+        announceSlideChange(slides.length - 1);
+        break;
+      case ' ':
+      case 'Enter':
+        if (state.isAutoplay) {
+          e.preventDefault();
+          toggleAutoplay();
+        }
+        break;
+      case 'Escape':
+        // Return focus to container when escaping
+        if (containerRef.current && state.isFocused) {
+          containerRef.current.focus();
+        }
+        break;
+    }
+  }, [slidePrev, slideNext, slideTo, state.currentIndex, state.isAutoplay, slides.length, announceSlideChange, toggleAutoplay]);
+  
+  // Focus management
+  const handleFocus = useCallback(() => {
+    setState(prev => ({ ...prev, isFocused: true }));
+  }, []);
+  
+  const handleBlur = useCallback(() => {
+    setState(prev => ({ ...prev, isFocused: false, focusedElement: null }));
+  }, []);
+  
+  // Touch handlers with enhanced accessibility
   const handleTouchStart = useCallback((e: TouchEvent) => {
     setState(prev => ({
       ...prev,
       touchStart: { x: e.touches[0].clientX, y: e.touches[0].clientY },
       isDragging: true
     }));
+    
+    // Provide haptic feedback if available
+    if ('vibrate' in navigator) {
+      navigator.vibrate(10);
+    }
   }, []);
   
   const handleTouchMove = useCallback((e: TouchEvent) => {
@@ -469,10 +662,17 @@ const Carousel: React.FC<CarouselProps> = ({
     
     // Determine if it's a horizontal swipe
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      // Provide haptic feedback for successful swipe
+      if ('vibrate' in navigator) {
+        navigator.vibrate(20);
+      }
+      
       if (diffX > 0) {
         slidePrev(); // Swipe right - go to previous
+        announceSlideChange(state.currentIndex - 1);
       } else {
         slideNext(); // Swipe left - go to next
+        announceSlideChange(state.currentIndex + 1);
       }
     }
     
@@ -481,7 +681,7 @@ const Carousel: React.FC<CarouselProps> = ({
       touchStart: null,
       isDragging: false
     }));
-  }, [state.touchStart, state.isDragging, slidePrev, slideNext]);
+  }, [state.touchStart, state.isDragging, slidePrev, slideNext, state.currentIndex, announceSlideChange]);
   
   // Mouse handlers for grab cursor
   const handleMouseDown = useCallback(() => {
@@ -520,6 +720,11 @@ const Carousel: React.FC<CarouselProps> = ({
     };
   }, [onInit, onDestroy]);
   
+  // Update slide change handler to include announcements
+  useEffect(() => {
+    announceSlideChange(state.currentIndex);
+  }, [state.currentIndex, announceSlideChange]);
+  
   // Calculate slide width and spacing
   const { slidesPerView: currentSlidesPerView = 1, spaceBetween: currentSpaceBetween = spaceBetween } = currentBreakpoint;
   const slidesPerViewNum = typeof currentSlidesPerView === 'number' ? currentSlidesPerView : 1;
@@ -533,10 +738,12 @@ const Carousel: React.FC<CarouselProps> = ({
     
     if (slide.type === 'image') {
       return (
-        <img
+        <Image
           src={slide.src}
           alt={slide.alt || slide.title || `Slide ${index + 1}`}
           loading={lazy ? 'lazy' : 'eager'}
+          fill
+          style={{ objectFit: 'cover' }}
         />
       );
     }
@@ -573,7 +780,18 @@ const Carousel: React.FC<CarouselProps> = ({
   const isNextDisabled = !loop && state.currentIndex === slides.length - 1;
   
   return (
-    <CarouselContainer className={`${grabCursor && state.isDragging ? 'carousel--grabbing' : ''} ${grabCursor ? 'carousel--grab' : ''} ${className}`}>
+    <CarouselContainer
+      className={`${grabCursor && state.isDragging ? 'carousel--grabbing' : ''} ${grabCursor ? 'carousel--grab' : ''} ${className}`}
+      label={containerLabel}
+    >
+      {/* Screen reader live region for announcements */}
+      <div
+        ref={liveRegionRef}
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+      />
+      
       <CarouselViewport
         ref={containerRef}
         onMouseDown={handleMouseDown}
@@ -583,9 +801,14 @@ const Carousel: React.FC<CarouselProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        ariaLive={state.isAutoplay ? 'off' : 'polite'}
       >
         <CarouselTrack
           ref={trackRef}
+          id="carousel-track"
           transform={`translateX(${getTranslateX()}px)`}
           transition={state.isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'}
         >
@@ -597,6 +820,8 @@ const Carousel: React.FC<CarouselProps> = ({
               totalSlides={slides.length}
               aspectRatio={typeof aspectRatio === 'string' ? aspectRatio : aspectRatio.toString()}
               lazy={typeof lazy === 'boolean' ? lazy : lazy.elementClass !== undefined}
+              ariaLabel={slide.ariaLabel || slideLabel.replace('{index}', String(index + 1)).replace('{total}', String(slides.length))}
+              ariaDescribedBy={slide.ariaDescription ? `slide-desc-${slide.id}` : undefined}
               style={{
                 width: `${slideWidth}px`,
                 marginRight: index < slides.length - 1 ? `${currentSpaceBetween}px` : '0'
@@ -604,7 +829,7 @@ const Carousel: React.FC<CarouselProps> = ({
             >
               {renderSlideContent(slide, index)}
               {slide.caption && (
-                <div className="carousel__slide-caption">
+                <div className="carousel__slide-caption" id={`slide-desc-${slide.id}`}>
                   {slide.caption}
                 </div>
               )}
@@ -616,24 +841,44 @@ const Carousel: React.FC<CarouselProps> = ({
       {navigation && (
         <>
           <NavigationButton
+            ref={prevButtonRef}
             direction="prev"
             onClick={slidePrev}
             disabled={isPrevDisabled}
+            ariaLabel={isPrevDisabled ? firstSlideMessage : prevSlideMessage}
+            tabIndex={state.isFocused ? 0 : -1}
           />
           <NavigationButton
+            ref={nextButtonRef}
             direction="next"
             onClick={slideNext}
             disabled={isNextDisabled}
+            ariaLabel={isNextDisabled ? lastSlideMessage : nextSlideMessage}
+            tabIndex={state.isFocused ? 0 : -1}
           />
         </>
       )}
       
       {pagination && (
         <PaginationBullets
+          ref={paginationRef}
           currentIndex={state.currentIndex}
           totalSlides={slides.length}
           onClick={slideTo}
+          ariaLabel="Carousel slide navigation"
         />
+      )}
+      
+      {/* Autoplay controls for keyboard users */}
+      {state.isAutoplay && (
+        <button
+          className="carousel__autoplay-control sr-only focus:not-sr-only"
+          onClick={toggleAutoplay}
+          aria-label={state.isPaused ? playLabel : pauseLabel}
+          tabIndex={state.isFocused ? 0 : -1}
+        >
+          {state.isPaused ? 'Play' : 'Pause'}
+        </button>
       )}
     </CarouselContainer>
   );

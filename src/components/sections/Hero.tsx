@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
-import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 import '@/styles/hero-button-styles.css';
 
@@ -67,10 +66,6 @@ const Hero: React.FC = () => {
     "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760404471/social_defipullen_A_continuation-style_digital_background_designed_f_41c365bc-4f40-49b8-b75c-c69d883435a2_0_wdoxfx.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_640&h_360&c_fill",
   []);
   
-  // Mobile video poster frame
-  const mobileVideoPoster = useMemo(() =>
-    "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760404471/social_defipullen_A_continuation-style_digital_background_designed_f_41c365bc-4f40-49b8-b75c-c69d883435a2_0_wdoxfx.jpg?w_640&h_360&c_fill&f_auto&q_auto:low",
-  []);
 
   // Static image fallback for mobile
   const staticImageFallback = "/hero-bg-new.png";
