@@ -1,37 +1,58 @@
 'use client';
 
 import React from 'react';
-import { Carousel } from '@/components/ui/carousel';
+import Carousel from '@/components/ui/carousel';
 import { FlickeringGrid } from '@/components/ui/flickering-grid';
 import { motion } from 'framer-motion';
 
 const WhyChooseUs: React.FC = () => {
   const slideData = [
     {
+      id: "zero-risk",
       title: "Zero Risk",
       description: "You can't lose money. Our offer makes working with us risk free.",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
-      isVideo: true,
+      type: "video" as const,
+      caption: "Zero Risk Guarantee",
+      muted: true,
+      autoplay: true,
+      loop: true,
     },
     {
+      id: "expert-team",
       title: "Expert Team",
       description: "Our specialists bring years of experience to deliver exceptional results.",
       src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      type: "image" as const,
+      caption: "Expert Team",
+      alt: "Expert team working together",
     },
     {
+      id: "proven-process",
       title: "Proven Process",
       description: "We've refined our approach to ensure consistent, high-quality outcomes.",
       src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      type: "image" as const,
+      caption: "Proven Process",
+      alt: "Proven workflow process",
     },
     {
+      id: "transparent-pricing",
       title: "Transparent Pricing",
       description: "No hidden fees or surprises—just clear, straightforward pricing.",
       src: "https://images.unsplash.com/photo-1554224154-260325c05f19?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      type: "image" as const,
+      caption: "Transparent Pricing",
+      alt: "Transparent pricing structure",
     },
     {
+      id: "dedicated-support",
       title: "Dedicated Support",
       description: "We're with you every step of the way, ensuring your success.",
       src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      type: "image" as const,
+      caption: "Dedicated Support",
+      alt: "Dedicated customer support",
     },
   ];
 
@@ -79,8 +100,12 @@ const WhyChooseUs: React.FC = () => {
           <div className="w-full max-w-5xl">
             <Carousel
               slides={slideData}
-              enableEnhancedAspectRatios={true}
-              carouselType="why-choose-us"
+              aspectRatio="3/4"
+              slidesPerView="auto"
+              spaceBetween={20}
+              loop={true}
+              navigation={true}
+              pagination={true}
             />
           </div>
         </motion.div>
