@@ -9,7 +9,7 @@ const WhyChooseUs: React.FC = () => {
   const slideData = [
     {
       title: "Zero Risk",
-      description: "You can't lose money—our offer makes working with us risk-free.",
+      description: "You can't lose money. Our offer makes working with us risk free.",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
       isVideo: true,
     },

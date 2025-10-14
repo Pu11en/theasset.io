@@ -120,7 +120,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             />
           )}
           {current === index && (
-            <div className="absolute inset-0 bg-black/30 transition-all duration-1000" />
+            <div className={`absolute inset-0 transition-all duration-1000 ${isVideo ? "bg-black/50" : "bg-black/30"}`} />
           )}
         </div>
 
@@ -129,11 +129,11 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold  relative">
+          <h2 className={`text-lg md:text-2xl lg:text-4xl font-semibold relative ${isVideo ? "text-white drop-shadow-lg" : "text-white"}`}>
             {title}
           </h2>
           {description && (
-            <p className="mt-3 text-sm md:text-base text-white/90 max-w-xs mx-auto">
+            <p className={`mt-3 text-sm md:text-base max-w-xs mx-auto ${isVideo ? "text-white/95 drop-shadow-md" : "text-white/90"}`}>
               {description}
             </p>
           )}
