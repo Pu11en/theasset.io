@@ -73,7 +73,7 @@ const Hero: React.FC = () => {
   []);
 
   // Static image fallback for mobile
-  const staticImageFallback = "/hero-bg.png";
+  const staticImageFallback = "/hero-bg-new.png";
 
   // Get the appropriate video URL based on screen size
   const getVideoUrl = useCallback(() => {
