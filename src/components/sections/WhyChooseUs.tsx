@@ -2,77 +2,36 @@
 
 import React from 'react';
 import Carousel from '@/components/ui/carousel';
+import VideoCard from '@/components/ui/VideoCard';
 import { FlickeringGrid } from '@/components/ui/flickering-grid';
 import { motion } from 'framer-motion';
 
 const WhyChooseUs: React.FC = () => {
-  const slideData = [
+  // Only 3 video cards as requested
+  const videoData = [
     {
       id: "zero-risk",
       title: "Zero Risk",
       description: "You can't lose money. Our offer makes working with us risk free.",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
-      type: "video" as const,
+      poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg",
       caption: "Zero Risk Guarantee",
-      muted: true,
-      autoplay: true,
-      loop: true,
     },
     {
       id: "expert-team",
       title: "Expert Team",
       description: "Our specialists bring years of experience to deliver exceptional results.",
-      src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      type: "image" as const,
+      src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
+      poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg",
       caption: "Expert Team",
-      alt: "Expert team working together",
     },
     {
       id: "proven-process",
       title: "Proven Process",
       description: "We've refined our approach to ensure consistent, high-quality outcomes.",
-      src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      type: "image" as const,
+      src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
+      poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg",
       caption: "Proven Process",
-      alt: "Proven workflow process",
-    },
-    {
-      id: "transparent-pricing",
-      title: "Transparent Pricing",
-      description: "No hidden fees or surprises—just clear, straightforward pricing.",
-      src: "https://images.unsplash.com/photo-1554224154-260325c05f19?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      type: "image" as const,
-      caption: "Transparent Pricing",
-      alt: "Transparent pricing structure",
-    },
-    {
-      id: "dedicated-support",
-      title: "Dedicated Support",
-      description: "We're with you every step of the way, ensuring your success.",
-      src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      type: "image" as const,
-      caption: "Dedicated Support",
-      alt: "Dedicated customer support",
-    },
-    {
-      id: "new-video",
-      title: "Video title placeholder",
-      description: "Video description placeholder",
-      src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
-      type: "video" as const,
-      caption: "New Video",
-      muted: true,
-      autoplay: true,
-      loop: true,
-    },
-    {
-      id: "new-image",
-      title: "Image title placeholder",
-      description: "Image description placeholder",
-      src: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760472391/carosal_pep_agscnh.png",
-      type: "image" as const,
-      caption: "New Image",
-      alt: "New image asset",
     },
   ];
 
@@ -117,9 +76,26 @@ const WhyChooseUs: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="w-full max-w-5xl">
+          <div className="w-full max-w-6xl">
             <Carousel
-              slides={slideData}
+              slides={videoData.map(video => ({
+                ...video,
+                type: 'custom' as const,
+                content: (
+                  <VideoCard
+                    src={video.src}
+                    poster={video.poster}
+                    title={video.title}
+                    description={video.description}
+                    caption={video.caption}
+                    aspectRatio="3/4"
+                    autoPlay={true}
+                    muted={true}
+                    loop={true}
+                    lazy={true}
+                  />
+                )
+              }))}
               aspectRatio="3/4"
               slidesPerView="auto"
               spaceBetween={20}

@@ -474,6 +474,7 @@ img {
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+  aspect-ratio: 3/4; /* Ensure consistent aspect ratio for video cards */
 }
 
 .carousel__slide img,
@@ -483,6 +484,69 @@ img {
   height: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Video card container */
+.video-card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--carousel-border-radius);
+  aspect-ratio: 3/4;
+}
+
+/* Ensure aspect ratio is maintained across all viewports */
+@media (min-width: 320px) and (max-width: 480px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 280px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 320px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 360px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 896px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 400px;
+  }
+}
+
+@media (min-width: 897px) and (max-width: 1024px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 440px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 480px;
+  }
+}
+
+@media (min-width: 1281px) {
+  .carousel__slide {
+    aspect-ratio: 3/4;
+    min-height: 520px;
+  }
 }
 
 .carousel__slide-caption {

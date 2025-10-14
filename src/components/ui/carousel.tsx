@@ -134,29 +134,37 @@ interface CarouselState {
   focusedElement: string | null;
 }
 
-// Default breakpoints
+// Default breakpoints - optimized for 3 video cards display
 const defaultBreakpoints = {
   320: {  // Extra small devices
     slidesPerView: 1,
     spaceBetween: 10
   },
-  640: {  // Small devices
+  480: {  // Small devices
     slidesPerView: 1.2,
     spaceBetween: 15
   },
-  768: {  // Medium devices (tablets)
+  640: {  // Medium devices
     slidesPerView: 1.5,
+    spaceBetween: 15
+  },
+  768: {  // Large tablets - fixed problematic range
+    slidesPerView: 1.8,
     spaceBetween: 20
   },
-  1024: { // Large devices (desktops)
-    slidesPerView: 2,
+  896: {  // Small desktops - additional breakpoint
+    slidesPerView: 2.2,
+    spaceBetween: 20
+  },
+  1024: { // Desktops
+    slidesPerView: 2.5,
     spaceBetween: 25
   },
-  1280: { // Extra large devices
-    slidesPerView: 2.5,
+  1280: { // Large desktops
+    slidesPerView: 2.8,
     spaceBetween: 30
   },
-  1536: { // 2XL devices
+  1440: { // Extra large desktops
     slidesPerView: 3,
     spaceBetween: 35
   }
