@@ -500,6 +500,79 @@ const Hero: React.FC = () => {
             </div>
           </>
         )}
+        
+        {/* Mobile video element - only rendered on mobile devices */}
+        {isMobile && !mobileVideoError && shouldLoadMobileVideo && (
+          <>
+            {/* Mobile loading indicator */}
+            {mobileLoadingState === 'loading' && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            
+            <video
+              ref={mobileVideoRef}
+              className="absolute inset-0 z-0 w-full h-full object-cover"
+              preload="metadata"
+              autoPlay={!prefersReducedMotion}
+              loop
+              muted={isMuted}
+              playsInline
+              poster={mobileVideoPoster}
+              aria-label="Background video showing digital marketing animation for mobile"
+              onError={handleMobileVideoError}
+              onLoadedData={handleMobileVideoLoadedData}
+              onCanPlay={handleMobileVideoCanPlay}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                opacity: mobileVideoLoaded ? 1 : 0,
+                transition: prefersReducedMotion ? 'none' : 'opacity 0.5s ease-in-out'
+              }}
+            >
+              <source src={mobileVideoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            
+            {/* Mobile video controls - touch-friendly */}
+            <div
+              className="absolute bottom-4 right-4 z-20 flex gap-2"
+              onTouchStart={() => setShowMobileVideoControls(true)}
+              onTouchEnd={() => setTimeout(() => setShowMobileVideoControls(false), 3000)}
+              onMouseEnter={() => setShowMobileVideoControls(true)}
+              onMouseLeave={() => setShowMobileVideoControls(false)}
+              onFocus={() => setShowMobileVideoControls(true)}
+              onBlur={() => setShowMobileVideoControls(false)}
+            >
+              <button
+                type="button"
+                className={`p-3 rounded-full bg-black/50 text-white transition-opacity ${showMobileVideoControls ? 'opacity-100' : 'opacity-0'} focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white touch-manipulation`}
+                onClick={toggleMobileVideoPlay}
+                aria-label={isMobileVideoPlaying ? 'Pause background video' : 'Play background video'}
+                aria-pressed={!isMobileVideoPlaying}
+                onKeyDown={handleMobileVideoKeyDown}
+                style={{ minWidth: '44px', minHeight: '44px' }} // Larger touch target
+              >
+                {isMobileVideoPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+              
+              <button
+                type="button"
+                className={`p-3 rounded-full bg-black/50 text-white transition-opacity ${showMobileVideoControls ? 'opacity-100' : 'opacity-0'} focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white touch-manipulation`}
+                onClick={toggleMobileMute}
+                aria-label={isMuted ? 'Unmute background video' : 'Mute background video'}
+                aria-pressed={!isMuted}
+                onKeyDown={handleMobileVideoKeyDown}
+                style={{ minWidth: '44px', minHeight: '44px' }} // Larger touch target
+              >
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24">

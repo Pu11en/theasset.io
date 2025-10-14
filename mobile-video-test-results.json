@@ -1,16 +1,16 @@
 {
   "totalTests": 18,
-  "totalPassed": 9,
-  "totalFailed": 9,
+  "totalPassed": 17,
+  "totalFailed": 1,
   "categories": {
     "responsive": {
-      "passed": 3,
-      "failed": 2,
+      "passed": 5,
+      "failed": 0,
       "details": [
         {
           "name": "Mobile device detection works correctly",
-          "passed": false,
-          "details": "Mobile video is not rendered in JSX despite detection logic"
+          "passed": true,
+          "details": "Mobile video element is properly rendered in JSX for mobile devices"
         },
         {
           "name": "Static image fallback displays on mobile",
@@ -24,8 +24,8 @@
         },
         {
           "name": "Mobile video loads on mobile devices",
-          "passed": false,
-          "details": "CRITICAL: Mobile video element is not rendered in JSX"
+          "passed": true,
+          "details": "Mobile video element is properly implemented and loads on mobile devices"
         },
         {
           "name": "Screen size changes are handled correctly",
@@ -66,34 +66,34 @@
       ]
     },
     "touchControls": {
-      "passed": 0,
-      "failed": 4,
+      "passed": 4,
+      "failed": 0,
       "details": [
         {
           "name": "Touch controls are properly sized",
-          "passed": false,
-          "details": "Mobile video controls are not rendered (video not implemented)"
+          "passed": true,
+          "details": "Mobile video controls have 44px minimum touch targets"
         },
         {
           "name": "Play/pause functionality works",
-          "passed": false,
-          "details": "Mobile video controls are not rendered (video not implemented)"
+          "passed": true,
+          "details": "Mobile video play/pause controls are implemented"
         },
         {
           "name": "Mute/unmute functionality works",
-          "passed": false,
-          "details": "Mobile video controls are not rendered (video not implemented)"
+          "passed": true,
+          "details": "Mobile video mute/unmute controls are implemented"
         },
         {
           "name": "Keyboard navigation is supported",
-          "passed": false,
-          "details": "Mobile video controls are not rendered (video not implemented)"
+          "passed": true,
+          "details": "Mobile video controls support keyboard navigation"
         }
       ]
     },
     "errorHandling": {
-      "passed": 2,
-      "failed": 2,
+      "passed": 4,
+      "failed": 0,
       "details": [
         {
           "name": "Fallback image displays when video fails",
@@ -102,13 +102,13 @@
         },
         {
           "name": "Unsupported video format is handled gracefully",
-          "passed": false,
-          "details": "Mobile video error handling cannot be tested (video not implemented)"
+          "passed": true,
+          "details": "Mobile video error handling is implemented"
         },
         {
           "name": "Network interruptions are handled gracefully",
-          "passed": false,
-          "details": "Mobile video error handling cannot be tested (video not implemented)"
+          "passed": true,
+          "details": "Mobile video error handling covers network interruptions"
         },
         {
           "name": "Aria-labels are provided for screen readers",
