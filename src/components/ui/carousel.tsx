@@ -8,6 +8,7 @@ interface SlideData {
   button?: string;
   src: string;
   description?: string;
+  isVideo?: boolean;
 }
 
 interface SlideProps {
@@ -64,13 +65,13 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     // Image opacity is handled by the Image component
   };
 
-  const { src, title, description } = slide;
+  const { src, title, description, isVideo } = slide;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[55vmin] h-[55vmin] mx-[4vmin] md:w-[50vmin] md:h-[50vmin] sm:w-[45vmin] sm:h-[45vmin] z-10 "
+        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[71vmin] mx-[4vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] z-10 "
         onClick={() => handleSlideClick(index)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -92,18 +93,32 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : "none",
           }}
         >
-          <Image
-            className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
-            style={{
-              opacity: current === index ? 1 : 0.5,
-            }}
-            alt={title}
-            src={src}
-            onLoad={imageLoaded}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
-          />
+          {isVideo ? (
+            <video
+              className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+              style={{
+                opacity: current === index ? 1 : 0.5,
+              }}
+              autoPlay
+              muted
+              loop
+              playsInline
+              src={src}
+            />
+          ) : (
+            <Image
+              className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+              style={{
+                opacity: current === index ? 1 : 0.5,
+              }}
+              alt={title}
+              src={src}
+              onLoad={imageLoaded}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+            />
+          )}
           {current === index && (
             <div className="absolute inset-0 bg-black/30 transition-all duration-1000" />
           )}
@@ -179,7 +194,7 @@ export function Carousel({ slides }: CarouselProps) {
 
   return (
     <div
-      className="relative w-[55vmin] h-[55vmin] md:w-[50vmin] md:h-[50vmin] sm:w-[45vmin] sm:h-[45vmin] mx-auto"
+      className="relative w-[40vmin] h-[71vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] mx-auto"
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
