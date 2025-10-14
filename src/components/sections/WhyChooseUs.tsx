@@ -54,6 +54,26 @@ const WhyChooseUs: React.FC = () => {
       caption: "Dedicated Support",
       alt: "Dedicated customer support",
     },
+    {
+      id: "new-video",
+      title: "Video title placeholder",
+      description: "Video description placeholder",
+      src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
+      type: "video" as const,
+      caption: "New Video",
+      muted: true,
+      autoplay: true,
+      loop: true,
+    },
+    {
+      id: "new-image",
+      title: "Image title placeholder",
+      description: "Image description placeholder",
+      src: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760472391/carosal_pep_agscnh.png",
+      type: "image" as const,
+      caption: "New Image",
+      alt: "New image asset",
+    },
   ];
 
   return (
