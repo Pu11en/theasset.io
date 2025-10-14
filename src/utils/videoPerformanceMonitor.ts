@@ -9,6 +9,7 @@ interface VideoPerformanceMetrics {
   lastError?: string;
   isPlaying: boolean;
   bufferEvents: number;
+  cleanup?: () => void;
 }
 
 interface VideoPerformanceOptions {
@@ -63,9 +64,14 @@ class VideoPerformanceMonitor {
       this.observers.delete(videoId);
     }
 
-    if (this.options.enableLogging) {
-      const metrics = this.metrics.get(videoId);
-      if (metrics) {
+    const metrics = this.metrics.get(videoId);
+    if (metrics) {
+      // Call cleanup function to remove event listeners
+      if (metrics.cleanup) {
+        metrics.cleanup();
+      }
+      
+      if (this.options.enableLogging) {
         console.log(`Stopped monitoring video: ${videoId}`, metrics);
       }
     }
@@ -181,7 +187,7 @@ class VideoPerformanceMonitor {
     };
 
     // Store cleanup function in metrics for later use
-    (metrics as any).cleanup = cleanup;
+    metrics.cleanup = cleanup;
   }
 
   // Generate performance report
