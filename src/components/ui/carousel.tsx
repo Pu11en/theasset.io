@@ -16,7 +16,6 @@ interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
-  isZeroRiskCard?: boolean;
   enableEnhancedAspectRatios?: boolean;
 }
 
@@ -25,7 +24,6 @@ const Slide = ({
   index,
   current,
   handleSlideClick,
-  isZeroRiskCard = false,
   enableEnhancedAspectRatios = false
 }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
@@ -76,17 +74,14 @@ const Slide = ({
 
   const { src, title, description, isVideo } = slide;
 
-  // Determine card classes based on enhanced mode and card type
+  // Determine card classes based on enhanced mode
   const getCardClasses = () => {
     if (!enableEnhancedAspectRatios) {
       return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out carousel-card-legacy mx-[4vmin] z-10";
     }
     
-    const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10";
-    // All cards now use the same aspect ratio, so we can apply the same class
-    const typeClasses = "carousel-card-standard";
-    
-    return `${baseClasses} ${typeClasses}`;
+    // All cards use the same aspect ratio (3:4)
+    return "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10 carousel-card-standard";
   };
 
   return (
@@ -107,7 +102,7 @@ const Slide = ({
         }}
       >
         <div
-          className="video-container rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
+          className="video-container rounded-[1%] overflow-hidden transition-all duration-150 ease-out w-full h-full"
           style={{
             transform:
               current === index
@@ -117,7 +112,7 @@ const Slide = ({
         >
           {isVideo ? (
             <video
-              className="video-element opacity-100 transition-opacity duration-600 ease-in-out"
+              className="video-element opacity-100 transition-opacity duration-600 ease-in-out w-full h-full"
               style={{
                 opacity: current === index ? 1 : 0.5,
               }}
@@ -129,7 +124,7 @@ const Slide = ({
             />
           ) : (
             <Image
-              className="video-element opacity-100 transition-opacity duration-600 ease-in-out"
+              className="video-element opacity-100 transition-opacity duration-600 ease-in-out w-full h-full"
               style={{
                 opacity: current === index ? 1 : 0.5,
               }}
@@ -137,7 +132,7 @@ const Slide = ({
               src={src}
               onLoad={imageLoaded}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 85vw, (max-width: 1024px) 45vw, 30vw"
               priority
             />
           )}
@@ -147,7 +142,7 @@ const Slide = ({
         </div>
 
         <article
-          className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out z-20 ${
+          className={`absolute p-[4vmin] transition-opacity duration-1000 ease-in-out z-20 ${
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
           style={{
@@ -155,7 +150,10 @@ const Slide = ({
             backgroundColor: current === index ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
             borderRadius: '0.25rem',
             backdropFilter: 'blur(2px)',
-            textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)',
+            bottom: 0,
+            left: 0,
+            right: 0
           }}
         >
           <h2 className={`text-lg md:text-2xl lg:text-4xl font-semibold relative ${isVideo ? "text-white drop-shadow-lg" : "text-white"}`}>
@@ -208,6 +206,32 @@ export function Carousel({
   carouselType = "standard"
 }: CarouselProps): React.ReactElement {
   const [current, setCurrent] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [cardWidth, setCardWidth] = useState(0);
+
+  // Calculate card width based on viewport
+  useEffect(() => {
+    const updateCardWidth = () => {
+      if (!carouselRef.current) return;
+      
+      const viewportWidth = window.innerWidth;
+      let width;
+      
+      if (viewportWidth < 768) {
+        width = viewportWidth * 0.85; // 85vw for mobile
+      } else if (viewportWidth < 1024) {
+        width = viewportWidth * 0.45; // 45vw for tablet
+      } else {
+        width = viewportWidth * 0.3; // 30vw for desktop
+      }
+      
+      setCardWidth(width);
+    };
+
+    updateCardWidth();
+    window.addEventListener('resize', updateCardWidth);
+    return () => window.removeEventListener('resize', updateCardWidth);
+  }, []);
 
   const handlePreviousClick = () => {
     const previous = current - 1;
@@ -227,20 +251,13 @@ export function Carousel({
 
   const id = useId();
 
-  // Determine if the current slide is a Zero Risk card
-  const isCurrentSlideZeroRisk = slides[current]?.title === "Zero Risk";
-
   // Get container classes based on enhanced mode
   const getContainerClasses = () => {
     if (!enableEnhancedAspectRatios) {
       return "relative carousel-card-legacy mx-auto";
     }
     
-    const baseClasses = "carousel-container-enhanced relative mx-auto";
-    // No longer need special handling for Zero Risk since all cards have the same aspect ratio
-    const activeClasses = "";
-    
-    return `${baseClasses} ${activeClasses}`;
+    return "carousel-container-enhanced relative mx-auto";
   };
 
   // Get list classes based on enhanced mode
@@ -252,15 +269,27 @@ export function Carousel({
     return "carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out";
   };
 
+  // Calculate transform based on actual card width
+  const getTransformValue = () => {
+    if (!enableEnhancedAspectRatios) {
+      return `translateX(-${current * (100 / slides.length)}%)`;
+    }
+    
+    // Use pixel-based transform for enhanced mode
+    const gap = current > 0 ? 16 : 0; // 1rem gap in pixels
+    return `translateX(-${current * (cardWidth + gap)}px)`;
+  };
+
   return (
     <div
+      ref={carouselRef}
       className={getContainerClasses()}
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
         className={getListClasses()}
         style={{
-          transform: `translateX(-${current * (100 / slides.length)}%)`,
+          transform: getTransformValue(),
         }}
       >
         {slides.map((slide, index) => (
@@ -270,7 +299,6 @@ export function Carousel({
             index={index}
             current={current}
             handleSlideClick={handleSlideClick}
-            isZeroRiskCard={false} // All cards now use the same aspect ratio
             enableEnhancedAspectRatios={enableEnhancedAspectRatios}
           />
         ))}

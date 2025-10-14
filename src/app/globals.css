@@ -417,30 +417,13 @@ img {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Enhanced Carousel Card Styles for Zero Risk Video Scaling Solution */
+/* Enhanced Carousel Card Styles for Consistent 3:4 Aspect Ratio */
 
 /* CSS Custom Properties for Responsive Card Dimensions */
 :root {
-  /* Unified 3:4 aspect ratio card dimensions for all breakpoints */
-  --carousel-card-width-mobile: 85vw;
-  --carousel-card-height-mobile: calc(85vw * 1.33); /* 3:4 aspect ratio (4/3 = 1.33) */
-  --carousel-card-width-tablet: 45vw;
-  --carousel-card-height-tablet: calc(45vw * 1.33);
-  --carousel-card-width-desktop: 30vw;
-  --carousel-card-height-desktop: calc(30vw * 1.33);
-  
-  /* All cards now use the same 3:4 aspect ratio */
-  --standard-card-width-mobile: var(--carousel-card-width-mobile);
-  --standard-card-height-mobile: var(--carousel-card-height-mobile);
-  --standard-card-width-tablet: var(--carousel-card-width-tablet);
-  --standard-card-height-tablet: var(--carousel-card-height-tablet);
-  --standard-card-width-desktop: var(--carousel-card-width-desktop);
-  --standard-card-height-desktop: var(--carousel-card-height-desktop);
-  
   /* Card spacing and margins */
-  --carousel-card-margin: 2vw;
-  --carousel-container-padding: 1rem;
   --carousel-card-gap: 1rem;
+  --carousel-container-padding: 1rem;
   
   /* Video container properties */
   --video-container-border-radius: 0.25rem;
@@ -459,23 +442,14 @@ img {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
   flex-shrink: 0;
-  margin: 0 var(--carousel-card-margin);
+  margin: 0 1rem;
 }
 
 /* Unified 3:4 Aspect Ratio Card Styles for All Cards */
-.carousel-card-standard,
-.carousel-card-zero-risk {
-  width: var(--carousel-card-width-mobile);
+.carousel-card-standard {
+  width: 85vw;
   aspect-ratio: 3/4;
-  /* Remove fixed height to let aspect-ratio control the height */
-}
-
-/* Fallback Styles for Browsers Without aspect-ratio Support */
-@supports not (aspect-ratio: 3/4) {
-  .carousel-card-standard,
-  .carousel-card-zero-risk {
-    height: var(--carousel-card-height-mobile);
-  }
+  max-width: 400px;
 }
 
 /* Video Container and Video Element Styles */
@@ -506,11 +480,7 @@ img {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--carousel-container-padding);
-}
-
-.carousel-container-enhanced.zero-risk-active {
-  /* Adjust container when Zero Risk card is active */
-  transform: scale(1.02);
+  overflow: hidden;
 }
 
 /* Carousel List Adjustments */
@@ -519,61 +489,28 @@ img {
   transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
   gap: var(--carousel-card-gap);
-  padding: 0 var(--carousel-card-margin);
 }
 
 /* Responsive Media Queries */
 @media (min-width: 768px) {
-  :root {
-    --carousel-card-width-mobile: var(--carousel-card-width-tablet);
-    --carousel-card-height-mobile: var(--carousel-card-height-tablet);
-    --standard-card-width-mobile: var(--standard-card-width-tablet);
-    --standard-card-height-mobile: var(--standard-card-height-tablet);
-    --carousel-card-margin: 1.5vw;
-  }
-  
   .carousel-card-standard {
-    width: var(--standard-card-width-tablet);
-    aspect-ratio: 3/4;
+    width: 45vw;
+    max-width: 400px;
   }
   
-  .carousel-card-zero-risk {
-    width: var(--carousel-card-width-tablet);
-    aspect-ratio: 3/4;
-  }
-  
-  @supports not (aspect-ratio: 3/4) {
-    .carousel-card-standard,
-    .carousel-card-zero-risk {
-      height: var(--carousel-card-height-tablet);
-    }
+  .carousel-card {
+    margin: 0 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  :root {
-    --carousel-card-width-mobile: var(--carousel-card-width-desktop);
-    --carousel-card-height-mobile: var(--carousel-card-height-desktop);
-    --standard-card-width-mobile: var(--standard-card-width-desktop);
-    --standard-card-height-mobile: var(--standard-card-height-desktop);
-    --carousel-card-margin: 1vw;
-  }
-  
   .carousel-card-standard {
-    width: var(--standard-card-width-desktop);
-    aspect-ratio: 3/4;
+    width: 30vw;
+    max-width: 400px;
   }
   
-  .carousel-card-zero-risk {
-    width: var(--carousel-card-width-desktop);
-    aspect-ratio: 3/4;
-  }
-  
-  @supports not (aspect-ratio: 3/4) {
-    .carousel-card-standard,
-    .carousel-card-zero-risk {
-      height: var(--carousel-card-height-desktop);
-    }
+  .carousel-card {
+    margin: 0 1rem;
   }
 }
 
