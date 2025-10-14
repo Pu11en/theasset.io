@@ -1,0 +1,112 @@
+services:
+  # Production Web Service
+  - type: web
+    name: asset-marketing-studio
+    env: node
+    plan: starter
+    region: oregon
+    branch: main
+    healthCheckPath: /api/health
+    buildCommand: "npm run build"
+    startCommand: "npm start"
+    autoDeploy: false
+    buildFilter:
+      # Only rebuild when essential files change
+      paths:
+        - src/**
+        - public/**
+        - package.json
+        - package-lock.json
+        - next.config.ts
+        - tailwind.config.ts
+        - tsconfig.json
+        - postcss.config.mjs
+      ignoredPaths:
+        - "**/*.test.js"
+        - "**/*.test.ts"
+        - "**/*.test.tsx"
+        - "test-results/**"
+        - "docs/**"
+        - "*.md"
+        - ".github/**"
+        - "test-*.html"
+        - "test-*.js"
+        - "verify-*.js"
+    buildContext:
+      # Enable caching for node_modules to speed up builds
+      caching:
+        paths:
+          - node_modules
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: 1
+    # Add headers for security and performance
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-XSS-Protection
+        value: "1; mode=block"
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      # Cache static assets for better performance
+      - path: /_next/static/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /images/*
+        name: Cache-Control
+        value: "public, max-age=86400"
+      - path: /favicon.ico
+        name: Cache-Control
+        value: "public, max-age=86400"
+
+  # Preview Environment for PRs
+  - type: web
+    name: asset-marketing-studio-preview
+    env: node
+    plan: starter
+    region: oregon
+    branch: preview
+    healthCheckPath: /api/health
+    buildCommand: "npm run build"
+    startCommand: "npm start"
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - src/**
+        - public/**
+        - package.json
+        - package-lock.json
+        - next.config.ts
+        - tailwind.config.ts
+        - tsconfig.json
+        - postcss.config.mjs
+      ignoredPaths:
+        - "**/*.test.js"
+        - "**/*.test.ts"
+        - "**/*.test.tsx"
+        - "test-results/**"
+        - "docs/**"
+        - "*.md"
+        - ".github/**"
+        - "test-*.html"
+        - "test-*.js"
+        - "verify-*.js"
+    buildContext:
+      caching:
+        paths:
+          - node_modules
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: 1
+    pullRequestPreview:
+      enabled: true
