@@ -1,0 +1,115 @@
+{
+  "timestamp": "2025-10-14T02:18:53.740Z",
+  "tests": {
+    "passed": 15,
+    "failed": 2,
+    "details": [
+      {
+        "testName": "Solutions section exists",
+        "passed": true,
+        "details": "Solutions section is visible",
+        "timestamp": "2025-10-14T02:18:57.608Z"
+      },
+      {
+        "testName": "Main heading exists",
+        "passed": true,
+        "details": "Main heading is visible",
+        "timestamp": "2025-10-14T02:18:57.614Z"
+      },
+      {
+        "testName": "Basic structure test",
+        "passed": false,
+        "details": "Error: locator.isVisible: Error: strict mode violation: locator('#solutions p') resolved to 4 elements:\n    1) <p class=\"text-xl text-black max-w-3xl mx-auto\">Our comprehensive suite of marketing services des…</p> aka getByText('Our comprehensive suite of')\n    2) <p class=\"text-black text-sm leading-relaxed px-2\">Precision marketing that reaches your ideal custo…</p> aka getByText('Precision marketing that')\n    3) <p class=\"text-black text-sm leading-relaxed px-2\">Plug-and-play marketing with customized campaigns…</p> aka getByText('Plug-and-play marketing with')\n    4) <p class=\"text-black text-sm leading-relaxed px-2\">Clear reporting and proven results that drive you…</p> aka getByText('Clear reporting and proven')\n\nCall log:\n\u001b[2m    - checking visibility of locator('#solutions p')\u001b[22m\n",
+        "timestamp": "2025-10-14T02:18:57.640Z"
+      },
+      {
+        "testName": "Heading is black",
+        "passed": true,
+        "details": "Heading color: rgb(0, 0, 0)",
+        "timestamp": "2025-10-14T02:18:57.643Z"
+      },
+      {
+        "testName": "Description is black",
+        "passed": true,
+        "details": "Description color: rgb(0, 0, 0)",
+        "timestamp": "2025-10-14T02:18:57.646Z"
+      },
+      {
+        "testName": "Card titles are black",
+        "passed": true,
+        "details": "Card title color: rgb(0, 0, 0)",
+        "timestamp": "2025-10-14T02:18:57.648Z"
+      },
+      {
+        "testName": "Video elements exist",
+        "passed": true,
+        "details": "Found 2 video elements",
+        "timestamp": "2025-10-14T02:18:57.651Z"
+      },
+      {
+        "testName": "Videos have autoplay",
+        "passed": true,
+        "details": "Videos have autoplay attribute",
+        "timestamp": "2025-10-14T02:18:57.662Z"
+      },
+      {
+        "testName": "Videos have muted",
+        "passed": false,
+        "details": "Videos missing muted",
+        "timestamp": "2025-10-14T02:18:57.662Z"
+      },
+      {
+        "testName": "Videos have loop",
+        "passed": true,
+        "details": "Videos have loop attribute",
+        "timestamp": "2025-10-14T02:18:57.662Z"
+      },
+      {
+        "testName": "Videos have playsinline",
+        "passed": true,
+        "details": "Videos have playsinline attribute",
+        "timestamp": "2025-10-14T02:18:57.662Z"
+      },
+      {
+        "testName": "Videos have valid sources",
+        "passed": true,
+        "details": "Found 2 video sources",
+        "timestamp": "2025-10-14T02:18:57.664Z"
+      },
+      {
+        "testName": "Video overlay exists",
+        "passed": true,
+        "details": "Video overlay is visible",
+        "timestamp": "2025-10-14T02:18:57.669Z"
+      },
+      {
+        "testName": "Section has aria-label",
+        "passed": true,
+        "details": "Section has aria-label",
+        "timestamp": "2025-10-14T02:18:57.673Z"
+      },
+      {
+        "testName": "Videos have aria-hidden",
+        "passed": true,
+        "details": "Videos have aria-hidden",
+        "timestamp": "2025-10-14T02:18:57.676Z"
+      },
+      {
+        "testName": "Overlay has aria-hidden",
+        "passed": true,
+        "details": "Overlay has aria-hidden",
+        "timestamp": "2025-10-14T02:18:57.679Z"
+      },
+      {
+        "testName": "Semantic HTML structure",
+        "passed": true,
+        "details": "Section: true, Headings: true",
+        "timestamp": "2025-10-14T02:18:57.682Z"
+      }
+    ]
+  },
+  "summary": {
+    "totalPassed": 15,
+    "totalFailed": 2
+  }
+}
