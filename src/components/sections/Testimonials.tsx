@@ -7,26 +7,26 @@ import { motion } from 'framer-motion';
 const Testimonials: React.FC = () => {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      title: "CEO",
-      company: "TechStart Inc.",
-      content: "The Asset Studio transformed our business. We doubled our sales in just 75 days, and the ROI has been incredible. Their team is professional, responsive, and delivers real results.",
-      rating: 5,
-      image: null
-    },
-    {
-      name: "Michael Chen",
-      title: "Marketing Director",
-      company: "Growth Labs",
-      content: "I've worked with many marketing agencies, but The Asset Studio is by far the best. Their 90-day performance guarantee is real - they delivered results faster than promised and continue to optimize our campaigns.",
-      rating: 5,
-      image: null
-    },
-    {
-      name: "Emily Rodriguez",
+      name: "Lala's Brand",
       title: "Founder",
-      company: "EcoBeauty Co.",
-      content: "The team at The Asset Studio understood our brand perfectly and created campaigns that resonated with our target audience. Our sales increased by 180% in the first 90 days. Highly recommend!",
+      company: "Boxmeal",
+      content: "Drew did an excellent job creating content for our new Boxmeal product. Everything was organized, simple, and easy to understand. He went above and beyond — I honestly felt like I was underpaying for the value delivered.",
+      rating: 5,
+      image: null
+    },
+    {
+      name: "Peptide Brand",
+      title: "CEO",
+      company: "Peptide Sciences",
+      content: "The Asset Studio exceeded expectations by building our brand, website, and content from scratch. The speed and quality were exceptional — far faster than we imagined possible — without sacrificing precision or creativity.",
+      rating: 5,
+      image: null
+    },
+    {
+      name: "Tech Director",
+      title: "Director of Technology",
+      company: "Tech Innovations",
+      content: "Drew is one of the smartest individuals I've worked with. He's like a sponge for information and applies it instantly. He built a chatbot on a massive dataset that worked flawlessly. I can't wait to see what he creates next.",
       rating: 5,
       image: null
     }

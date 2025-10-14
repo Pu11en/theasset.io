@@ -3,7 +3,6 @@ import Hero from '@/components/sections/Hero';
 import Solutions from '@/components/sections/Solutions';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import Process from '@/components/sections/Process';
-import Pricing from '@/components/sections/Pricing';
 import Testimonials from '@/components/sections/Testimonials';
 import CTA from '@/components/sections/CTA';
 import FAQ from '@/components/sections/FAQ';
@@ -17,7 +16,6 @@ export default function Home() {
       <Solutions />
       <WhyChooseUs />
       <Process />
-      <Pricing />
       <Testimonials />
       <CTA />
       <FAQ />

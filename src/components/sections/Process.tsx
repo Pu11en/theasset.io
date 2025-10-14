@@ -16,7 +16,7 @@ const Process: React.FC = () => {
       number: 2,
       icon: <Rocket className="h-12 w-12 text-blue-600" />,
       title: "Implementation",
-      description: "Our expert team launches your performance campaigns across multiple channels, optimized for maximum reach and engagement."
+      description: "We launch your performance campaigns across multiple channels, optimized for maximum reach and engagement."
     },
     {
       number: 3,
@@ -98,24 +98,6 @@ const Process: React.FC = () => {
           ))}
         </motion.div>
 
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="inline-flex items-center justify-center p-6 bg-yellow-50 rounded-lg border-2 border-yellow-200">
-            <div className="text-center">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">
-                90 Days to Results
-              </h4>
-              <p className="text-gray-700 max-w-md">
-                From strategy to implementation to optimization, we deliver measurable growth in just 90 days.
-              </p>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
