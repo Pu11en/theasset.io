@@ -32,7 +32,6 @@ export const useVideoLazyLoad = (
   const {
     threshold = 0.1,
     rootMargin = '50px',
-    preloadNext = true,
     pauseWhenNotVisible = true
   } = options;
 
@@ -138,7 +137,8 @@ export const useVideoLazyLoad = (
 
   // Set up Intersection Observer
   useEffect(() => {
-    if (!containerRef.current) return;
+    // Only create IntersectionObserver on client side
+    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined' || !containerRef.current) return;
 
     const options = {
       threshold,
@@ -188,12 +188,12 @@ export const useVideoLazyLoad = (
 
   // Cleanup on unmount
   useEffect(() => {
+    const currentVideo = videoRef.current;
     return () => {
-      const video = videoRef.current;
-      if (video) {
-        video.pause();
-        video.src = '';
-        video.load();
+      if (currentVideo) {
+        currentVideo.pause();
+        currentVideo.src = '';
+        currentVideo.load();
       }
     };
   }, []);

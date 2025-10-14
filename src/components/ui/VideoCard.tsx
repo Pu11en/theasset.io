@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, TouchEvent } from 'react';
+import React, { useState, useEffect, useCallback, TouchEvent } from 'react';
 import Image from 'next/image';
 import useVideoLazyLoad from '@/hooks/useVideoLazyLoad';
 import videoPerformanceMonitor from '@/utils/videoPerformanceMonitor';
@@ -45,7 +45,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
   caption,
   className = '',
   aspectRatio = '3/4',
-  autoPlay = true,
   muted = true,
   loop = true,
   lazy = true,
@@ -67,10 +66,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
     isLoaded,
     isLoading,
     hasError,
-    isVisible,
     videoRef,
     containerRef,
-    loadVideo,
     pauseVideo,
     playVideo
   } = useVideoLazyLoad({
@@ -109,7 +106,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         videoPerformanceMonitor.stopMonitoring(videoId);
       }
     };
-  }, [isLoaded, videoId]);
+  }, [isLoaded, videoId, videoRef]);
 
   // Show fallback image if video fails to load
   useEffect(() => {
@@ -127,7 +124,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
     if (!video) return;
 
     // Check if this is a mobile device
-    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
     
     if (isPlaying) {
       pauseVideo();
@@ -145,10 +142,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
     }
     
     // Provide haptic feedback on mobile
-    if (isMobile && 'vibrate' in navigator) {
+    if (isMobile && typeof navigator !== 'undefined' && 'vibrate' in navigator) {
       navigator.vibrate(5);
     }
-  }, [isPlaying, pauseVideo, playVideo]);
+  }, [isPlaying, pauseVideo, playVideo, videoRef]);
 
   // Touch gesture handlers for mobile interactions
   const handleTouchStart = useCallback((e: TouchEvent) => {
@@ -170,7 +167,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
     const touch = e.touches[0];
     const deltaX = Math.abs(touch.clientX - touchGesture.startX);
     const deltaY = Math.abs(touch.clientY - touchGesture.startY);
-    const deltaTime = Date.now() - touchGesture.startTime;
     
     // Detect if this is a swipe gesture
     if (deltaX > 30 || deltaY > 30) {
@@ -189,7 +185,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
     // Check for double tap (quick tap twice)
     if (!touchGesture.isSwipe && deltaTime < 300) {
       const video = videoRef.current;
-      if (video && enableFullscreenOnMobile && window.matchMedia('(pointer: coarse)').matches) {
+      if (video && enableFullscreenOnMobile && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
         // Toggle fullscreen on double tap for mobile
         if (!isFullscreen) {
           if (video.requestFullscreen) {
@@ -198,7 +194,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
             });
           }
         } else {
-          if (document.exitFullscreen) {
+          if (typeof document !== 'undefined' && document.exitFullscreen) {
             document.exitFullscreen().catch(() => {
               // Ignore fullscreen errors
             });
@@ -207,7 +203,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         setIsFullscreen(!isFullscreen);
         
         // Provide haptic feedback
-        if ('vibrate' in navigator) {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
           navigator.vibrate([10, 50, 10]);
         }
       }
@@ -228,23 +224,26 @@ const VideoCard: React.FC<VideoCardProps> = ({
     }
     
     setTouchGesture(null);
-  }, [enableTouchGestures, touchGesture, isFullscreen, enableFullscreenOnMobile]);
+  }, [enableTouchGestures, touchGesture, isFullscreen, enableFullscreenOnMobile, videoRef]);
 
   // Handle fullscreen change events
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
+    // Only add event listeners on client side
+    if (typeof document !== 'undefined') {
+      const handleFullscreenChange = () => {
+        setIsFullscreen(!!document.fullscreenElement);
+      };
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      return () => {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      };
+    }
   }, []);
 
   // Auto-hide controls on mobile when playing
   useEffect(() => {
-    if (isPlaying && window.matchMedia('(pointer: coarse)').matches) {
+    if (isPlaying && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
       const timer = setTimeout(() => {
         setShowControls(false);
       }, 3000);
@@ -302,7 +301,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         muted={muted}
         loop={loop}
         playsInline
-        controls={showControls && window.matchMedia('(pointer: coarse)').matches}
+        controls={showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches}
         onClick={handleVideoClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -351,7 +350,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
       )}
 
       {/* Mobile-specific controls overlay */}
-      {isLoaded && !hasError && window.matchMedia('(pointer: coarse)').matches && (
+      {isLoaded && !hasError && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && (
         <div
           className={`absolute top-4 right-4 flex flex-col gap-2 transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
@@ -368,7 +367,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
                   if (!isFullscreen) {
                     video.requestFullscreen?.();
                   } else {
-                    document.exitFullscreen?.();
+                    if (typeof document !== 'undefined') {
+                      document.exitFullscreen?.();
+                    }
                   }
                 }
               }}
@@ -394,7 +395,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
       )}
 
       {/* Touch gesture hints for mobile */}
-      {enableTouchGestures && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
+      {enableTouchGestures && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
         <div className="absolute bottom-4 left-4 right-4 text-center">
           <p className="text-white text-xs bg-black bg-opacity-50 rounded-full px-3 py-1 backdrop-blur-sm">
             Tap to play • Double tap for fullscreen

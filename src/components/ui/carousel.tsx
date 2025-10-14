@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, ReactNode, TouchEvent, KeyboardEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, useRef, useCallback, ReactNode, TouchEvent, KeyboardEvent } from 'react';
 import Image from 'next/image';
 
 // TypeScript interfaces
@@ -396,6 +396,7 @@ const NavigationButton = React.forwardRef<
   tabIndex = 0
 }, ref) => (
   <button
+    ref={ref}
     className={`carousel__arrow carousel__arrow--${direction} ${disabled ? 'carousel__arrow--disabled' : ''} ${className || ''}`}
     onClick={onClick}
     disabled={disabled}
@@ -430,6 +431,7 @@ const PaginationBullets = React.forwardRef<
   }
 >(({ currentIndex, totalSlides, onClick, className, ariaLabel }, ref) => (
   <div
+    ref={ref}
     className={`carousel__pagination carousel__pagination--bullets ${className || ''}`}
     role="tablist"
     aria-label={ariaLabel || "Carousel slide navigation"}
@@ -479,7 +481,6 @@ const Carousel: React.FC<CarouselProps> = ({
     nextSlideMessage = 'Next slide',
     firstSlideMessage = 'This is the first slide',
     lastSlideMessage = 'This is the last slide',
-    paginationBulletMessage = 'Go to slide {index}',
     containerLabel = 'Image carousel',
     slideLabel = 'Slide {index} of {total}',
     playLabel = 'Play autoplay',
@@ -539,20 +540,23 @@ const Carousel: React.FC<CarouselProps> = ({
   
   // Update container width and breakpoint config
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setContainerWidth(width);
-        setCurrentBreakpoint(getResponsiveConfig());
-      }
-    };
-    
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    
-    return () => {
-      window.removeEventListener('resize', updateWidth);
-    };
+    // Only add event listeners on client side
+    if (typeof window !== 'undefined') {
+      const updateWidth = () => {
+        if (containerRef.current) {
+          const width = containerRef.current.offsetWidth;
+          setContainerWidth(width);
+          setCurrentBreakpoint(getResponsiveConfig());
+        }
+      };
+      
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+      
+      return () => {
+        window.removeEventListener('resize', updateWidth);
+      };
+    }
   }, [getResponsiveConfig]);
   
   // Calculate track transform
@@ -583,13 +587,15 @@ const Carousel: React.FC<CarouselProps> = ({
       : Math.max(0, Math.min(index, slides.length - 1));
     
     // Pause videos in slides that are no longer visible
-    const videosToPause = document.querySelectorAll('.carousel__slide:not(.carousel__slide--active) video');
-    videosToPause.forEach(video => {
-      const htmlVideo = video as HTMLVideoElement;
-      if (!htmlVideo.paused) {
-        htmlVideo.pause();
-      }
-    });
+    if (typeof document !== 'undefined') {
+      const videosToPause = document.querySelectorAll('.carousel__slide:not(.carousel__slide--active) video');
+      videosToPause.forEach(video => {
+        const htmlVideo = video as HTMLVideoElement;
+        if (!htmlVideo.paused) {
+          htmlVideo.pause();
+        }
+      });
+    }
     
     setState(prev => ({
       ...prev,
@@ -708,7 +714,7 @@ const Carousel: React.FC<CarouselProps> = ({
         }
         break;
     }
-  }, [slidePrev, slideNext, slideTo, state.currentIndex, state.isAutoplay, slides.length, announceSlideChange, toggleAutoplay]);
+  }, [slidePrev, slideNext, slideTo, state.currentIndex, state.isAutoplay, state.isFocused, slides.length, announceSlideChange, toggleAutoplay]);
   
   // Focus management
   const handleFocus = useCallback(() => {
@@ -745,16 +751,18 @@ const Carousel: React.FC<CarouselProps> = ({
     }));
     
     // Pause any playing videos to prevent conflicts
-    const videos = document.querySelectorAll('.carousel__slide--active video');
-    videos.forEach(video => {
-      const htmlVideo = video as HTMLVideoElement;
-      if (!htmlVideo.paused) {
-        htmlVideo.pause();
-      }
-    });
+    if (typeof document !== 'undefined') {
+      const videos = document.querySelectorAll('.carousel__slide--active video');
+      videos.forEach(video => {
+        const htmlVideo = video as HTMLVideoElement;
+        if (!htmlVideo.paused) {
+          htmlVideo.pause();
+        }
+      });
+    }
     
     // Provide light haptic feedback on touch start
-    if ('vibrate' in navigator && window.matchMedia('(pointer: coarse)').matches) {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
       navigator.vibrate(5);
     }
   }, [getResponsiveConfig]);
@@ -835,7 +843,7 @@ const Carousel: React.FC<CarouselProps> = ({
     
     if (isHorizontalSwipe && (hasPassedThreshold || hasMomentum)) {
       // Provide haptic feedback for successful swipe
-      if ('vibrate' in navigator && window.matchMedia('(pointer: coarse)').matches) {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
         navigator.vibrate(10);
       }
       
@@ -868,14 +876,16 @@ const Carousel: React.FC<CarouselProps> = ({
     }));
     
     // Resume video playback for active slide
-    setTimeout(() => {
-      const activeVideo = document.querySelector('.carousel__slide--active video') as HTMLVideoElement;
-      if (activeVideo && activeVideo.paused && activeVideo.autoplay) {
-        activeVideo.play().catch(() => {
-          // Ignore autoplay errors
-        });
-      }
-    }, 100);
+    if (typeof document !== 'undefined') {
+      setTimeout(() => {
+        const activeVideo = document.querySelector('.carousel__slide--active video') as HTMLVideoElement;
+        if (activeVideo && activeVideo.paused && activeVideo.autoplay) {
+          activeVideo.play().catch(() => {
+            // Ignore autoplay errors
+          });
+        }
+      }, 100);
+    }
   }, [state.touchGesture, state.isDragging, state.currentIndex, slidePrev, slideNext, announceSlideChange, getResponsiveConfig, getTranslateX]);
   
   // Mouse handlers for grab cursor

@@ -156,7 +156,7 @@ class VideoPerformanceMonitor {
     videoElement.addEventListener('timeupdate', handleQualityChange);
 
     // Set up Performance Observer for resource timing
-    if ('PerformanceObserver' in window) {
+    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
           if (entry.name.includes(videoId)) {
