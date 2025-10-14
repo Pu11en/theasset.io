@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-10-14T05:03:52.880Z",
+  "tests": [
+    {
+      "name": "Zero Risk card displays with correct subheading text",
+      "status": "passed",
+      "message": "Test completed successfully"
+    },
+    {
+      "name": "Text is clearly readable over video background",
+      "status": "passed",
+      "message": "Test completed successfully"
+    },
+    {
+      "name": "Video remains as background element while text is main focus",
+      "status": "passed",
+      "message": "Test completed successfully"
+    },
+    {
+      "name": "Changes work across different screen sizes",
+      "status": "passed",
+      "message": "Test completed successfully"
+    },
+    {
+      "name": "Carousel functionality works properly",
+      "status": "failed",
+      "message": "page.goto: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"load\"\u001b[22m\n"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5
+  }
+}
