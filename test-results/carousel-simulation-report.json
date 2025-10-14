@@ -1,0 +1,1309 @@
+{
+  "summary": {
+    "totalTests": 42,
+    "passedTests": 42,
+    "failedTests": 0,
+    "startTime": "2025-10-14T19:21:25.095Z",
+    "endTime": "2025-10-14T19:21:25.102Z",
+    "duration": 7
+  },
+  "viewports": {
+    "Mobile": {
+      "width": 375,
+      "height": 667,
+      "tests": [
+        {
+          "viewport": "Mobile",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 318.75,
+                "height": 425,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 318.75,
+                "height": 425,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 318.75,
+                "height": 425,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 318.75,
+                "height": 425,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 318.75,
+                "height": 425,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "1.125rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "0.875rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 375,
+              "containerWidth": 337.5,
+              "cardWidth": 318.75,
+              "expectedWidth": 318.75,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 0,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    },
+    "Mobile Landscape": {
+      "width": 667,
+      "height": 375,
+      "tests": [
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 566.9499999999999,
+                "height": 755.9333333333332,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 566.9499999999999,
+                "height": 755.9333333333332,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 566.9499999999999,
+                "height": 755.9333333333332,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 566.9499999999999,
+                "height": 755.9333333333332,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 566.9499999999999,
+                "height": 755.9333333333332,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "1.125rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "0.875rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 667,
+              "containerWidth": 600.3000000000001,
+              "cardWidth": 566.9499999999999,
+              "expectedWidth": 566.9499999999999,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Mobile Landscape",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 0,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    },
+    "Tablet": {
+      "width": 768,
+      "height": 1024,
+      "tests": [
+        {
+          "viewport": "Tablet",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 345.6,
+                "height": 460.8,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 345.6,
+                "height": 460.8,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 345.6,
+                "height": 460.8,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 345.6,
+                "height": 460.8,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 345.6,
+                "height": 460.8,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "1.5rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "1rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 768,
+              "containerWidth": 691.2,
+              "cardWidth": 345.6,
+              "expectedWidth": 345.6,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 0,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    },
+    "Tablet Landscape": {
+      "width": 1024,
+      "height": 768,
+      "tests": [
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 307.2,
+                "height": 409.59999999999997,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 307.2,
+                "height": 409.59999999999997,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 307.2,
+                "height": 409.59999999999997,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 307.2,
+                "height": 409.59999999999997,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 307.2,
+                "height": 409.59999999999997,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "2.25rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "1rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 1024,
+              "containerWidth": 921.6,
+              "cardWidth": 307.2,
+              "expectedWidth": 307.2,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Tablet Landscape",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 1,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    },
+    "Desktop": {
+      "width": 1280,
+      "height": 720,
+      "tests": [
+        {
+          "viewport": "Desktop",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 384,
+                "height": 512,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 384,
+                "height": 512,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 384,
+                "height": 512,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 384,
+                "height": 512,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 384,
+                "height": 512,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "2.25rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "1rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 1280,
+              "containerWidth": 1152,
+              "cardWidth": 384,
+              "expectedWidth": 384,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 0,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    },
+    "Desktop Large": {
+      "width": 1920,
+      "height": 1080,
+      "tests": [
+        {
+          "viewport": "Desktop Large",
+          "test": "Card Aspect Ratio (3:4)",
+          "passed": true,
+          "details": {
+            "cards": [
+              {
+                "index": 0,
+                "width": 576,
+                "height": 768,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 1,
+                "width": 576,
+                "height": 768,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 2,
+                "width": 576,
+                "height": 768,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 3,
+                "width": 576,
+                "height": 768,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              },
+              {
+                "index": 4,
+                "width": 576,
+                "height": 768,
+                "aspectRatio": "0.75",
+                "expectedRatio": "0.75",
+                "isCorrect": true
+              }
+            ]
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Navigation Arrows",
+          "passed": true,
+          "details": {
+            "arrowsVisible": {
+              "prevArrow": {
+                "visible": true,
+                "clickable": true
+              },
+              "nextArrow": {
+                "visible": true,
+                "clickable": true
+              }
+            },
+            "navigationTest": {
+              "initialSlide": 0,
+              "afterNextSlide": 1,
+              "afterPrevSlide": 0,
+              "nextWorking": true,
+              "prevWorking": true
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Smooth Transitions",
+          "passed": true,
+          "details": {
+            "transitionTime": 1000,
+            "isSmooth": true,
+            "rapidTransitionTime": 3500
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Video Content Display",
+          "passed": true,
+          "details": {
+            "videos": [
+              {
+                "index": 0,
+                "isVideo": true,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 1,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 2,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 3,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              },
+              {
+                "index": 4,
+                "isVideo": false,
+                "hasSrc": true,
+                "isVisible": true,
+                "aspectRatio": "0.75"
+              }
+            ],
+            "firstSlideVideo": {
+              "isActive": true,
+              "isPlaying": true,
+              "isVisible": true,
+              "hasSrc": true,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Text Overlays",
+          "passed": true,
+          "details": {
+            "textData": {
+              "title": {
+                "text": "Zero Risk",
+                "isVisible": true,
+                "fontSize": "2.25rem",
+                "color": "#FFFFFF",
+                "hasTextShadow": true
+              },
+              "description": {
+                "text": "You can't lose money. Our offer makes working with us risk free.",
+                "isVisible": true,
+                "fontSize": "1rem",
+                "color": "rgba(255, 255, 255, 0.9)"
+              },
+              "container": {
+                "isVisible": true,
+                "hasBackground": true,
+                "backgroundColor": "rgba(0, 0, 0, 0.5)",
+                "backdropFilter": "blur(2px)"
+              }
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Responsive Behavior",
+          "passed": true,
+          "details": {
+            "responsiveData": {
+              "viewportWidth": 1920,
+              "containerWidth": 1200,
+              "cardWidth": 576,
+              "expectedWidth": 576,
+              "widthMatch": true,
+              "cardCount": 5,
+              "aspectRatio": "0.75"
+            }
+          },
+          "issues": []
+        },
+        {
+          "viewport": "Desktop Large",
+          "test": "Edge Cases",
+          "passed": true,
+          "details": {
+            "edgeCases": {
+              "firstSlideNavigation": {
+                "firstSlideIndex": 0,
+                "afterFirstPrevSlide": 4,
+                "wrapsCorrectly": true
+              },
+              "lastSlideNavigation": {
+                "lastSlideIndex": 4,
+                "afterLastNextSlide": 0,
+                "wrapsCorrectly": true
+              },
+              "rapidNavigation": {
+                "duration": 0,
+                "completed": true
+              }
+            }
+          },
+          "issues": []
+        }
+      ],
+      "passedTests": 7,
+      "failedTests": 0
+    }
+  },
+  "issues": []
+}
