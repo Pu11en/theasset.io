@@ -79,7 +79,7 @@ const Slide = ({
   // Determine card classes based on enhanced mode and card type
   const getCardClasses = () => {
     if (!enableEnhancedAspectRatios) {
-      return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[53.3vmin] mx-[4vmin] md:w-[35vmin] md:h-[46.7vmin] sm:w-[30vmin] sm:h-[40vmin] z-10 aspect-[3/4]";
+      return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out carousel-card-legacy mx-[4vmin] z-10";
     }
     
     const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10";
@@ -233,7 +233,7 @@ export function Carousel({
   // Get container classes based on enhanced mode
   const getContainerClasses = () => {
     if (!enableEnhancedAspectRatios) {
-      return "relative w-[40vmin] h-[53.3vmin] md:w-[35vmin] md:h-[46.7vmin] sm:w-[30vmin] sm:h-[40vmin] mx-auto aspect-[3/4]";
+      return "relative carousel-card-legacy mx-auto";
     }
     
     const baseClasses = "carousel-container-enhanced relative mx-auto";
