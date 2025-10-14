@@ -7,7 +7,7 @@ import { FlickeringGrid } from '@/components/ui/flickering-grid';
 import { motion } from 'framer-motion';
 
 const WhyChooseUs: React.FC = () => {
-  // Only 3 video cards as requested
+  // Only 3 video cards as requested with responsive sources
   const videoData = [
     {
       id: "zero-risk",
@@ -16,6 +16,23 @@ const WhyChooseUs: React.FC = () => {
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg",
       caption: "Zero Risk Guarantee",
+      sources: [
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
+          type: "video/mp4"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/insta_post_2_1_xdaptq.mp4",
+          type: "video/mp4",
+          media: "(max-width: 640px)"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760415676/insta_post_2_1_xdaptq.mp4",
+          type: "video/mp4",
+          media: "(max-width: 1024px)"
+        }
+      ],
+      fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
     },
     {
       id: "expert-team",
@@ -24,6 +41,23 @@ const WhyChooseUs: React.FC = () => {
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg",
       caption: "Expert Team",
+      sources: [
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
+          type: "video/mp4"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760470477/carosal_6_yzdvbj.mp4",
+          type: "video/mp4",
+          media: "(max-width: 640px)"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760470477/carosal_6_yzdvbj.mp4",
+          type: "video/mp4",
+          media: "(max-width: 1024px)"
+        }
+      ],
+      fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
     },
     {
       id: "proven-process",
@@ -32,6 +66,23 @@ const WhyChooseUs: React.FC = () => {
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg",
       caption: "Proven Process",
+      sources: [
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
+          type: "video/mp4"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/proven_process_video.mp4",
+          type: "video/mp4",
+          media: "(max-width: 640px)"
+        },
+        {
+          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760415676/proven_process_video.mp4",
+          type: "video/mp4",
+          media: "(max-width: 1024px)"
+        }
+      ],
+      fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg"
     },
   ];
 
@@ -93,6 +144,8 @@ const WhyChooseUs: React.FC = () => {
                     muted={true}
                     loop={true}
                     lazy={true}
+                    sources={video.sources}
+                    fallbackImage={video.fallbackImage}
                   />
                 )
               }))}

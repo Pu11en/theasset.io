@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Lazy Loading Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .video-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+        }
+        .video-card {
+            height: 300px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .performance-info {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Video Lazy Loading Test</h1>
+        
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Test Instructions:</h2>
+            <ul class="list-disc list-inside space-y-1">
+                <li>Scroll down to see videos load as they enter the viewport</li>
+                <li>Check the performance metrics in the bottom-right corner</li>
+                <li>Verify that videos pause when scrolled out of view</li>
+                <li>Test on different viewport sizes to verify responsive sources</li>
+            </ul>
+        </div>
+
+        <div class="mb-4">
+            <button id="generate-report" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Generate Performance Report
+            </button>
+            <button id="clear-metrics" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+                Clear Metrics
+            </button>
+        </div>
+
+        <div class="video-container" id="video-container">
+            <!-- Videos will be added here -->
+        </div>
+
+        <div class="performance-info" id="performance-info">
+            <h3 class="font-bold mb-2">Performance Metrics:</h3>
+            <div id="metrics-content">No metrics yet...</div>
+        </div>
+    </div>
+
+    <script>
+        // Mock implementation of our lazy loading system for testing
+        class VideoLazyLoader {
+            constructor() {
+                this.observer = null;
+                this.videos = new Map();
+                this.metrics = {
+                    totalVideos: 0,
+                    loadedVideos: 0,
+                    failedVideos: 0,
+                    totalLoadTime: 0
+                };
+                this.init();
+            }
+
+            init() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const videoId = entry.target.dataset.videoId;
+                        const videoData = this.videos.get(videoId);
+                        
+                        if (entry.isIntersecting && !videoData.loaded) {
+                            this.loadVideo(videoId, entry.target);
+                        } else if (!entry.isIntersecting && videoData.loaded) {
+                            this.pauseVideo(videoId, entry.target);
+                        }
+                    });
+                }, {
+                    rootMargin: '50px',
+                    threshold: 0.1
+                });
+            }
+
+            addVideo(videoId, videoElement, sources) {
+                this.videos.set(videoId, {
+                    element: videoElement,
+                    sources: sources,
+                    loaded: false,
+                    loadStartTime: 0,
+                    loadTime: 0,
+                    errorCount: 0
+                });
+                this.metrics.totalVideos++;
+                this.observer.observe(videoElement);
+            }
+
+            loadVideo(videoId, videoElement) {
+                const videoData = this.videos.get(videoId);
+                if (!videoData || videoData.loaded) return;
+
+                videoData.loadStartTime = performance.now();
+                const loadingIndicator = videoElement.querySelector('.loading-indicator');
+                
+                // Show loading indicator
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'block';
+                }
+
+                // Simulate video loading with different sources based on viewport
+                const isMobile = window.innerWidth < 640;
+                const selectedSource = isMobile && videoData.sources.mobile 
+                    ? videoData.sources.mobile 
+                    : videoData.sources.desktop;
+
+                videoElement.src = selectedSource;
+                videoElement.load();
+
+                videoElement.addEventListener('canplay', () => {
+                    videoData.loaded = true;
+                    videoData.loadTime = performance.now() - videoData.loadStartTime;
+                    this.metrics.loadedVideos++;
+                    this.metrics.totalLoadTime += videoData.loadTime;
+                    
+                    // Hide loading indicator
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                    
+                    // Auto-play if in viewport
+                    if (this.isElementInViewport(videoElement)) {
+                        videoElement.play().catch(e => console.log('Autoplay prevented:', e));
+                    }
+                    
+                    this.updateMetricsDisplay();
+                }, { once: true });
+
+                videoElement.addEventListener('error', () => {
+                    videoData.errorCount++;
+                    this.metrics.failedVideos++;
+                    
+                    // Hide loading indicator and show error
+                    if (loadingIndicator) {
+                        loadingIndicator.textContent = 'Failed to load video';
+                    }
+                    
+                    this.updateMetricsDisplay();
+                }, { once: true });
+            }
+
+            pauseVideo(videoId, videoElement) {
+                if (!videoElement.paused) {
+                    videoElement.pause();
+                }
+            }
+
+            isElementInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+
+            updateMetricsDisplay() {
+                const metricsContent = document.getElementById('metrics-content');
+                const avgLoadTime = this.metrics.loadedVideos > 0 
+                    ? (this.metrics.totalLoadTime / this.metrics.loadedVideos).toFixed(2)
+                    : 0;
+                
+                metricsContent.innerHTML = `
+                    Total Videos: ${this.metrics.totalVideos}<br>
+                    Loaded Videos: ${this.metrics.loadedVideos}<br>
+                    Failed Videos: ${this.metrics.failedVideos}<br>
+                    Avg Load Time: ${avgLoadTime}ms<br>
+                    <br>
+                    <small>Check console for detailed metrics</small>
+                `;
+            }
+
+            generateReport() {
+                const report = {
+                    summary: this.metrics,
+                    details: Array.from(this.videos.entries()).map(([id, data]) => ({
+                        id,
+                        loaded: data.loaded,
+                        loadTime: data.loadTime,
+                        errorCount: data.errorCount
+                    }))
+                };
+                
+                console.log('Video Performance Report:', report);
+                alert('Performance report generated. Check console for details.');
+            }
+
+            clearMetrics() {
+                this.metrics = {
+                    totalVideos: 0,
+                    loadedVideos: 0,
+                    failedVideos: 0,
+                    totalLoadTime: 0
+                };
+                this.updateMetricsDisplay();
+                console.clear();
+            }
+        }
+
+        // Initialize the lazy loader
+        const lazyLoader = new VideoLazyLoader();
+
+        // Video data for testing
+        const videoData = [
+            {
+                id: 'video-1',
+                title: 'Zero Risk',
+                poster: 'https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg',
+                sources: {
+                    desktop: 'https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4',
+                    mobile: 'https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/insta_post_2_1_xdaptq.mp4'
+                }
+            },
+            {
+                id: 'video-2',
+                title: 'Expert Team',
+                poster: 'https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg',
+                sources: {
+                    desktop: 'https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4',
+                    mobile: 'https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760470477/carosal_6_yzdvbj.mp4'
+                }
+            },
+            {
+                id: 'video-3',
+                title: 'Proven Process',
+                poster: 'https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg',
+                sources: {
+                    desktop: 'https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4',
+                    mobile: 'https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/proven_process_video.mp4'
+                }
+            }
+        ];
+
+        // Create video elements
+        function createVideoElements() {
+            const container = document.getElementById('video-container');
+            
+            videoData.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card bg-gray-200 rounded-lg overflow-hidden';
+                videoCard.dataset.videoId = video.id;
+                
+                videoCard.innerHTML = `
+                    <div class="relative w-full h-full">
+                        <img src="${video.poster}" alt="${video.title}" class="absolute inset-0 w-full h-full object-cover" />
+                        <video 
+                            class="absolute inset-0 w-full h-full object-cover"
+                            poster="${video.poster}"
+                            muted
+                            loop
+                            playsinline
+                            preload="none"
+                        ></video>
+                        <div class="loading-indicator" style="display: none;">
+                            Loading video...
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                            <h3 class="text-white font-semibold text-lg">${video.title}</h3>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(videoCard);
+                
+                // Add to lazy loader
+                const videoElement = videoCard.querySelector('video');
+                lazyLoader.addVideo(video.id, videoElement, video.sources);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('generate-report').addEventListener('click', () => {
+            lazyLoader.generateReport();
+        });
+
+        document.getElementById('clear-metrics').addEventListener('click', () => {
+            lazyLoader.clearMetrics();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createVideoElements();
+            lazyLoader.updateMetricsDisplay();
+            
+            // Log viewport size for testing
+            console.log(`Viewport: ${window.innerWidth}x${window.innerHeight}`);
+            console.log('Scroll to test lazy loading...');
+        });
+
+        // Log performance metrics periodically
+        setInterval(() => {
+            if (lazyLoader.metrics.loadedVideos > 0) {
+                console.log('Current Performance Metrics:', lazyLoader.metrics);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

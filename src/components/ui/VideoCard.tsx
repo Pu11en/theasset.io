@@ -2,6 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import useVideoLazyLoad from '@/hooks/useVideoLazyLoad';
+import videoPerformanceMonitor from '@/utils/videoPerformanceMonitor';
+
+interface VideoSource {
+  src: string;
+  type: string;
+  media?: string;
+}
 
 interface VideoCardProps {
   src: string;
@@ -15,6 +23,8 @@ interface VideoCardProps {
   muted?: boolean;
   loop?: boolean;
   lazy?: boolean;
+  sources?: VideoSource[];
+  fallbackImage?: string;
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({
@@ -28,33 +38,36 @@ const VideoCard: React.FC<VideoCardProps> = ({
   autoPlay = true,
   muted = true,
   loop = true,
-  lazy = true
+  lazy = true,
+  sources,
+  fallbackImage
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showFallback, setShowFallback] = useState(false);
+  const videoId = `video-${title.replace(/\s+/g, '-').toLowerCase()}`;
+  
+  // Use our custom lazy loading hook
+  const {
+    isInView,
+    isLoaded,
+    isLoading,
+    hasError,
+    isVisible,
+    videoRef,
+    containerRef,
+    loadVideo,
+    pauseVideo,
+    playVideo
+  } = useVideoLazyLoad({
+    threshold: 0.1,
+    rootMargin: '50px',
+    preloadNext: true,
+    pauseWhenNotVisible: true
+  });
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    const handleLoadStart = () => {
-      setIsLoading(true);
-      setHasError(false);
-    };
-
-    const handleCanPlay = () => {
-      setIsLoading(false);
-      if (autoPlay) {
-        setIsPlaying(true);
-      }
-    };
-
-    const handleError = () => {
-      setHasError(true);
-      setIsLoading(false);
-    };
 
     const handlePlay = () => {
       setIsPlaying(true);
@@ -64,43 +77,49 @@ const VideoCard: React.FC<VideoCardProps> = ({
       setIsPlaying(false);
     };
 
-    video.addEventListener('loadstart', handleLoadStart);
-    video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('error', handleError);
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
 
-    // Attempt to play video if autoplay is enabled
-    if (autoPlay) {
-      video.play().catch(err => {
-        console.warn('Video autoplay failed:', err);
-      });
+    // Start performance monitoring when video is ready
+    if (isLoaded) {
+      videoPerformanceMonitor.startMonitoring(videoId, video);
     }
 
     return () => {
-      video.removeEventListener('loadstart', handleLoadStart);
-      video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('error', handleError);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      
+      // Stop monitoring when component unmounts
+      if (isLoaded) {
+        videoPerformanceMonitor.stopMonitoring(videoId);
+      }
     };
-  }, [autoPlay]);
+  }, [isLoaded, videoId]);
+
+  // Show fallback image if video fails to load
+  useEffect(() => {
+    if (hasError && fallbackImage) {
+      setShowFallback(true);
+      
+      // Log error for debugging
+      console.error(`Video failed to load: ${title} (${videoId})`);
+    }
+  }, [hasError, fallbackImage, title, videoId]);
 
   const handleVideoClick = () => {
     const video = videoRef.current;
     if (!video) return;
 
     if (isPlaying) {
-      video.pause();
+      pauseVideo();
     } else {
-      video.play().catch(err => {
-        console.warn('Video play failed:', err);
-      });
+      playVideo();
     }
   };
 
   return (
-    <div 
+    <div
+      ref={containerRef}
       className={`relative w-full h-full overflow-hidden rounded-lg bg-gray-100 ${className}`}
       style={{ aspectRatio }}
     >
@@ -114,24 +133,34 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Error state */}
+      {/* Error state with fallback */}
       {hasError && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200">
-          <div className="flex flex-col items-center text-center p-4">
-            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-2">
-              <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+          {showFallback && fallbackImage ? (
+            <Image
+              src={fallbackImage}
+              alt={title}
+              fill
+              style={{ objectFit: 'cover' }}
+            />
+          ) : (
+            <div className="flex flex-col items-center text-center p-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-2">
+                <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-600">Failed to load video</p>
             </div>
-            <p className="text-sm text-gray-600">Failed to load video</p>
-          </div>
+          )}
         </div>
       )}
 
-      {/* Video element */}
+      {/* Video element with lazy loading */}
       <video
         ref={videoRef}
-        className="w-full h-full object-cover"
+        className={`w-full h-full object-cover ${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        preload={lazy && !isInView ? 'none' : 'auto'}
         src={src}
         poster={poster}
         muted={muted}
@@ -139,11 +168,21 @@ const VideoCard: React.FC<VideoCardProps> = ({
         playsInline
         onClick={handleVideoClick}
         style={{ cursor: 'pointer' }}
-      />
+      >
+        {/* Responsive sources for different viewports */}
+        {sources && sources.map((source, index) => (
+          <source
+            key={index}
+            src={source.src}
+            type={source.type}
+            media={source.media}
+          />
+        ))}
+      </video>
 
       {/* Play/Pause overlay */}
-      {!isLoading && !hasError && (
-        <div 
+      {isLoaded && !hasError && (
+        <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
           style={{ opacity: isPlaying ? 0 : 0.7, transition: 'opacity 0.3s ease' }}
         >
@@ -156,6 +195,14 @@ const VideoCard: React.FC<VideoCardProps> = ({
               )}
             </svg>
           </div>
+        </div>
+      )}
+
+      {/* Performance indicator (for development) */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="absolute top-2 left-2 z-20 bg-black/50 text-white text-xs px-2 py-1 rounded">
+          {isInView ? 'In View' : 'Out of View'} | {isLoaded ? 'Loaded' : 'Not Loaded'}
+          {hasError && ' | Error'}
         </div>
       )}
 

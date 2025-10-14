@@ -504,13 +504,22 @@ const Carousel: React.FC<CarouselProps> = ({
     return -offset;
   }, [state.currentIndex, containerWidth, currentBreakpoint, spaceBetween]);
   
-  // Navigation functions
+  // Navigation functions with video management
   const slideTo = useCallback((index: number) => {
     if (state.isAnimating) return;
     
     const newIndex = loop
       ? (index + slides.length) % slides.length
       : Math.max(0, Math.min(index, slides.length - 1));
+    
+    // Pause videos in slides that are no longer visible
+    const videosToPause = document.querySelectorAll('.carousel__slide:not(.carousel__slide--active) video');
+    videosToPause.forEach(video => {
+      const htmlVideo = video as HTMLVideoElement;
+      if (!htmlVideo.paused) {
+        htmlVideo.pause();
+      }
+    });
     
     setState(prev => ({
       ...prev,
@@ -738,7 +747,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const slidesPerViewNum = typeof currentSlidesPerView === 'number' ? currentSlidesPerView : 1;
   const slideWidth = containerWidth / slidesPerViewNum;
   
-  // Render slide content
+  // Render slide content with enhanced video support
   const renderSlideContent = (slide: SlideData, index: number) => {
     if (slide.type === 'custom' && slide.content) {
       return slide.content;
@@ -757,26 +766,36 @@ const Carousel: React.FC<CarouselProps> = ({
     }
     
     if (slide.type === 'video') {
+      const isActive = index === state.currentIndex;
+      const isVisible = Math.abs(index - state.currentIndex) <= 1; // Current slide and adjacent slides
+      
       return (
         <video
           src={slide.src}
           poster={slide.poster}
           loop={slide.loop}
           muted={slide.muted}
-          autoPlay={slide.autoplay}
+          autoPlay={slide.autoplay && isActive}
           playsInline
-          controls
+          controls={isActive} // Only show controls on active slide
+          preload={isVisible ? 'auto' : 'none'} // Preload current and adjacent slides
+          className={`transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-75'}`}
+          style={{ objectFit: 'cover' }}
         />
       );
     }
     
     if (slide.type === 'iframe') {
+      const isActive = index === state.currentIndex;
+      
       return (
         <iframe
-          src={slide.src}
+          src={isActive ? slide.src : ''}
           title={slide.title || `Slide ${index + 1}`}
           frameBorder="0"
           allowFullScreen
+          loading={isActive ? 'eager' : 'lazy'}
+          className={isActive ? 'opacity-100' : 'opacity-0'}
         />
       );
     }
@@ -820,29 +839,53 @@ const Carousel: React.FC<CarouselProps> = ({
           transform={`translateX(${getTranslateX()}px)`}
           transition={state.isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'}
         >
-          {slides.map((slide, index) => (
-            <CarouselSlide
-              key={slide.id}
-              isActive={index === state.currentIndex}
-              index={index}
-              totalSlides={slides.length}
-              aspectRatio={typeof aspectRatio === 'string' ? aspectRatio : aspectRatio.toString()}
-              lazy={typeof lazy === 'boolean' ? lazy : lazy.elementClass !== undefined}
-              ariaLabel={slide.ariaLabel || slideLabel.replace('{index}', String(index + 1)).replace('{total}', String(slides.length))}
-              ariaDescribedBy={slide.ariaDescription ? `slide-desc-${slide.id}` : undefined}
-              style={{
-                width: `${slideWidth}px`,
-                marginRight: index < slides.length - 1 ? `${currentSpaceBetween}px` : '0'
-              } as React.CSSProperties}
-            >
-              {renderSlideContent(slide, index)}
-              {slide.caption && (
-                <div className="carousel__slide-caption" id={`slide-desc-${slide.id}`}>
-                  {slide.caption}
-                </div>
-              )}
-            </CarouselSlide>
-          ))}
+          {slides.map((slide, index) => {
+            const isActive = index === state.currentIndex;
+            const isVisible = Math.abs(index - state.currentIndex) <= 1; // Current slide and adjacent slides
+            
+            return (
+              <CarouselSlide
+                key={slide.id}
+                isActive={isActive}
+                index={index}
+                totalSlides={slides.length}
+                aspectRatio={typeof aspectRatio === 'string' ? aspectRatio : aspectRatio.toString()}
+                lazy={typeof lazy === 'boolean' ? lazy : lazy.elementClass !== undefined}
+                ariaLabel={slide.ariaLabel || slideLabel.replace('{index}', String(index + 1)).replace('{total}', String(slides.length))}
+                ariaDescribedBy={slide.ariaDescription ? `slide-desc-${slide.id}` : undefined}
+                style={{
+                  width: `${slideWidth}px`,
+                  marginRight: index < slides.length - 1 ? `${currentSpaceBetween}px` : '0'
+                } as React.CSSProperties}
+                className={`transition-all duration-300 ${isActive ? 'z-10' : 'z-0'}`}
+              >
+                {/* Performance optimization: Only render content for visible slides */}
+                {isVisible ? (
+                  <>
+                    {renderSlideContent(slide, index)}
+                    {slide.caption && (
+                      <div className="carousel__slide-caption" id={`slide-desc-${slide.id}`}>
+                        {slide.caption}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  /* Placeholder for non-visible slides to maintain layout */
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                    {slide.poster && (
+                      <Image
+                        src={slide.poster}
+                        alt={slide.title || `Slide ${index + 1} preview`}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        className="opacity-50"
+                      />
+                    )}
+                  </div>
+                )}
+              </CarouselSlide>
+            );
+          })}
         </CarouselTrack>
       </CarouselViewport>
       
