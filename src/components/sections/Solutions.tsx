@@ -40,8 +40,8 @@ const Solutions: React.FC = () => {
       title: "Performance Analysis",
       description: "Clear reporting and proven results that drive your business forward.",
       features: [
-        "Clear Reporting: Simple, easy-to-understand performance reports",
-        "Proven Results: On average, clients see a 60% increase in clicks instantly"
+        "Clear reporting: Simple, easy-to-understand performance reports",
+        "Proven results: On average, clients see a 60% increase in clicks instantly"
       ],
       stats: "60% Average Click Increase",
       glowColor: 'green' as const,

@@ -10,7 +10,7 @@ const Testimonials: React.FC = () => {
       name: "Lala's Brand",
       title: "Founder",
       company: "Boxmeal",
-      content: "Drew did an excellent job creating content for our new Boxmeal product. Everything was organized, simple, and easy to understand. He went above and beyond — I honestly felt like I was underpaying for the value delivered.",
+      content: "Drew did an excellent job creating content for our new Boxmeal product. Everything was organized, simple, and easy to understand. He went above and beyond, and I honestly felt like I was underpaying for the value delivered.",
       rating: 5,
       image: null
     },
@@ -18,7 +18,7 @@ const Testimonials: React.FC = () => {
       name: "Peptide Brand",
       title: "CEO",
       company: "Peptide Sciences",
-      content: "The Asset Studio exceeded expectations by building our brand, website, and content from scratch. The speed and quality were exceptional — far faster than we imagined possible — without sacrificing precision or creativity.",
+      content: "The Asset Studio exceeded expectations by building our brand, website, and content from scratch. The speed and quality were exceptional, far faster than we imagined possible, without sacrificing precision or creativity.",
       rating: 5,
       image: null
     },

@@ -78,7 +78,7 @@ const CTA: React.FC = () => {
             We saw a 180% increase in sales in just 75 days. The best marketing investment we&apos;ve ever made!&quot;
           </p>
           <p className="text-white font-semibold mt-4">
-            — Sarah Johnson, CEO of TechStart Inc.
+            - Sarah Johnson, CEO of TechStart Inc.
           </p>
         </motion.div>
       </div>
