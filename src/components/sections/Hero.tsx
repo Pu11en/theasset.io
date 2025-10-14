@@ -38,9 +38,20 @@ const Hero: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showVideoControls, setShowVideoControls] = useState(false);
+  
+  // Mobile-specific video state
+  const [mobileVideoLoaded, setMobileVideoLoaded] = useState(false);
+  const [mobileVideoError, setMobileVideoError] = useState(false);
+  const [shouldLoadMobileVideo, setShouldLoadMobileVideo] = useState(false);
+  const [mobileLoadingState, setMobileLoadingState] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
+  const [isMobileVideoPlaying, setIsMobileVideoPlaying] = useState(true);
+  const [showMobileVideoControls, setShowMobileVideoControls] = useState(false);
+  
   const videoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const mobileObserverRef = useRef<IntersectionObserver | null>(null);
   const skipLinkRef = useRef<HTMLAnchorElement>(null);
 
   // Optimized Cloudinary URLs for different screen sizes
@@ -50,6 +61,16 @@ const Hero: React.FC = () => {
     desktop: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_1920&h_1080&c_fill",
     ultrawide: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760393206/defipullen_A_continuation-style_digital_background_designed_f_4dae005a-f881-4411-826d-3b42be6cd65b_0_qnghsc.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_2560&h_1080&c_fill"
   }), []);
+
+  // Mobile-specific video URL
+  const mobileVideoUrl = useMemo(() =>
+    "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760404471/social_defipullen_A_continuation-style_digital_background_designed_f_41c365bc-4f40-49b8-b75c-c69d883435a2_0_wdoxfx.mp4?q=auto:f_auto:low&cs_srgb=true&b_rgb:000000&w_640&h_360&c_fill",
+  []);
+  
+  // Mobile video poster frame
+  const mobileVideoPoster = useMemo(() =>
+    "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760404471/social_defipullen_A_continuation-style_digital_background_designed_f_41c365bc-4f40-49b8-b75c-c69d883435a2_0_wdoxfx.jpg?w_640&h_360&c_fill&f_auto&q_auto:low",
+  []);
 
   // Static image fallback for mobile
   const staticImageFallback = "/hero-bg.png";
@@ -96,10 +117,10 @@ const Hero: React.FC = () => {
     }
   }, []);
 
-  // Check connection speed and data saver preference
+  // Check connection speed and data saver preference for desktop video
   const shouldLoadVideoBasedOnConnection = useCallback(() => {
     if (typeof window !== 'undefined') {
-      // Always disable video on mobile to save data and improve performance
+      // Always disable desktop video on mobile to save data and improve performance
       if (isMobile) {
         return false;
       }
@@ -130,7 +151,41 @@ const Hero: React.FC = () => {
     return true;
   }, [isMobile]);
 
-  // Set up intersection observer for lazy loading
+  // Check if mobile video should be loaded based on connection and device capabilities
+  const shouldLoadMobileVideoBasedOnConnection = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      // Only load mobile video on mobile devices
+      if (!isMobile) {
+        return false;
+      }
+      
+      // Check for data saver preference
+      if ('connection' in navigator && (navigator as NavigatorWithConnection).connection?.saveData) {
+        return false;
+      }
+      
+      // Check for very slow connections
+      if ('connection' in navigator) {
+        const connection = (navigator as NavigatorWithConnection).connection;
+        const verySlowConnections = ['slow-2g', '2g'];
+        if (connection && verySlowConnections.includes(connection.effectiveType)) {
+          return false;
+        }
+      }
+      
+      // Check battery level if available
+      if ('getBattery' in navigator) {
+        (navigator as NavigatorWithConnection).getBattery?.().then((battery: BatteryManager) => {
+          if (battery.level < 0.1) {
+            return false;
+          }
+        });
+      }
+    }
+    return true;
+  }, [isMobile]);
+
+  // Set up intersection observer for lazy loading (desktop video)
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -160,6 +215,36 @@ const Hero: React.FC = () => {
     };
   }, [shouldLoadVideoBasedOnConnection]);
 
+  // Set up intersection observer for mobile video lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && shouldLoadMobileVideoBasedOnConnection()) {
+            setShouldLoadMobileVideo(true);
+            setMobileLoadingState('loading');
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '100px 0px', // Start loading 100px before the hero section is in view for mobile
+        threshold: 0.1
+      }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+      mobileObserverRef.current = observer;
+    }
+
+    return () => {
+      if (mobileObserverRef.current) {
+        mobileObserverRef.current.disconnect();
+      }
+    };
+  }, [shouldLoadMobileVideoBasedOnConnection]);
+
   useEffect(() => {
     // Set the iframe src with a timestamp only on the client side
     setIframeSrc(`https://www.youtube.com/embed/4K4xOtBcuTo?cb=${Date.now()}`);
@@ -181,6 +266,27 @@ const Hero: React.FC = () => {
         console.error('Video autoplay failed:', error);
         setVideoError(true);
         setLoadingState('error');
+      });
+    }
+  };
+
+  // Mobile video event handlers
+  const handleMobileVideoError = () => {
+    setMobileVideoError(true);
+    setMobileLoadingState('error');
+  };
+
+  const handleMobileVideoLoadedData = () => {
+    setMobileVideoLoaded(true);
+    setMobileLoadingState('loaded');
+  };
+
+  const handleMobileVideoCanPlay = () => {
+    if (mobileVideoRef.current) {
+      mobileVideoRef.current.play().catch(error => {
+        console.error('Mobile video autoplay failed:', error);
+        setMobileVideoError(true);
+        setMobileLoadingState('error');
       });
     }
   };
@@ -218,6 +324,27 @@ const Hero: React.FC = () => {
     }
   }, [isMuted]);
 
+  // Mobile video control functions
+  const toggleMobileVideoPlay = useCallback(() => {
+    if (mobileVideoRef.current) {
+      if (isMobileVideoPlaying) {
+        mobileVideoRef.current.pause();
+      } else {
+        mobileVideoRef.current.play().catch(error => {
+          console.error('Mobile video play failed:', error);
+        });
+      }
+      setIsMobileVideoPlaying(!isMobileVideoPlaying);
+    }
+  }, [isMobileVideoPlaying]);
+
+  const toggleMobileMute = useCallback(() => {
+    if (mobileVideoRef.current) {
+      mobileVideoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  }, [isMuted]);
+
   // Handle keyboard navigation for video controls
   const handleVideoKeyDown = useCallback((e: React.KeyboardEvent) => {
     switch (e.key) {
@@ -237,6 +364,26 @@ const Hero: React.FC = () => {
         break;
     }
   }, [toggleVideoPlay, toggleMute]);
+
+  // Handle keyboard navigation for mobile video controls
+  const handleMobileVideoKeyDown = useCallback((e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case ' ':
+      case 'Enter':
+        e.preventDefault();
+        toggleMobileVideoPlay();
+        break;
+      case 'm':
+      case 'M':
+        e.preventDefault();
+        toggleMobileMute();
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setShowMobileVideoControls(false);
+        break;
+    }
+  }, [toggleMobileVideoPlay, toggleMobileMute]);
 
   // Focus management for skip link
   useEffect(() => {
@@ -378,14 +525,13 @@ const Hero: React.FC = () => {
             High-performing marketing campaigns for brands
           </motion.p>
 
-          {/* Hide video on very small mobile screens to improve performance */}
-          {screenSize !== 'mobile' && (
-            <motion.div
-              className="mb-8 sm:mb-10 max-w-4xl mx-auto px-4"
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-              transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.3 }}
-            >
+          {/* YouTube video - now visible on all screen sizes including mobile */}
+          <motion.div
+            className="mb-6 sm:mb-8 md:mb-10 max-w-4xl mx-auto px-4"
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+            transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.3 }}
+          >
             <div className="relative w-full h-0 pb-[56.25%] rounded-lg overflow-hidden shadow-xl">
               {iframeSrc && (
                 <iframe
@@ -399,8 +545,7 @@ const Hero: React.FC = () => {
                 ></iframe>
               )}
             </div>
-            </motion.div>
-          )}
+          </motion.div>
 
           <motion.div
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4"
