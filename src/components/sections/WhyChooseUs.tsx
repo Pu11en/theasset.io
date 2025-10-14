@@ -40,7 +40,7 @@ const WhyChooseUs: React.FC = () => {
       description: "Proven Track Record Across Multiple Industries",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg",
-      caption: "Extensive Experience",
+      caption: "",
       sources: [
         {
           src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
@@ -61,11 +61,11 @@ const WhyChooseUs: React.FC = () => {
     },
     {
       id: "business-automations",
-      title: "Business Automations",
-      description: "High-Tech Solutions for Streamlined Operations",
+      title: "",
+      description: "",
       src: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png",
-      caption: "Business Automations",
+      caption: "",
       isStaticImage: true,
       sources: [],
       fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png"
