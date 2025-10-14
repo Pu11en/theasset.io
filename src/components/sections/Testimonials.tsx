@@ -120,24 +120,6 @@ const Testimonials: React.FC = () => {
           ))}
         </motion.div>
 
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="inline-flex items-center p-6 bg-blue-50 rounded-lg border border-blue-200">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-blue-600 mb-2">
-                Join 500+ Happy Clients
-              </h3>
-              <p className="text-gray-700 max-w-md">
-                See why businesses trust The Asset Studio to deliver consistent, measurable growth.
-              </p>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
