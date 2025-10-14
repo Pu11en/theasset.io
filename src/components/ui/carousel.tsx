@@ -79,11 +79,12 @@ const Slide = ({
   // Determine card classes based on enhanced mode and card type
   const getCardClasses = () => {
     if (!enableEnhancedAspectRatios) {
-      return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[71vmin] mx-[4vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] z-10 aspect-[9/16]";
+      return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[53.3vmin] mx-[4vmin] md:w-[35vmin] md:h-[46.7vmin] sm:w-[30vmin] sm:h-[40vmin] z-10 aspect-[3/4]";
     }
     
     const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10 mx-[var(--carousel-card-margin)]";
-    const typeClasses = isZeroRiskCard ? "carousel-card-zero-risk" : "carousel-card-standard";
+    // All cards now use the same aspect ratio, so we can apply the same class
+    const typeClasses = "carousel-card-standard";
     
     return `${baseClasses} ${typeClasses}`;
   };
@@ -225,11 +226,12 @@ export function Carousel({
   // Get container classes based on enhanced mode
   const getContainerClasses = () => {
     if (!enableEnhancedAspectRatios) {
-      return "relative w-[40vmin] h-[71vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] mx-auto aspect-[9/16]";
+      return "relative w-[40vmin] h-[53.3vmin] md:w-[35vmin] md:h-[46.7vmin] sm:w-[30vmin] sm:h-[40vmin] mx-auto aspect-[3/4]";
     }
     
     const baseClasses = "carousel-container-enhanced relative mx-auto";
-    const activeClasses = isCurrentSlideZeroRisk ? "zero-risk-active" : "";
+    // No longer need special handling for Zero Risk since all cards have the same aspect ratio
+    const activeClasses = "";
     
     return `${baseClasses} ${activeClasses}`;
   };
@@ -261,7 +263,7 @@ export function Carousel({
             index={index}
             current={current}
             handleSlideClick={handleSlideClick}
-            isZeroRiskCard={slide.title === "Zero Risk"}
+            isZeroRiskCard={false} // All cards now use the same aspect ratio
             enableEnhancedAspectRatios={enableEnhancedAspectRatios}
           />
         ))}
