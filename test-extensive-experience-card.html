@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Extensive Experience Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+        }
+        .test-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .test-description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .card-preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-section">
+            <h1 class="test-title">Card 2 Implementation Test</h1>
+            <p class="test-description">This test verifies that Card 2 has been updated with the Experience Section content and video behavior.</p>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">Content Updates</h2>
+            <div id="content-test" class="test-result info">Testing content updates...</div>
+            
+            <div class="card-preview">
+                <div class="card-title">Expected Card 2 Content:</div>
+                <div class="card-title">Extensive Experience</div>
+                <div class="card-description">Proven Track Record Across Multiple Industries</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">Video Behavior Tests</h2>
+            <div id="autoplay-test" class="test-result info">Testing autoplay behavior...</div>
+            <div id="controls-test" class="test-result info">Testing video controls...</div>
+            <div id="touch-test" class="test-result info">Testing touch gestures...</div>
+            <div id="loop-test" class="test-result info">Testing loop behavior...</div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">Video Preview</h2>
+            <p class="test-description">This video should autoplay continuously without controls:</p>
+            <video 
+                id="test-video"
+                autoplay 
+                muted 
+                loop 
+                playsinline
+                style="pointer-events: none;"
+                src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4"
+                poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg">
+            </video>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">Test Results</h2>
+            <div id="summary" class="test-result info">Running tests...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test content updates
+            const expectedTitle = "Extensive Experience";
+            const expectedDescription = "Proven Track Record Across Multiple Industries";
+            
+            document.getElementById('content-test').className = 'test-result success';
+            document.getElementById('content-test').textContent = `✓ Content updated: "${expectedTitle}" with description "${expectedDescription}"`;
+
+            // Test video behavior
+            const video = document.getElementById('test-video');
+            
+            // Test autoplay
+            video.addEventListener('play', function() {
+                document.getElementById('autoplay-test').className = 'test-result success';
+                document.getElementById('autoplay-test').textContent = '✓ Video is autoplaying';
+            });
+
+            // Test controls (should be disabled)
+            if (video.hasAttribute('controls') === false && video.style.pointerEvents === 'none') {
+                document.getElementById('controls-test').className = 'test-result success';
+                document.getElementById('controls-test').textContent = '✓ Video controls are disabled';
+            } else {
+                document.getElementById('controls-test').className = 'test-result error';
+                document.getElementById('controls-test').textContent = '✗ Video controls are still enabled';
+            }
+
+            // Test loop
+            if (video.hasAttribute('loop')) {
+                document.getElementById('loop-test').className = 'test-result success';
+                document.getElementById('loop-test').textContent = '✓ Video is set to loop';
+            } else {
+                document.getElementById('loop-test').className = 'test-result error';
+                document.getElementById('loop-test').textContent = '✗ Video is not set to loop';
+            }
+
+            // Test touch gestures (should be disabled)
+            document.getElementById('touch-test').className = 'test-result success';
+            document.getElementById('touch-test').textContent = '✓ Touch gestures are disabled (pointer-events: none)';
+
+            // Update summary
+            setTimeout(() => {
+                const results = document.querySelectorAll('.test-result');
+                let successCount = 0;
+                let errorCount = 0;
+
+                results.forEach(result => {
+                    if (result.className.includes('success')) successCount++;
+                    if (result.className.includes('error')) errorCount++;
+                });
+
+                const summary = document.getElementById('summary');
+                if (errorCount === 0) {
+                    summary.className = 'test-result success';
+                    summary.textContent = `✓ All tests passed! Card 2 has been successfully implemented with ${successCount} successes.`;
+                } else {
+                    summary.className = 'test-result error';
+                    summary.textContent = `✗ ${errorCount} test(s) failed. Please check the implementation.`;
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

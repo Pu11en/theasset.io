@@ -18,6 +18,7 @@ interface SlideData {
   lazy?: boolean; // Lazy loading
   ariaLabel?: string;
   ariaDescription?: string;
+  isStaticImage?: boolean; // For rendering static images instead of videos
 }
 
 // Touch gesture state interface
@@ -511,7 +512,8 @@ const Carousel: React.FC<CarouselProps> = ({
   const liveRegionRef = useRef<HTMLDivElement>(null);
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
-  const paginationRef = useRef<HTMLDivElement>(null);
+  // Pagination reference removed as pagination is no longer used
+  // const paginationRef = useRef<HTMLDivElement>(null);
   
   // Get responsive config based on container width
   const getResponsiveConfig = useCallback(() => {
@@ -1098,7 +1100,8 @@ const Carousel: React.FC<CarouselProps> = ({
         </>
       )}
       
-      {pagination && (
+      {/* Pagination component removed - only arrow navigation is now enabled */}
+      {/* {pagination && (
         <PaginationBullets
           ref={paginationRef}
           currentIndex={state.currentIndex}
@@ -1106,7 +1109,7 @@ const Carousel: React.FC<CarouselProps> = ({
           onClick={slideTo}
           ariaLabel="Carousel slide navigation"
         />
-      )}
+      )} */}
       
       {/* Autoplay controls for keyboard users */}
       {state.isAutoplay && (

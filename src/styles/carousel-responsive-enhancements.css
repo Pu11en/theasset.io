@@ -1,0 +1,527 @@
+/**
+ * Carousel Responsive Design and Cross-Browser Compatibility Enhancements
+ * 
+ * This file contains additional CSS rules to ensure the carousel works properly
+ * across all device sizes and browsers, with special focus on:
+ * 1. Enhanced responsive breakpoints
+ * 2. Cross-browser video autoplay compatibility
+ * 3. Improved touch gesture support
+ * 4. Better accessibility features
+ * 5. Performance optimizations
+ */
+
+/* ==========================================================================
+   Enhanced Responsive Breakpoints
+   ========================================================================== */
+
+/* Ultra-wide desktop support (1920px+) */
+@media (min-width: 1920px) {
+  .carousel__slide {
+    min-height: 600px;
+  }
+  
+  .carousel__arrow {
+    width: 4rem;
+    height: 4rem;
+  }
+  
+  .carousel__arrow--prev {
+    left: 2rem;
+  }
+  
+  .carousel__arrow--next {
+    right: 2rem;
+  }
+  
+  /* Enhanced text sizing for ultra-wide displays */
+  .video-card-container .text-overlay h3,
+  .video-card-container > div > div:last-child h3 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  
+  .video-card-container .text-overlay p,
+  .video-card-container > div > div:last-child p {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+}
+
+/* Small mobile devices optimization (320px-374px) */
+@media (max-width: 374px) {
+  .carousel__slide {
+    border-radius: 6px;
+    min-height: 240px;
+  }
+  
+  .carousel__arrow {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+  
+  .carousel__arrow--prev {
+    left: 4px;
+  }
+  
+  .carousel__arrow--next {
+    right: 4px;
+  }
+  
+  /* Smaller text for very small screens */
+  .video-card-container .text-overlay,
+  .video-card-container > div > div:last-child {
+    padding: 0.75rem;
+  }
+  
+  .video-card-container .text-overlay h3,
+  .video-card-container > div > div:last-child h3 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+  
+  .video-card-container .text-overlay p,
+  .video-card-container > div > div:last-child p {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+}
+
+/* Foldable phone support (small screens with unique aspect ratios) */
+@media (max-height: 600px) and (orientation: landscape) {
+  .carousel__slide {
+    min-height: 180px;
+  }
+  
+  .carousel__arrow {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  .video-card-container .text-overlay,
+  .video-card-container > div > div:last-child {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .video-card-container .text-overlay h3,
+  .video-card-container > div > div:last-child h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.125rem;
+  }
+  
+  .video-card-container .text-overlay p,
+  .video-card-container > div > div:last-child p {
+    font-size: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   Cross-Browser Video Autoplay Compatibility
+   ========================================================================== */
+
+/* Safari-specific video optimizations */
+@supports (-webkit-appearance: none) {
+  .carousel__slide video {
+    /* Safari-specific video properties */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  /* Safari 14+ specific autoplay support */
+  @supports (-webkit-backdrop-filter: blur(1px)) {
+    .carousel__slide video[autoplay] {
+      -webkit-play-inline: true;
+      plays-inline: true;
+    }
+  }
+}
+
+/* Firefox-specific video optimizations */
+@supports (-moz-appearance: none) {
+  .carousel__slide video {
+    /* Firefox-specific video properties */
+    -moz-transform: translateZ(0);
+    transform: translateZ(0);
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-perspective: 1000px;
+    perspective: 1000px;
+  }
+}
+
+/* Edge-specific video optimizations */
+@supports (-ms-ime-align: auto) {
+  .carousel__slide video {
+    /* Edge-specific video properties */
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* Chrome-specific video optimizations */
+@supports (-webkit-touch-callout: none) {
+  .carousel__slide video {
+    /* Chrome-specific video properties */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+}
+
+/* ==========================================================================
+   Enhanced Touch Gesture Support
+   ========================================================================== */
+
+/* Improved touch targets for all devices */
+@media (pointer: coarse) {
+  .carousel__arrow {
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  /* Enhanced touch feedback */
+  .carousel__arrow:active {
+    transform: translateY(-50%) scale(0.95);
+    transition: transform 0.1s ease;
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Larger touch area for video controls */
+  .video-card-container video {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Touch gesture indicators */
+@media (pointer: coarse) and (hover: none) {
+  .carousel__viewport::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .carousel__viewport:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Enhanced Accessibility Features
+   ========================================================================== */
+
+/* High contrast mode improvements */
+@media (prefers-contrast: high) {
+  .carousel__arrow {
+    background: white;
+    border: 3px solid black;
+    color: black;
+  }
+  
+  .carousel__arrow:hover {
+    background: black;
+    color: white;
+  }
+  
+  .carousel__arrow:focus {
+    outline: 3px solid black;
+    outline-offset: 2px;
+    background: yellow;
+    color: black;
+  }
+  
+  /* Enhanced text contrast */
+  .video-card-container .text-overlay h3,
+  .video-card-container > div > div:last-child h3 {
+    color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7);
+  }
+  
+  .video-card-container .text-overlay p,
+  .video-card-container > div > div:last-child p {
+    color: #FFFFFF;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Enhanced focus indicators */
+.carousel__arrow:focus-visible {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Screen reader announcements */
+.carousel__sr-announcement {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Performance Optimizations
+   ========================================================================== */
+
+/* Hardware acceleration for smooth animations */
+.carousel__track,
+.carousel__slide,
+.carousel__slide video {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize for low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  .carousel__track {
+    transition: none !important;
+  }
+  
+  .carousel__slide {
+    transition: none !important;
+  }
+  
+  .carousel__arrow {
+    transition: none !important;
+  }
+  
+  .carousel__arrow:hover {
+    transform: translateY(-50%);
+  }
+}
+
+/* Optimize for battery saving mode */
+@media (prefers-reduced-data: reduce) {
+  .carousel__slide video {
+    filter: brightness(0.8) contrast(1.0);
+  }
+  
+  .carousel__slide video::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
+    pointer-events: none;
+  }
+}
+
+/* ==========================================================================
+   Cross-Browser Compatibility Fixes
+   ========================================================================== */
+
+/* Internet Explorer 11 fixes */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .carousel__track {
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  
+  .carousel__slide {
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+  
+  .carousel__arrow {
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+}
+
+/* Legacy Edge fixes */
+@supports (-ms-ime-align: auto) {
+  .carousel__track {
+    display: -ms-flexbox;
+    -ms-flex-direction: row;
+  }
+  
+  .carousel__slide {
+    -ms-flex: 0 0 auto;
+  }
+}
+
+/* ==========================================================================
+   Dark Mode Enhancements
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .carousel__arrow {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  .carousel__arrow:hover {
+    background: #3B82F6;
+    border-color: #3B82F6;
+  }
+  
+  .carousel__arrow:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .carousel {
+    position: static;
+    overflow: visible;
+  }
+  
+  .carousel__track {
+    display: block;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .carousel__slide {
+    display: block;
+    margin-bottom: 1rem;
+    break-inside: avoid;
+  }
+  
+  .carousel__arrow {
+    display: none;
+  }
+  
+  .carousel__slide video {
+    display: none;
+  }
+  
+  .video-card-container .text-overlay,
+  .video-card-container > div > div:last-child {
+    position: static;
+    background: none;
+    color: black;
+    text-shadow: none;
+  }
+}
+
+/* ==========================================================================
+   Responsive Image Handling
+   ========================================================================== */
+
+/* Ensure images maintain aspect ratio across all viewports */
+.carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Optimize images for different screen densities */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .carousel__slide img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* ==========================================================================
+   Video Loading Optimization
+   ========================================================================== */
+
+/* Improve video loading experience */
+.carousel__slide video {
+  background: #000;
+  object-fit: cover;
+}
+
+/* Video loading states */
+.carousel__slide video::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0),
+              linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.carousel__slide video:not([src])::before {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Error Handling and Fallbacks
+   ========================================================================== */
+
+/* Video error state styling */
+.carousel__slide video[error] {
+  display: none;
+}
+
+.carousel__slide video[error] + .video-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Image error state styling */
+.carousel__slide img[error] {
+  background: #f0f0f0;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  text-align: center;
+}
+
+.carousel__slide img[error]::after {
+  content: 'Image failed to load';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -40,7 +40,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
   const memoizedColor = useMemo(() => {
     const toRGBA = (color: string) => {
-      if (typeof window === "undefined") {
+      if (typeof window === "undefined" || typeof document === "undefined") {
         return `rgba(59, 130, 246,`; // Default to blue color in SSR
       }
       const canvas = document.createElement("canvas");
@@ -57,7 +57,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
   const setupCanvas = useCallback(
     (canvas: HTMLCanvasElement, width: number, height: number) => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -118,6 +118,9 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   );
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;

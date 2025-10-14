@@ -35,6 +35,8 @@ interface VideoCardProps {
   fallbackImage?: string;
   enableTouchGestures?: boolean;
   enableFullscreenOnMobile?: boolean;
+  forceAutoplay?: boolean; // New prop for continuous autoplay without controls
+  isStaticImage?: boolean; // New prop to render static image instead of video
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({
@@ -51,7 +53,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
   sources,
   fallbackImage,
   enableTouchGestures = true,
-  enableFullscreenOnMobile = true
+  enableFullscreenOnMobile = true,
+  forceAutoplay = false, // Default to false
+  isStaticImage = false // Default to false
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
@@ -74,7 +78,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
     threshold: 0.1,
     rootMargin: '50px',
     preloadNext: true,
-    pauseWhenNotVisible: true
+    pauseWhenNotVisible: !forceAutoplay, // Don't pause forceAutoplay videos
+    forceAutoplay // Pass forceAutoplay to the hook
   });
 
   useEffect(() => {
@@ -89,8 +94,49 @@ const VideoCard: React.FC<VideoCardProps> = ({
       setIsPlaying(false);
     };
 
+    const handleError = (e: Event) => {
+      console.error(`Video error for ${title}:`, e);
+      setShowFallback(true);
+    };
+
+    const handleStalled = () => {
+      console.warn(`Video stalled for ${title}, attempting to restart...`);
+      if (forceAutoplay && video) {
+        setTimeout(() => {
+          video.play().catch(err => {
+            console.error('Failed to restart stalled video:', err);
+          });
+        }, 500);
+      }
+    };
+
+    const handleSuspend = () => {
+      console.warn(`Video suspended for ${title}`);
+      if (forceAutoplay && video) {
+        setTimeout(() => {
+          video.play().catch(err => {
+            console.error('Failed to resume suspended video:', err);
+          });
+        }, 300);
+      }
+    };
+
+    const handleEnded = () => {
+      // For forceAutoplay videos, restart immediately when ended
+      if (forceAutoplay && video && !loop) {
+        video.currentTime = 0;
+        video.play().catch(err => {
+          console.error('Failed to restart video after end:', err);
+        });
+      }
+    };
+
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
+    video.addEventListener('error', handleError);
+    video.addEventListener('stalled', handleStalled);
+    video.addEventListener('suspend', handleSuspend);
+    video.addEventListener('ended', handleEnded);
 
     // Start performance monitoring when video is ready
     if (isLoaded) {
@@ -100,13 +146,17 @@ const VideoCard: React.FC<VideoCardProps> = ({
     return () => {
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      video.removeEventListener('error', handleError);
+      video.removeEventListener('stalled', handleStalled);
+      video.removeEventListener('suspend', handleSuspend);
+      video.removeEventListener('ended', handleEnded);
       
       // Stop monitoring when component unmounts
       if (isLoaded) {
         videoPerformanceMonitor.stopMonitoring(videoId);
       }
     };
-  }, [isLoaded, videoId, videoRef]);
+  }, [isLoaded, videoId, videoRef, title, forceAutoplay, loop]);
 
   // Show fallback image if video fails to load
   useEffect(() => {
@@ -117,6 +167,46 @@ const VideoCard: React.FC<VideoCardProps> = ({
       console.error(`Video failed to load: ${title} (${videoId})`);
     }
   }, [hasError, fallbackImage, title, videoId]);
+
+  // Force autoplay videos to start playing immediately when loaded
+  useEffect(() => {
+    if (forceAutoplay && isLoaded && videoRef.current) {
+      const video = videoRef.current;
+      
+      // Ensure video is muted for autoplay compatibility
+      video.muted = true;
+      
+      // Try to play immediately
+      video.play().catch(err => {
+        console.warn(`Initial autoplay failed for ${title}, trying fallback...`, err);
+        
+        // Fallback strategies for autoplay
+        setTimeout(() => {
+          // Try again with a small delay
+          video.play().catch(err2 => {
+            console.error(`Fallback autoplay failed for ${title}`, err2);
+            
+            // Last resort: try to play with user interaction simulation
+            const simulateUserInteraction = () => {
+              video.play().catch(err3 => {
+                console.error(`Simulated interaction autoplay failed for ${title}`, err3);
+              });
+            };
+            
+            // Add a one-time click listener to the document as last resort
+            const enableAutoplay = () => {
+              simulateUserInteraction();
+              document.removeEventListener('click', enableAutoplay);
+              document.removeEventListener('touchstart', enableAutoplay);
+            };
+            
+            document.addEventListener('click', enableAutoplay, { once: true });
+            document.addEventListener('touchstart', enableAutoplay, { once: true });
+          });
+        }, 100);
+      });
+    }
+  }, [forceAutoplay, isLoaded, title, videoRef]);
 
   // Enhanced video click handler with mobile considerations
   const handleVideoClick = useCallback(() => {
@@ -291,47 +381,63 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Video element with lazy loading and enhanced mobile support */}
-      <video
-        ref={videoRef}
-        className={`w-full h-full object-cover ${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 ${enableTouchGestures ? 'touch-manipulation' : ''}`}
-        preload={lazy && !isInView ? 'none' : 'auto'}
-        src={src}
-        poster={poster}
-        muted={muted}
-        loop={loop}
-        playsInline
-        controls={showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches}
-        onClick={handleVideoClick}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        style={{
-          cursor: 'pointer',
-          // Ensure proper touch handling on mobile
-          touchAction: enableTouchGestures ? 'pan-y' : 'auto',
-          // Optimize for mobile playback
-          WebkitUserSelect: 'none',
-          KhtmlUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          userSelect: 'none',
-          WebkitTapHighlightColor: 'transparent'
-        }}
-      >
-        {/* Responsive sources for different viewports */}
-        {sources && sources.map((source, index) => (
-          <source
-            key={index}
-            src={source.src}
-            type={source.type}
-            media={source.media}
-          />
-        ))}
-      </video>
+      {/* Render either video or static image based on isStaticImage prop */}
+      {isStaticImage ? (
+        <Image
+          src={src}
+          alt={title}
+          fill
+          style={{ objectFit: 'cover' }}
+          className={`${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+          loading={lazy ? 'lazy' : 'eager'}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          className={`w-full h-full object-cover ${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 ${enableTouchGestures ? 'touch-manipulation' : ''} ${forceAutoplay ? 'pointer-events-none' : ''}`}
+          preload={lazy && !isInView ? 'none' : 'auto'}
+          src={src}
+          poster={poster}
+          muted={muted}
+          loop={loop}
+          playsInline
+          controls={forceAutoplay ? false : (showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)}
+          onClick={forceAutoplay ? undefined : handleVideoClick}
+          onTouchStart={forceAutoplay ? undefined : handleTouchStart}
+          onTouchMove={forceAutoplay ? undefined : handleTouchMove}
+          onTouchEnd={forceAutoplay ? undefined : handleTouchEnd}
+          autoPlay={forceAutoplay ? true : undefined}
+          x-webkit-airplay="deny"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          style={{
+            cursor: forceAutoplay ? 'default' : 'pointer',
+            // Ensure proper touch handling on mobile
+            touchAction: enableTouchGestures ? 'pan-y' : 'auto',
+            // Optimize for mobile playback
+            WebkitUserSelect: 'none',
+            KhtmlUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            userSelect: 'none',
+            WebkitTapHighlightColor: 'transparent'
+          }}
+        >
+          {/* Responsive sources for different viewports */}
+          {sources && sources.map((source, index) => (
+            <source
+              key={index}
+              src={source.src}
+              type={source.type}
+              media={source.media}
+            />
+          ))}
+        </video>
+      )}
 
-      {/* Enhanced Play/Pause overlay with mobile optimizations */}
-      {isLoaded && !hasError && (
+      {/* Enhanced Play/Pause overlay with mobile optimizations - hidden for forceAutoplay and static images */}
+      {isLoaded && !hasError && !forceAutoplay && !isStaticImage && (
         <div
           className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${
             isPlaying ? 'opacity-0' : 'opacity-70'
@@ -349,8 +455,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Mobile-specific controls overlay */}
-      {isLoaded && !hasError && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && (
+      {/* Mobile-specific controls overlay - hidden for forceAutoplay and static images */}
+      {isLoaded && !hasError && !forceAutoplay && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && (
         <div
           className={`absolute top-4 right-4 flex flex-col gap-2 transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
@@ -394,8 +500,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Touch gesture hints for mobile */}
-      {enableTouchGestures && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
+      {/* Touch gesture hints for mobile - hidden for forceAutoplay and static images */}
+      {enableTouchGestures && !forceAutoplay && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
         <div className="absolute bottom-4 left-4 right-4 text-center">
           <p className="text-white text-xs bg-black bg-opacity-50 rounded-full px-3 py-1 backdrop-blur-sm">
             Tap to play • Double tap for fullscreen
@@ -411,12 +517,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Text overlay */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-        <h3 className="text-white font-semibold text-lg mb-1">{title}</h3>
-        <p className="text-white/90 text-sm">{description}</p>
+      {/* Text overlay - positioned at the top as primary focal point */}
+      <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 via-black/60 to-transparent p-4 sm:p-6">
+        <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2 drop-shadow-lg">{title}</h3>
+        <p className="text-white/95 text-sm sm:text-base md:text-lg drop-shadow-md">{description}</p>
         {caption && (
-          <p className="text-white/80 text-xs mt-1">{caption}</p>
+          <p className="text-white/90 text-xs sm:text-sm mt-2 drop-shadow-md">{caption}</p>
         )}
       </div>
     </div>

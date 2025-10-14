@@ -11,11 +11,11 @@ const WhyChooseUs: React.FC = () => {
   const videoData = [
     {
       id: "zero-risk",
-      title: "Zero Risk",
-      description: "You can't lose money. Our offer makes working with us risk free.",
+      title: "ZeroRisk",
+      description: "You Can't Lose Money - Our Offer Makes Your Investment Risk-Free",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg",
-      caption: "Zero Risk Guarantee",
+      caption: "",
       sources: [
         {
           src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4",
@@ -35,12 +35,12 @@ const WhyChooseUs: React.FC = () => {
       fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
     },
     {
-      id: "expert-team",
-      title: "Expert Team",
-      description: "Our specialists bring years of experience to deliver exceptional results.",
+      id: "extensive-experience",
+      title: "Extensive Experience",
+      description: "Proven Track Record Across Multiple Industries",
       src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
       poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg",
-      caption: "Expert Team",
+      caption: "Extensive Experience",
       sources: [
         {
           src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4",
@@ -60,29 +60,15 @@ const WhyChooseUs: React.FC = () => {
       fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
     },
     {
-      id: "proven-process",
-      title: "Proven Process",
-      description: "We've refined our approach to ensure consistent, high-quality outcomes.",
-      src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
-      poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg",
-      caption: "Proven Process",
-      sources: [
-        {
-          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/proven_process_video.mp4",
-          type: "video/mp4"
-        },
-        {
-          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/proven_process_video.mp4",
-          type: "video/mp4",
-          media: "(max-width: 640px)"
-        },
-        {
-          src: "https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_768/v1760415676/proven_process_video.mp4",
-          type: "video/mp4",
-          media: "(max-width: 1024px)"
-        }
-      ],
-      fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/proven_process_poster.jpg"
+      id: "business-automations",
+      title: "Business Automations",
+      description: "High-Tech Solutions for Streamlined Operations",
+      src: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png",
+      poster: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png",
+      caption: "Business Automations",
+      isStaticImage: true,
+      sources: [],
+      fallbackImage: "https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png"
     },
   ];
 
@@ -146,8 +132,10 @@ const WhyChooseUs: React.FC = () => {
                     lazy={true}
                     sources={video.sources}
                     fallbackImage={video.fallbackImage}
-                    enableTouchGestures={true}
-                    enableFullscreenOnMobile={true}
+                    enableTouchGestures={video.id !== "zero-risk" && video.id !== "extensive-experience" && video.id !== "business-automations"}
+                    enableFullscreenOnMobile={video.id !== "zero-risk" && video.id !== "extensive-experience" && video.id !== "business-automations"}
+                    forceAutoplay={video.id === "zero-risk" || video.id === "extensive-experience"}
+                    isStaticImage={video.id === "business-automations"}
                   />
                 )
               }))}
@@ -156,7 +144,7 @@ const WhyChooseUs: React.FC = () => {
               spaceBetween={20}
               loop={true}
               navigation={true}
-              pagination={true}
+              pagination={false}
             />
           </div>
         </motion.div>

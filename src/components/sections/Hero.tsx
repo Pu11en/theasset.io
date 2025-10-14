@@ -182,62 +182,68 @@ const Hero: React.FC = () => {
 
   // Set up intersection observer for lazy loading (desktop video)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && shouldLoadVideoBasedOnConnection()) {
-            setShouldLoadVideo(true);
-            setLoadingState('loading');
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: '200px 0px', // Start loading 200px before the hero section is in view
-        threshold: 0.1
-      }
-    );
+    // Only create IntersectionObserver on client side
+    if (typeof window !== 'undefined' && typeof IntersectionObserver !== 'undefined') {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && shouldLoadVideoBasedOnConnection()) {
+              setShouldLoadVideo(true);
+              setLoadingState('loading');
+              observer.disconnect();
+            }
+          });
+        },
+        {
+          rootMargin: '200px 0px', // Start loading 200px before the hero section is in view
+          threshold: 0.1
+        }
+      );
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-      observerRef.current = observer;
+      if (heroRef.current) {
+        observer.observe(heroRef.current);
+        observerRef.current = observer;
+      }
+
+      return () => {
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+        }
+      };
     }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
   }, [shouldLoadVideoBasedOnConnection]);
 
   // Set up intersection observer for mobile video lazy loading
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && shouldLoadMobileVideoBasedOnConnection()) {
-            setShouldLoadMobileVideo(true);
-            setMobileLoadingState('loading');
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: '100px 0px', // Start loading 100px before the hero section is in view for mobile
-        threshold: 0.1
-      }
-    );
+    // Only create IntersectionObserver on client side
+    if (typeof window !== 'undefined' && typeof IntersectionObserver !== 'undefined') {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && shouldLoadMobileVideoBasedOnConnection()) {
+              setShouldLoadMobileVideo(true);
+              setMobileLoadingState('loading');
+              observer.disconnect();
+            }
+          });
+        },
+        {
+          rootMargin: '100px 0px', // Start loading 100px before the hero section is in view for mobile
+          threshold: 0.1
+        }
+      );
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-      mobileObserverRef.current = observer;
+      if (heroRef.current) {
+        observer.observe(heroRef.current);
+        mobileObserverRef.current = observer;
+      }
+
+      return () => {
+        if (mobileObserverRef.current) {
+          mobileObserverRef.current.disconnect();
+        }
+      };
     }
-
-    return () => {
-      if (mobileObserverRef.current) {
-        mobileObserverRef.current.disconnect();
-      }
-    };
   }, [shouldLoadMobileVideoBasedOnConnection]);
 
   useEffect(() => {
@@ -288,14 +294,17 @@ const Hero: React.FC = () => {
 
   // Set up screen size detection
   useEffect(() => {
-    detectScreenSize();
-    
-    const handleResize = () => {
+    // Only add event listeners on client side
+    if (typeof window !== 'undefined') {
       detectScreenSize();
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+      
+      const handleResize = () => {
+        detectScreenSize();
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
   }, [detectScreenSize]);
 
   // Video control functions
@@ -382,14 +391,17 @@ const Hero: React.FC = () => {
 
   // Focus management for skip link
   useEffect(() => {
-    const handleFocus = () => {
-      if (skipLinkRef.current) {
-        skipLinkRef.current.focus();
-      }
-    };
+    // Only add event listeners on client side
+    if (typeof document !== 'undefined') {
+      const handleFocus = () => {
+        if (skipLinkRef.current) {
+          skipLinkRef.current.focus();
+        }
+      };
 
-    document.addEventListener('keydown', handleFocus);
-    return () => document.removeEventListener('keydown', handleFocus);
+      document.addEventListener('keydown', handleFocus);
+      return () => document.removeEventListener('keydown', handleFocus);
+    }
   }, []);
 
   return (

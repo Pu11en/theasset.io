@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Automations Card Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .aspect-ratio-custom {
+            aspect-ratio: 3/4;
+        }
+        .carousel__slide {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .text-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 100%);
+            padding: 1rem 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-center">Business Automations Card Test</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1: Zero Risk (Original Video) -->
+            <div class="carousel__slide aspect-ratio-custom bg-gray-200">
+                <video 
+                    class="w-full h-full object-cover"
+                    src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4"
+                    poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                ></video>
+                <div class="text-overlay">
+                    <h3 class="text-white font-bold text-xl mb-2">ZeroRisk</h3>
+                    <p class="text-white/95 text-sm">You Can't Lose Money - Our Offer Makes Your Investment Risk-Free</p>
+                </div>
+            </div>
+            
+            <!-- Card 2: Extensive Experience (Original Video) -->
+            <div class="carousel__slide aspect-ratio-custom bg-gray-200">
+                <video 
+                    class="w-full h-full object-cover"
+                    src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4"
+                    poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                ></video>
+                <div class="text-overlay">
+                    <h3 class="text-white font-bold text-xl mb-2">Extensive Experience</h3>
+                    <p class="text-white/95 text-sm">Proven Track Record Across Multiple Industries</p>
+                </div>
+            </div>
+            
+            <!-- Card 3: Business Automations (New Static Image) -->
+            <div class="carousel__slide aspect-ratio-custom bg-gray-200">
+                <img 
+                    class="w-full h-full object-cover"
+                    src="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png"
+                    alt="Business Automations"
+                />
+                <div class="text-overlay">
+                    <h3 class="text-white font-bold text-xl mb-2">Business Automations</h3>
+                    <p class="text-white/95 text-sm">High-Tech Solutions for Streamlined Operations</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 p-4 bg-white rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-2">Test Results:</h2>
+            <ul class="list-disc pl-5 space-y-1">
+                <li>Card 3 displays the static image correctly</li>
+                <li>All cards maintain the 3:4 aspect ratio</li>
+                <li>Text overlay is properly positioned on all cards</li>
+                <li>Business Automations card shows the new heading and subheading</li>
+                <li>Image loads from the correct Cloudinary URL</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

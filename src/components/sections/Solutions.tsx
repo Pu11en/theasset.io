@@ -70,8 +70,8 @@ const Solutions: React.FC = () => {
   useEffect(() => {
     setIsClient(true);
     
-    // Optimize video loading
-    if (videoRef.current) {
+    // Optimize video loading only on client side
+    if (typeof document !== 'undefined' && videoRef.current) {
       videoRef.current.setAttribute('preload', 'metadata');
       // Start video playback when user interacts with page
       const startVideo = () => {

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Autoplay Behavior Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background: #f3f4f6;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .status-indicator {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .test-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .log-container {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 0.25rem;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        
+        .log-info { background: #dbeafe; color: #1e40af; }
+        .log-success { background: #d1fae5; color: #065f46; }
+        .log-warning { background: #fed7aa; color: #92400e; }
+        .log-error { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Video Autoplay Behavior Test</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+            <!-- Force Autoplay Video 1 -->
+            <div class="space-y-2">
+                <h2 class="text-lg font-semibold text-gray-800">ZeroRisk (Force Autoplay)</h2>
+                <div class="video-container">
+                    <video
+                        id="video-1"
+                        class="w-full h-full object-cover"
+                        src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4"
+                        poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
+                        muted
+                        loop
+                        playsInline
+                        autoPlay
+                        x-webkit-airplay="deny"
+                        x5-video-player-type="h5"
+                        x5-video-player-fullscreen="true"
+                        x5-video-orientation="portraint"
+                        style="pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;"
+                    ></video>
+                    <div class="video-overlay">
+                        <div class="status-indicator" id="status-1">Loading...</div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p>Expected: Autoplay immediately, loop continuously, no controls</p>
+                </div>
+            </div>
+            
+            <!-- Force Autoplay Video 2 -->
+            <div class="space-y-2">
+                <h2 class="text-lg font-semibold text-gray-800">Extensive Experience (Force Autoplay)</h2>
+                <div class="video-container">
+                    <video
+                        id="video-2"
+                        class="w-full h-full object-cover"
+                        src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4"
+                        poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
+                        muted
+                        loop
+                        playsInline
+                        autoPlay
+                        x-webkit-airplay="deny"
+                        x5-video-player-type="h5"
+                        x5-video-player-fullscreen="true"
+                        x5-video-orientation="portraint"
+                        style="pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;"
+                    ></video>
+                    <div class="video-overlay">
+                        <div class="status-indicator" id="status-2">Loading...</div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p>Expected: Autoplay immediately, loop continuously, no controls</p>
+                </div>
+            </div>
+            
+            <!-- Static Image -->
+            <div class="space-y-2">
+                <h2 class="text-lg font-semibold text-gray-800">Business Automations (Static)</h2>
+                <div class="video-container">
+                    <img
+                        id="image-3"
+                        class="w-full h-full object-cover"
+                        src="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png"
+                        alt="Business Automations"
+                    >
+                    <div class="video-overlay">
+                        <div class="status-indicator" id="status-3">Static Image</div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p>Expected: Static image, no video playback</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="test-controls">
+            <div class="max-w-6xl mx-auto space-y-4">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="runTests()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        Run Tests
+                    </button>
+                    <button onclick="clearLogs()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                        Clear Logs
+                    </button>
+                    <button onclick="checkVideoStates()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        Check Video States
+                    </button>
+                    <button onclick="simulateUserInteraction()" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
+                        Simulate User Interaction
+                    </button>
+                </div>
+                
+                <div class="log-container" id="log-container">
+                    <div class="log-entry log-info">Test page loaded. Click "Run Tests" to begin.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const logContainer = document.getElementById('log-container');
+        const videos = [
+            { id: 'video-1', statusId: 'status-1', name: 'ZeroRisk', shouldAutoplay: true },
+            { id: 'video-2', statusId: 'status-2', name: 'Extensive Experience', shouldAutoplay: true },
+            { id: 'image-3', statusId: 'status-3', name: 'Business Automations', shouldAutoplay: false }
+        ];
+        
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function updateStatus(videoId, status, isSuccess = true) {
+            const statusElement = document.getElementById(videoId);
+            if (statusElement) {
+                statusElement.textContent = status;
+                statusElement.style.background = isSuccess ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)';
+            }
+        }
+        
+        function runTests() {
+            log('Starting video autoplay behavior tests...', 'info');
+            
+            videos.forEach(video => {
+                if (video.shouldAutoplay) {
+                    const element = document.getElementById(video.id);
+                    if (element) {
+                        // Test video attributes
+                        const hasAutoplay = element.hasAttribute('autoplay');
+                        const hasMuted = element.hasAttribute('muted');
+                        const hasLoop = element.hasAttribute('loop');
+                        const hasControls = element.hasAttribute('controls');
+                        const hasPlaysInline = element.hasAttribute('playsinline');
+                        const pointerEvents = element.style.pointerEvents;
+                        
+                        log(`${video.name}: autoplay=${hasAutoplay}, muted=${hasMuted}, loop=${hasLoop}, controls=${hasControls}, playsinline=${hasPlaysInline}, pointerEvents=${pointerEvents}`, 
+                            hasAutoplay && hasMuted && hasLoop && !hasControls && hasPlaysInline && pointerEvents === 'none' ? 'success' : 'error');
+                        
+                        // Set up event listeners
+                        element.addEventListener('play', () => {
+                            log(`${video.name}: Video started playing`, 'success');
+                            updateStatus(video.statusId, 'Playing', true);
+                        });
+                        
+                        element.addEventListener('pause', () => {
+                            log(`${video.name}: Video paused`, 'warning');
+                            updateStatus(video.statusId, 'Paused', false);
+                        });
+                        
+                        element.addEventListener('ended', () => {
+                            log(`${video.name}: Video ended`, 'warning');
+                            updateStatus(video.statusId, 'Ended', false);
+                        });
+                        
+                        element.addEventListener('error', (e) => {
+                            log(`${video.name}: Video error - ${e.message}`, 'error');
+                            updateStatus(video.statusId, 'Error', false);
+                        });
+                        
+                        element.addEventListener('stalled', () => {
+                            log(`${video.name}: Video stalled`, 'warning');
+                        });
+                        
+                        // Try to play the video
+                        element.play().then(() => {
+                            log(`${video.name}: Autoplay successful`, 'success');
+                            updateStatus(video.statusId, 'Playing', true);
+                        }).catch(err => {
+                            log(`${video.name}: Autoplay failed - ${err.message}`, 'error');
+                            updateStatus(video.statusId, 'Autoplay Failed', false);
+                            
+                            // Try fallback
+                            setTimeout(() => {
+                                element.play().then(() => {
+                                    log(`${video.name}: Fallback autoplay successful`, 'success');
+                                    updateStatus(video.statusId, 'Playing', true);
+                                }).catch(err2 => {
+                                    log(`${video.name}: Fallback autoplay failed - ${err2.message}`, 'error');
+                                    updateStatus(video.statusId, 'Autoplay Failed', false);
+                                });
+                            }, 1000);
+                        });
+                    }
+                } else {
+                    log(`${video.name}: Static image - no video tests needed`, 'info');
+                    updateStatus(video.statusId, 'Static Image', true);
+                }
+            });
+            
+            log('Tests completed. Check video states for detailed information.', 'info');
+        }
+        
+        function checkVideoStates() {
+            log('Checking current video states...', 'info');
+            
+            videos.forEach(video => {
+                if (video.shouldAutoplay) {
+                    const element = document.getElementById(video.id);
+                    if (element) {
+                        const isPaused = element.paused;
+                        const currentTime = element.currentTime;
+                        const duration = element.duration;
+                        const readyState = element.readyState;
+                        
+                        log(`${video.name}: paused=${isPaused}, currentTime=${currentTime.toFixed(2)}, duration=${duration ? duration.toFixed(2) : 'unknown'}, readyState=${readyState}`, 
+                            !isPaused ? 'success' : 'warning');
+                    }
+                }
+            });
+        }
+        
+        function simulateUserInteraction() {
+            log('Simulating user interaction to enable autoplay...', 'info');
+            
+            // Create a temporary click event
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            
+            document.body.dispatchEvent(clickEvent);
+            
+            // Try to play videos again after user interaction
+            setTimeout(() => {
+                videos.forEach(video => {
+                    if (video.shouldAutoplay) {
+                        const element = document.getElementById(video.id);
+                        if (element && element.paused) {
+                            element.play().then(() => {
+                                log(`${video.name}: Autoplay successful after user interaction`, 'success');
+                                updateStatus(video.statusId, 'Playing', true);
+                            }).catch(err => {
+                                log(`${video.name}: Autoplay still failed after user interaction - ${err.message}`, 'error');
+                            });
+                        }
+                    }
+                });
+            }, 100);
+        }
+        
+        function clearLogs() {
+            logContainer.innerHTML = '<div class="log-entry log-info">Logs cleared.</div>';
+        }
+        
+        // Auto-run tests after page load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 1000);
+        });
+        
+        // Periodic state check
+        setInterval(checkVideoStates, 5000);
+    </script>
+</body>
+</html>

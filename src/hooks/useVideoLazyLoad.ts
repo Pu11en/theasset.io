@@ -27,12 +27,13 @@ interface VideoLazyLoadReturn extends VideoLazyLoadState {
 }
 
 export const useVideoLazyLoad = (
-  options: VideoLazyLoadOptions = {}
+  options: VideoLazyLoadOptions & { forceAutoplay?: boolean } = {}
 ): VideoLazyLoadReturn => {
   const {
     threshold = 0.1,
     rootMargin = '50px',
-    pauseWhenNotVisible = true
+    pauseWhenNotVisible = true,
+    forceAutoplay = false
   } = options;
 
   const [state, setState] = useState<VideoLazyLoadState>({
@@ -78,10 +79,20 @@ export const useVideoLazyLoad = (
         hasError: false
       }));
 
-      // Auto-play if in viewport
-      if (state.isInView) {
+      // Auto-play if in viewport or if forceAutoplay is enabled
+      if (state.isInView || forceAutoplay) {
         video.play().catch(err => {
           console.warn('Video autoplay failed:', err);
+          // For forceAutoplay videos, try alternative methods
+          if (forceAutoplay) {
+            // Try to play with user interaction simulation
+            setTimeout(() => {
+              video.muted = true; // Ensure muted for autoplay
+              video.play().catch(err => {
+                console.error('Force autoplay failed even with fallback:', err);
+              });
+            }, 100);
+          }
         });
       }
     };
@@ -168,9 +179,18 @@ export const useVideoLazyLoad = (
             // Play video when it becomes visible
             video.play().catch(err => {
               console.warn('Video autoplay failed:', err);
+              // For forceAutoplay videos, try alternative methods
+              if (forceAutoplay) {
+                setTimeout(() => {
+                  video.muted = true; // Ensure muted for autoplay
+                  video.play().catch(err => {
+                    console.error('Force autoplay failed even with fallback:', err);
+                  });
+                }, 100);
+              }
             });
-          } else if (!isIntersecting && pauseWhenNotVisible && state.isLoaded) {
-            // Pause video when it's not visible
+          } else if (!isIntersecting && pauseWhenNotVisible && state.isLoaded && !forceAutoplay) {
+            // Don't pause forceAutoplay videos when not visible
             video.pause();
           }
         }
