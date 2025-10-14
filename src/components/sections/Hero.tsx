@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { motion } from 'framer-motion';
+import '@/styles/hero-button-styles.css';
 
 // Type definitions for browser APIs that don't have proper TypeScript definitions
 interface NetworkInformation {
@@ -263,7 +264,7 @@ const Hero: React.FC = () => {
       <section
         ref={heroRef}
         id="home"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="hero relative min-h-screen flex items-center justify-center overflow-hidden"
         aria-labelledby="hero-heading"
         role="banner"
       >
@@ -419,15 +420,13 @@ const Hero: React.FC = () => {
               Book Call
               <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" style={{ color: 'black' }} aria-hidden="true" />
             </a>
-            <Button
-              variant="outline"
-              size="lg"
+            <a
               href="#solutions"
-              className="border-black bg-black text-white hover:bg-white hover:text-black text-sm sm:text-base focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white transition-all duration-200"
+              className="btn-learn-more inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-lg border-2 border-black bg-black text-white hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white"
               aria-label="Learn more about our solutions"
             >
               Learn More
-            </Button>
+            </a>
           </motion.div>
         </div>
       </div>

@@ -1,0 +1,6 @@
+/* Hero Button Hover Styles */
+
+.hero .btn-learn-more:hover {
+  color: #000000;
+  transition: color 0.3s ease;
+}
