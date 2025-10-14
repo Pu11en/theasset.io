@@ -1,0 +1,408 @@
+{
+  "timestamp": "2025-10-14T04:40:37.605Z",
+  "summary": {
+    "total": 51,
+    "passed": 33,
+    "failed": 18
+  },
+  "tests": [
+    {
+      "name": "Page loads and WhyChooseUs section is accessible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:43.375Z"
+    },
+    {
+      "name": "Aspect ratio is 9:16 on Mobile",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 1.77, Diff: 1.21",
+      "timestamp": "2025-10-14T04:40:44.724Z"
+    },
+    {
+      "name": "Slide aspect ratio is 9:16 on Mobile",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 0.08, Diff: 0.49",
+      "timestamp": "2025-10-14T04:40:44.729Z"
+    },
+    {
+      "name": "Video element exists in Zero Risk card",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:45.999Z"
+    },
+    {
+      "name": "Video is from Cloudinary",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:47.009Z"
+    },
+    {
+      "name": "Video has autoplay, muted, loop, playsInline attributes",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:47.009Z"
+    },
+    {
+      "name": "Video has 9:16 aspect ratio",
+      "passed": false,
+      "details": "Video dimensions: 1080x1920, Ratio: 1.78",
+      "timestamp": "2025-10-14T04:40:47.013Z"
+    },
+    {
+      "name": "Text overlay article element exists",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:48.322Z"
+    },
+    {
+      "name": "Text overlay shows \"Zero Risk\" title",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:48.327Z"
+    },
+    {
+      "name": "Text overlay shows description",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:48.327Z"
+    },
+    {
+      "name": "Text overlay is visible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:48.327Z"
+    },
+    {
+      "name": "Next navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:49.587Z"
+    },
+    {
+      "name": "Carousel navigation changes active slide",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:50.590Z"
+    },
+    {
+      "name": "Previous navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:50.596Z"
+    },
+    {
+      "name": "Direct slide click navigation works",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:50.602Z"
+    },
+    {
+      "name": "Carousel uses responsive units on Mobile",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:51.891Z"
+    },
+    {
+      "name": "Text scales responsively on Mobile",
+      "passed": false,
+      "details": "Font size: 18px",
+      "timestamp": "2025-10-14T04:40:51.896Z"
+    },
+    {
+      "name": "Page loads and WhyChooseUs section is accessible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:40:57.871Z"
+    },
+    {
+      "name": "Aspect ratio is 9:16 on Tablet",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 1.77, Diff: 1.21",
+      "timestamp": "2025-10-14T04:40:59.483Z"
+    },
+    {
+      "name": "Slide aspect ratio is 9:16 on Tablet",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 0.08, Diff: 0.49",
+      "timestamp": "2025-10-14T04:40:59.493Z"
+    },
+    {
+      "name": "Video element exists in Zero Risk card",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:00.975Z"
+    },
+    {
+      "name": "Video is from Cloudinary",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:01.996Z"
+    },
+    {
+      "name": "Video has autoplay, muted, loop, playsInline attributes",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:01.996Z"
+    },
+    {
+      "name": "Video has 9:16 aspect ratio",
+      "passed": true,
+      "details": "Video dimensions: 832x464, Ratio: 0.56",
+      "timestamp": "2025-10-14T04:41:02.003Z"
+    },
+    {
+      "name": "Text overlay article element exists",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:03.518Z"
+    },
+    {
+      "name": "Text overlay shows \"Zero Risk\" title",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:03.528Z"
+    },
+    {
+      "name": "Text overlay shows description",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:03.528Z"
+    },
+    {
+      "name": "Text overlay is visible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:03.528Z"
+    },
+    {
+      "name": "Next navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:05.107Z"
+    },
+    {
+      "name": "Carousel navigation changes active slide",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:06.118Z"
+    },
+    {
+      "name": "Previous navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:06.130Z"
+    },
+    {
+      "name": "Direct slide click navigation works",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:06.138Z"
+    },
+    {
+      "name": "Carousel uses responsive units on Tablet",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:07.668Z"
+    },
+    {
+      "name": "Text scales responsively on Tablet",
+      "passed": false,
+      "details": "Font size: 24px",
+      "timestamp": "2025-10-14T04:41:07.677Z"
+    },
+    {
+      "name": "Page loads and WhyChooseUs section is accessible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:13.546Z"
+    },
+    {
+      "name": "Aspect ratio is 9:16 on Desktop",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 1.77, Diff: 1.21",
+      "timestamp": "2025-10-14T04:41:15.808Z"
+    },
+    {
+      "name": "Slide aspect ratio is 9:16 on Desktop",
+      "passed": false,
+      "details": "Expected: 0.56, Actual: 0.07, Diff: 0.50",
+      "timestamp": "2025-10-14T04:41:15.830Z"
+    },
+    {
+      "name": "Video element exists in Zero Risk card",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:17.863Z"
+    },
+    {
+      "name": "Video is from Cloudinary",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:18.883Z"
+    },
+    {
+      "name": "Video has autoplay, muted, loop, playsInline attributes",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:18.883Z"
+    },
+    {
+      "name": "Video has 9:16 aspect ratio",
+      "passed": true,
+      "details": "Video dimensions: 832x464, Ratio: 0.56",
+      "timestamp": "2025-10-14T04:41:18.907Z"
+    },
+    {
+      "name": "Text overlay article element exists",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:20.848Z"
+    },
+    {
+      "name": "Text overlay shows \"Zero Risk\" title",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:20.870Z"
+    },
+    {
+      "name": "Text overlay shows description",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:20.870Z"
+    },
+    {
+      "name": "Text overlay is visible",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:20.870Z"
+    },
+    {
+      "name": "Next navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:22.825Z"
+    },
+    {
+      "name": "Carousel navigation changes active slide",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:23.862Z"
+    },
+    {
+      "name": "Previous navigation button exists and clickable",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:23.889Z"
+    },
+    {
+      "name": "Direct slide click navigation works",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:23.914Z"
+    },
+    {
+      "name": "Carousel uses responsive units on Desktop",
+      "passed": false,
+      "details": "",
+      "timestamp": "2025-10-14T04:41:25.983Z"
+    },
+    {
+      "name": "Text scales responsively on Desktop",
+      "passed": false,
+      "details": "Font size: 36px",
+      "timestamp": "2025-10-14T04:41:26.002Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "initial-load",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\initial-load-mobile-1760416843375.png"
+    },
+    {
+      "name": "aspect-ratio-test",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\aspect-ratio-test-mobile-1760416844729.png"
+    },
+    {
+      "name": "video-loaded",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\video-loaded-mobile-1760416847013.png"
+    },
+    {
+      "name": "text-overlay",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\text-overlay-mobile-1760416848327.png"
+    },
+    {
+      "name": "navigation-test",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\navigation-test-mobile-1760416850602.png"
+    },
+    {
+      "name": "responsiveness-test",
+      "viewport": "Mobile",
+      "path": "test-results\\screenshots\\why-choose-us\\responsiveness-test-mobile-1760416851896.png"
+    },
+    {
+      "name": "initial-load",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\initial-load-tablet-1760416857871.png"
+    },
+    {
+      "name": "aspect-ratio-test",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\aspect-ratio-test-tablet-1760416859493.png"
+    },
+    {
+      "name": "video-loaded",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\video-loaded-tablet-1760416862003.png"
+    },
+    {
+      "name": "text-overlay",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\text-overlay-tablet-1760416863528.png"
+    },
+    {
+      "name": "navigation-test",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\navigation-test-tablet-1760416866138.png"
+    },
+    {
+      "name": "responsiveness-test",
+      "viewport": "Tablet",
+      "path": "test-results\\screenshots\\why-choose-us\\responsiveness-test-tablet-1760416867677.png"
+    },
+    {
+      "name": "initial-load",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\initial-load-desktop-1760416873546.png"
+    },
+    {
+      "name": "aspect-ratio-test",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\aspect-ratio-test-desktop-1760416875830.png"
+    },
+    {
+      "name": "video-loaded",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\video-loaded-desktop-1760416878907.png"
+    },
+    {
+      "name": "text-overlay",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\text-overlay-desktop-1760416880870.png"
+    },
+    {
+      "name": "navigation-test",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\navigation-test-desktop-1760416883914.png"
+    },
+    {
+      "name": "responsiveness-test",
+      "viewport": "Desktop",
+      "path": "test-results\\screenshots\\why-choose-us\\responsiveness-test-desktop-1760416886002.png"
+    }
+  ]
+}
