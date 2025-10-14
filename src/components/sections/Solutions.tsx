@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Target, Zap, BarChart3, Users, TrendingUp, CheckCircle } from 'lucide-react';
 import SpotlightCard from '@/components/ui/spotlight-card';
 import { motion } from 'framer-motion';
@@ -64,17 +64,71 @@ const Solutions: React.FC = () => {
     visible: { opacity: 1, y: 0 }
   };
 
+  const [isClient, setIsClient] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Optimize video loading
+    if (videoRef.current) {
+      videoRef.current.setAttribute('preload', 'metadata');
+      // Start video playback when user interacts with page
+      const startVideo = () => {
+        if (videoRef.current) {
+          videoRef.current.play().catch(e => console.log('Video autoplay failed:', e));
+        }
+        document.removeEventListener('click', startVideo);
+        document.removeEventListener('touchstart', startVideo);
+      };
+      
+      document.addEventListener('click', startVideo);
+      document.addEventListener('touchstart', startVideo);
+      
+      return () => {
+        document.removeEventListener('click', startVideo);
+        document.removeEventListener('touchstart', startVideo);
+      };
+    }
+  }, []);
+
   return (
-    <section id="solutions" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/solutions-bg-new.png')"
-        }}
-      />
-      {/* Overlay for text readability - made more transparent to show background */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
+    <section id="solutions" className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Solutions section">
+      {/* Video Background - Desktop */}
+      {isClient && (
+        <>
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover hidden lg:block"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760405896/social_defipullen_A_continuation-style_digital_background_designed_f_7bbfc11b-e450-4abc-910a-6eef28babf6a_0_xzhdrv.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          
+          {/* Video Background - Mobile */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover lg:hidden"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760406410/social_defipullen_A_continuation-style_digital_background_designed_f_dc49c4c4-ced0-4a1e-a218-7245167285e8_0_xqzwmw.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </>
+      )}
+      
+      {/* Overlay for text readability - semi-transparent for WCAG compliance */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
       
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
@@ -85,10 +139,10 @@ const Solutions: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
             Solutions That Drive Results
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
+          <p className="text-xl text-black max-w-3xl mx-auto">
             Our comprehensive suite of marketing services designed to accelerate your business growth
           </p>
         </motion.div>
@@ -124,10 +178,10 @@ const Solutions: React.FC = () => {
                       </div>
                       {solution.icon}
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-2xl font-bold text-black mb-2">
                       {solution.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed px-2">
+                    <p className="text-black text-sm leading-relaxed px-2">
                       {solution.description}
                     </p>
                   </div>
@@ -138,7 +192,7 @@ const Solutions: React.FC = () => {
                       {solution.features.map((feature, featureIndex) => (
                         <motion.li
                           key={featureIndex}
-                          className="flex items-start space-x-2 text-gray-700 text-sm"
+                          className="flex items-start space-x-2 text-black text-sm"
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
@@ -158,7 +212,7 @@ const Solutions: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                     >
                       {solution.accentIcon}
-                      <span className="text-lg font-semibold text-gray-900">
+                      <span className="text-lg font-semibold text-black">
                         {solution.stats}
                       </span>
                     </motion.div>
