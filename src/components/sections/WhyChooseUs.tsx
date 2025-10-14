@@ -77,7 +77,11 @@ const WhyChooseUs: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <div className="w-full max-w-5xl">
-            <Carousel slides={slideData} />
+            <Carousel
+              slides={slideData}
+              enableEnhancedAspectRatios={true}
+              carouselType="why-choose-us"
+            />
           </div>
         </motion.div>
       </div>

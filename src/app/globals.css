@@ -416,3 +416,210 @@ img {
 .video-controls button:focus::before {
   background: rgba(255, 255, 255, 0.1);
 }
+
+/* Enhanced Carousel Card Styles for Zero Risk Video Scaling Solution */
+
+/* CSS Custom Properties for Responsive Card Dimensions */
+:root {
+  /* Base card dimensions for different breakpoints */
+  --carousel-card-width-mobile: 85vw;
+  --carousel-card-height-mobile: calc(85vw * 1.25); /* 4:5 aspect ratio for Zero Risk */
+  --carousel-card-width-tablet: 45vw;
+  --carousel-card-height-tablet: calc(45vw * 1.25);
+  --carousel-card-width-desktop: 30vw;
+  --carousel-card-height-desktop: calc(30vw * 1.25);
+  
+  /* Standard 9:16 card dimensions */
+  --standard-card-width-mobile: 85vw;
+  --standard-card-height-mobile: calc(85vw * 1.78); /* 9:16 aspect ratio */
+  --standard-card-width-tablet: 45vw;
+  --standard-card-height-tablet: calc(45vw * 1.78);
+  --standard-card-width-desktop: 30vw;
+  --standard-card-height-desktop: calc(30vw * 1.78);
+  
+  /* Card spacing and margins */
+  --carousel-card-margin: 2vw;
+  --carousel-container-padding: 1rem;
+  
+  /* Video container properties */
+  --video-container-border-radius: 0.25rem;
+  --video-overlay-opacity: 0.5;
+}
+
+/* Carousel Card Base Styles */
+.carousel-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--video-container-border-radius);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Standard 9:16 Aspect Ratio Card Styles */
+.carousel-card-standard {
+  width: var(--standard-card-width-mobile);
+  height: var(--standard-card-height-mobile);
+  aspect-ratio: 9/16;
+}
+
+/* Zero Risk 4:5 Aspect Ratio Card Styles */
+.carousel-card-zero-risk {
+  width: var(--carousel-card-width-mobile);
+  height: var(--carousel-card-height-mobile);
+  aspect-ratio: 4/5;
+}
+
+/* Fallback Styles for Browsers Without aspect-ratio Support */
+@supports not (aspect-ratio: 9/16) {
+  .carousel-card-standard {
+    height: var(--standard-card-height-mobile);
+  }
+  
+  .carousel-card-zero-risk {
+    height: var(--carousel-card-height-mobile);
+  }
+}
+
+/* Video Container and Video Element Styles */
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #1D1F2F;
+}
+
+.video-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures video is not cropped or distorted */
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* Enhanced Carousel Container */
+.carousel-container-enhanced {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--carousel-container-padding);
+}
+
+.carousel-container-enhanced.zero-risk-active {
+  /* Adjust container when Zero Risk card is active */
+  transform: scale(1.02);
+}
+
+/* Carousel List Adjustments */
+.carousel-list-enhanced {
+  display: flex;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Responsive Media Queries */
+@media (min-width: 768px) {
+  :root {
+    --carousel-card-width-mobile: var(--carousel-card-width-tablet);
+    --carousel-card-height-mobile: var(--carousel-card-height-tablet);
+    --standard-card-width-mobile: var(--standard-card-width-tablet);
+    --standard-card-height-mobile: var(--standard-card-height-tablet);
+    --carousel-card-margin: 1.5vw;
+  }
+  
+  .carousel-card-standard {
+    width: var(--standard-card-width-tablet);
+    height: var(--standard-card-height-tablet);
+  }
+  
+  .carousel-card-zero-risk {
+    width: var(--carousel-card-width-tablet);
+    height: var(--carousel-card-height-tablet);
+  }
+  
+  @supports not (aspect-ratio: 9/16) {
+    .carousel-card-standard {
+      height: var(--standard-card-height-tablet);
+    }
+    
+    .carousel-card-zero-risk {
+      height: var(--carousel-card-height-tablet);
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --carousel-card-width-mobile: var(--carousel-card-width-desktop);
+    --carousel-card-height-mobile: var(--carousel-card-height-desktop);
+    --standard-card-width-mobile: var(--standard-card-width-desktop);
+    --standard-card-height-mobile: var(--standard-card-height-desktop);
+    --carousel-card-margin: 1vw;
+  }
+  
+  .carousel-card-standard {
+    width: var(--standard-card-width-desktop);
+    height: var(--standard-card-height-desktop);
+  }
+  
+  .carousel-card-zero-risk {
+    width: var(--carousel-card-width-desktop);
+    height: var(--carousel-card-height-desktop);
+  }
+  
+  @supports not (aspect-ratio: 9/16) {
+    .carousel-card-standard {
+      height: var(--standard-card-height-desktop);
+    }
+    
+    .carousel-card-zero-risk {
+      height: var(--carousel-card-height-desktop);
+    }
+  }
+}
+
+/* Backwards Compatibility Styles */
+.carousel-card-legacy {
+  width: 40vmin;
+  height: 71vmin;
+  aspect-ratio: 9/16;
+}
+
+@media (min-width: 768px) {
+  .carousel-card-legacy {
+    width: 35vmin;
+    height: 62vmin;
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel-card-legacy {
+    width: 30vmin;
+    height: 53vmin;
+  }
+}
+
+/* Performance Optimizations */
+.video-element,
+.carousel-card {
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-card,
+  .video-element,
+  .carousel-list-enhanced {
+    transition: none;
+  }
+}

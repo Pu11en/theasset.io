@@ -16,9 +16,18 @@ interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
+  isZeroRiskCard?: boolean;
+  enableEnhancedAspectRatios?: boolean;
 }
 
-const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
+const Slide = ({
+  slide,
+  index,
+  current,
+  handleSlideClick,
+  isZeroRiskCard = false,
+  enableEnhancedAspectRatios = false
+}: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
 
   const xRef = useRef(0);
@@ -67,11 +76,23 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
   const { src, title, description, isVideo } = slide;
 
+  // Determine card classes based on enhanced mode and card type
+  const getCardClasses = () => {
+    if (!enableEnhancedAspectRatios) {
+      return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[71vmin] mx-[4vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] z-10 aspect-[9/16]";
+    }
+    
+    const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10 mx-[var(--carousel-card-margin)]";
+    const typeClasses = isZeroRiskCard ? "carousel-card-zero-risk" : "carousel-card-standard";
+    
+    return `${baseClasses} ${typeClasses}`;
+  };
+
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[71vmin] mx-[4vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] z-10 aspect-[9/16]"
+        className={getCardClasses()}
         onClick={() => handleSlideClick(index)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -85,7 +106,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         }}
       >
         <div
-          className="absolute top-0 left-0 w-full h-full bg-[#1D1F2F] rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
+          className="video-container rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
           style={{
             transform:
               current === index
@@ -95,7 +116,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         >
           {isVideo ? (
             <video
-              className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+              className="video-element opacity-100 transition-opacity duration-600 ease-in-out"
               style={{
                 opacity: current === index ? 1 : 0.5,
               }}
@@ -107,7 +128,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             />
           ) : (
             <Image
-              className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+              className="video-element opacity-100 transition-opacity duration-600 ease-in-out"
               style={{
                 opacity: current === index ? 1 : 0.5,
               }}
@@ -169,9 +190,15 @@ const CarouselControl = ({
 
 interface CarouselProps {
   slides: SlideData[];
+  enableEnhancedAspectRatios?: boolean;
+  carouselType?: string;
 }
 
-export function Carousel({ slides }: CarouselProps) {
+export function Carousel({
+  slides,
+  enableEnhancedAspectRatios = false,
+  carouselType = "standard"
+}: CarouselProps): React.ReactElement {
   const [current, setCurrent] = useState(0);
 
   const handlePreviousClick = () => {
@@ -192,13 +219,37 @@ export function Carousel({ slides }: CarouselProps) {
 
   const id = useId();
 
+  // Determine if the current slide is a Zero Risk card
+  const isCurrentSlideZeroRisk = slides[current]?.title === "Zero Risk";
+
+  // Get container classes based on enhanced mode
+  const getContainerClasses = () => {
+    if (!enableEnhancedAspectRatios) {
+      return "relative w-[40vmin] h-[71vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] mx-auto aspect-[9/16]";
+    }
+    
+    const baseClasses = "carousel-container-enhanced relative mx-auto";
+    const activeClasses = isCurrentSlideZeroRisk ? "zero-risk-active" : "";
+    
+    return `${baseClasses} ${activeClasses}`;
+  };
+
+  // Get list classes based on enhanced mode
+  const getListClasses = () => {
+    if (!enableEnhancedAspectRatios) {
+      return "absolute flex mx-[-4vmin] transition-transform duration-1000 ease-in-out";
+    }
+    
+    return "carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out";
+  };
+
   return (
     <div
-      className="relative w-[40vmin] h-[71vmin] md:w-[35vmin] md:h-[62vmin] sm:w-[30vmin] sm:h-[53vmin] mx-auto aspect-[9/16]"
+      className={getContainerClasses()}
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
-        className="absolute flex mx-[-4vmin] transition-transform duration-1000 ease-in-out"
+        className={getListClasses()}
         style={{
           transform: `translateX(-${current * (100 / slides.length)}%)`,
         }}
@@ -210,6 +261,8 @@ export function Carousel({ slides }: CarouselProps) {
             index={index}
             current={current}
             handleSlideClick={handleSlideClick}
+            isZeroRiskCard={slide.title === "Zero Risk"}
+            enableEnhancedAspectRatios={enableEnhancedAspectRatios}
           />
         ))}
       </ul>
