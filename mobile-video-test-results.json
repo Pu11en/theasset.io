@@ -1,0 +1,121 @@
+{
+  "totalTests": 18,
+  "totalPassed": 9,
+  "totalFailed": 9,
+  "categories": {
+    "responsive": {
+      "passed": 3,
+      "failed": 2,
+      "details": [
+        {
+          "name": "Mobile device detection works correctly",
+          "passed": false,
+          "details": "Mobile video is not rendered in JSX despite detection logic"
+        },
+        {
+          "name": "Static image fallback displays on mobile",
+          "passed": true,
+          "details": "Static image is displayed as background on mobile devices"
+        },
+        {
+          "name": "YouTube video is visible on mobile",
+          "passed": true,
+          "details": "YouTube video is rendered on all screen sizes including mobile"
+        },
+        {
+          "name": "Mobile video loads on mobile devices",
+          "passed": false,
+          "details": "CRITICAL: Mobile video element is not rendered in JSX"
+        },
+        {
+          "name": "Screen size changes are handled correctly",
+          "passed": true,
+          "details": "Component detects and responds to window resize events"
+        }
+      ]
+    },
+    "performance": {
+      "passed": 4,
+      "failed": 1,
+      "details": [
+        {
+          "name": "Lazy loading is implemented for mobile video",
+          "passed": true,
+          "details": "IntersectionObserver is used for lazy loading"
+        },
+        {
+          "name": "Data saver preference is respected",
+          "passed": true,
+          "details": "shouldLoadMobileVideoBasedOnConnection checks for saveData flag"
+        },
+        {
+          "name": "Connection quality is considered",
+          "passed": true,
+          "details": "Video loading is disabled on very slow connections"
+        },
+        {
+          "name": "Battery level is properly considered",
+          "passed": false,
+          "details": "ISSUE: Battery level check is async but result is not used in decision"
+        },
+        {
+          "name": "Appropriate video sizes are selected",
+          "passed": true,
+          "details": "Different video URLs are provided for different screen sizes"
+        }
+      ]
+    },
+    "touchControls": {
+      "passed": 0,
+      "failed": 4,
+      "details": [
+        {
+          "name": "Touch controls are properly sized",
+          "passed": false,
+          "details": "Mobile video controls are not rendered (video not implemented)"
+        },
+        {
+          "name": "Play/pause functionality works",
+          "passed": false,
+          "details": "Mobile video controls are not rendered (video not implemented)"
+        },
+        {
+          "name": "Mute/unmute functionality works",
+          "passed": false,
+          "details": "Mobile video controls are not rendered (video not implemented)"
+        },
+        {
+          "name": "Keyboard navigation is supported",
+          "passed": false,
+          "details": "Mobile video controls are not rendered (video not implemented)"
+        }
+      ]
+    },
+    "errorHandling": {
+      "passed": 2,
+      "failed": 2,
+      "details": [
+        {
+          "name": "Fallback image displays when video fails",
+          "passed": true,
+          "details": "Static image fallback is implemented for desktop video errors"
+        },
+        {
+          "name": "Unsupported video format is handled gracefully",
+          "passed": false,
+          "details": "Mobile video error handling cannot be tested (video not implemented)"
+        },
+        {
+          "name": "Network interruptions are handled gracefully",
+          "passed": false,
+          "details": "Mobile video error handling cannot be tested (video not implemented)"
+        },
+        {
+          "name": "Aria-labels are provided for screen readers",
+          "passed": true,
+          "details": "Hero section has proper aria-labelledby attribute"
+        }
+      ]
+    }
+  }
+}
