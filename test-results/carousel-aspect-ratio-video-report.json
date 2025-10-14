@@ -1,0 +1,421 @@
+{
+  "timestamp": "2025-10-14T18:56:09.316Z",
+  "summary": {
+    "total": 51,
+    "passed": 48,
+    "failed": 3
+  },
+  "tests": [
+    {
+      "name": "Aspect Ratio - mobile - Card 1",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.407Z",
+      "expected": 0.75,
+      "actual": 0.75,
+      "width": 318.75,
+      "height": 425,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - mobile - Card 2",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.460Z",
+      "expected": 0.75,
+      "actual": 0.775019954906681,
+      "width": 312.375,
+      "height": 403.05413818359375,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - mobile - Card 3",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.471Z",
+      "expected": 0.75,
+      "actual": 0.775019954906681,
+      "width": 312.375,
+      "height": 403.05413818359375,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - mobile - Card 4",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.478Z",
+      "expected": 0.75,
+      "actual": 0.775019954906681,
+      "width": 312.375,
+      "height": 403.05413818359375,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - mobile - Card 5",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.489Z",
+      "expected": 0.75,
+      "actual": 0.775019954906681,
+      "width": 312.375,
+      "height": 403.05413818359375,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - tablet - Card 1",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.594Z",
+      "expected": 0.75,
+      "actual": 0.7500169548999661,
+      "width": 345.59375,
+      "height": 460.78125,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - tablet - Card 2",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.654Z",
+      "expected": 0.75,
+      "actual": 0.7764836028345263,
+      "width": 338.681884765625,
+      "height": 436.1739044189453,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - tablet - Card 3",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.783Z",
+      "expected": 0.75,
+      "actual": 0.7764835756705926,
+      "width": 338.681884765625,
+      "height": 436.1739196777344,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - tablet - Card 4",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.789Z",
+      "expected": 0.75,
+      "actual": 0.7764835756705926,
+      "width": 338.681884765625,
+      "height": 436.1739196777344,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - tablet - Card 5",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.806Z",
+      "expected": 0.75,
+      "actual": 0.7764835756705926,
+      "width": 338.681884765625,
+      "height": 436.1739196777344,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - desktop - Card 1",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.908Z",
+      "expected": 0.75,
+      "actual": 0.75,
+      "width": 360,
+      "height": 480,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - desktop - Card 2",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:11.995Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - desktop - Card 3",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.102Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - desktop - Card 4",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.201Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Aspect Ratio - desktop - Card 5",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.208Z",
+      "expected": 0.75,
+      "actual": 0.7772401001382023,
+      "width": 352.7999267578125,
+      "height": 453.9136962890625,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Video Elements Found",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.243Z",
+      "count": 3
+    },
+    {
+      "name": "Video 1 - Muted Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.247Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 1 - Loop Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.249Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 1 - Autoplay Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.263Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 1 - PlaysInline Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:12.264Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 1 - Actually Playing",
+      "passed": false,
+      "timestamp": "2025-10-14T18:56:14.271Z",
+      "expected": true,
+      "actual": false
+    },
+    {
+      "name": "Video 2 - Muted Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:14.273Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 2 - Loop Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:14.274Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 2 - Autoplay Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:14.276Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 2 - PlaysInline Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:14.277Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 2 - Actually Playing",
+      "passed": false,
+      "timestamp": "2025-10-14T18:56:16.287Z",
+      "expected": true,
+      "actual": false
+    },
+    {
+      "name": "Video 3 - Muted Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:16.288Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 3 - Loop Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:16.289Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 3 - Autoplay Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:16.290Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 3 - PlaysInline Attribute",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:16.291Z",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Video 3 - Actually Playing",
+      "passed": false,
+      "timestamp": "2025-10-14T18:56:18.303Z",
+      "expected": true,
+      "actual": false
+    },
+    {
+      "name": "Responsive - mobile - No Horizontal Overflow",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:18.364Z",
+      "viewportWidth": 375,
+      "bodyWidth": 375,
+      "hasOverflow": false
+    },
+    {
+      "name": "Responsive - mobile - Carousel Fits",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:18.371Z",
+      "viewportWidth": 375,
+      "carouselWidth": 343,
+      "fitsInViewport": true
+    },
+    {
+      "name": "Responsive - mobile - No Layout Shifts",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:21.393Z",
+      "initialCards": 5,
+      "finalCards": 5
+    },
+    {
+      "name": "Responsive - tablet - No Horizontal Overflow",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:21.715Z",
+      "viewportWidth": 768,
+      "bodyWidth": 768,
+      "hasOverflow": false
+    },
+    {
+      "name": "Responsive - tablet - Carousel Fits",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:21.721Z",
+      "viewportWidth": 768,
+      "carouselWidth": 720,
+      "fitsInViewport": true
+    },
+    {
+      "name": "Responsive - tablet - No Layout Shifts",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:24.763Z",
+      "initialCards": 5,
+      "finalCards": 5
+    },
+    {
+      "name": "Responsive - desktop - No Horizontal Overflow",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:25.332Z",
+      "viewportWidth": 1200,
+      "bodyWidth": 1200,
+      "hasOverflow": false
+    },
+    {
+      "name": "Responsive - desktop - Carousel Fits",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:25.337Z",
+      "viewportWidth": 1200,
+      "carouselWidth": 1024,
+      "fitsInViewport": true
+    },
+    {
+      "name": "Responsive - desktop - No Layout Shifts",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.371Z",
+      "initialCards": 5,
+      "finalCards": 5
+    },
+    {
+      "name": "CSS Aspect Ratio - Card 1",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.901Z",
+      "actualValue": "3 / 4"
+    },
+    {
+      "name": "CSS Aspect Ratio - Card 2",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.922Z",
+      "actualValue": "3 / 4"
+    },
+    {
+      "name": "CSS Aspect Ratio - Card 3",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.943Z",
+      "actualValue": "3 / 4"
+    },
+    {
+      "name": "CSS Aspect Ratio - Card 4",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.961Z",
+      "actualValue": "3 / 4"
+    },
+    {
+      "name": "CSS Aspect Ratio - Card 5",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:28.986Z",
+      "actualValue": "3 / 4"
+    },
+    {
+      "name": "Video Containers Found",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.014Z",
+      "count": 5
+    },
+    {
+      "name": "Video Container 1 - Aspect Ratio",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.016Z",
+      "expected": 0.75,
+      "actual": 0.75,
+      "width": 360,
+      "height": 480
+    },
+    {
+      "name": "Video Container 2 - Aspect Ratio",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.017Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625
+    },
+    {
+      "name": "Video Container 3 - Aspect Ratio",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.017Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625
+    },
+    {
+      "name": "Video Container 4 - Aspect Ratio",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.029Z",
+      "expected": 0.75,
+      "actual": 0.7772403690666649,
+      "width": 352.800048828125,
+      "height": 453.9136962890625
+    },
+    {
+      "name": "Video Container 5 - Aspect Ratio",
+      "passed": true,
+      "timestamp": "2025-10-14T18:56:29.030Z",
+      "expected": 0.75,
+      "actual": 0.7772401001382023,
+      "width": 352.7999267578125,
+      "height": 453.9136962890625
+    }
+  ]
+}
