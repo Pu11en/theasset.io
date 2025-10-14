@@ -82,7 +82,7 @@ const Slide = ({
       return "flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[53.3vmin] mx-[4vmin] md:w-[35vmin] md:h-[46.7vmin] sm:w-[30vmin] sm:h-[40vmin] z-10 aspect-[3/4]";
     }
     
-    const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10 mx-[var(--carousel-card-margin)]";
+    const baseClasses = "carousel-card flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out z-10";
     // All cards now use the same aspect ratio, so we can apply the same class
     const typeClasses = "carousel-card-standard";
     
@@ -147,9 +147,16 @@ const Slide = ({
         </div>
 
         <article
-          className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${
+          className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out z-20 ${
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
+          style={{
+            zIndex: current === index ? 20 : 10,
+            backgroundColor: current === index ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
+            borderRadius: '0.25rem',
+            backdropFilter: 'blur(2px)',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
+          }}
         >
           <h2 className={`text-lg md:text-2xl lg:text-4xl font-semibold relative ${isVideo ? "text-white drop-shadow-lg" : "text-white"}`}>
             {title}

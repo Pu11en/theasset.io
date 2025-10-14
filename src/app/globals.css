@@ -440,6 +440,7 @@ img {
   /* Card spacing and margins */
   --carousel-card-margin: 2vw;
   --carousel-container-padding: 1rem;
+  --carousel-card-gap: 1rem;
   
   /* Video container properties */
   --video-container-border-radius: 0.25rem;
@@ -457,6 +458,8 @@ img {
   border-radius: var(--video-container-border-radius);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  flex-shrink: 0;
+  margin: 0 var(--carousel-card-margin);
 }
 
 /* Unified 3:4 Aspect Ratio Card Styles for All Cards */
@@ -515,6 +518,8 @@ img {
   display: flex;
   transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  gap: var(--carousel-card-gap);
+  padding: 0 var(--carousel-card-margin);
 }
 
 /* Responsive Media Queries */

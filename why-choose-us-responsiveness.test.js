@@ -64,6 +64,7 @@ function createTestPageContent() {
           --standard-card-height-desktop: var(--carousel-card-height-desktop);
           --carousel-card-margin: 2vw;
           --carousel-container-padding: 1rem;
+          --carousel-card-gap: 1rem;
           --video-container-border-radius: 0.25rem;
           --video-overlay-opacity: 0.5;
         }
@@ -78,6 +79,8 @@ function createTestPageContent() {
           border-radius: var(--video-container-border-radius);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           will-change: transform;
+          flex-shrink: 0;
+          margin: 0 var(--carousel-card-margin);
         }
         
         .carousel-card-standard,
@@ -119,6 +122,8 @@ function createTestPageContent() {
           display: flex;
           transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
           will-change: transform;
+          gap: var(--carousel-card-gap);
+          padding: 0 var(--carousel-card-margin);
         }
         
         @media (min-width: 768px) {
@@ -195,7 +200,7 @@ function createTestPageContent() {
                 <div class="flex justify-center items-center mt-12">
                   <div class="w-full max-w-5xl">
                     <div class="carousel-container-enhanced relative mx-auto">
-                      <div class="carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out" id="carousel-list">
+                      <div class="carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out" id="carousel-list" style="width: 300%; overflow: hidden;">
                         \${slideData.map((slide, index) => \`
                           <div class="carousel-card carousel-card-standard" data-slide-index="\${index}">
                             <div class="video-container rounded-[1%] overflow-hidden transition-all duration-150 ease-out">
@@ -218,7 +223,7 @@ function createTestPageContent() {
                               <div class="absolute inset-0 transition-all duration-1000 bg-black/30" />
                             </div>
                             
-                            <article class="relative p-[4vmin] transition-opacity duration-1000 ease-in-out opacity-100 visible">
+                            <article class="relative p-[4vmin] transition-opacity duration-1000 ease-in-out opacity-100 visible z-20" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 0.25rem; backdrop-filter: blur(2px); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); position: absolute; bottom: 0; left: 0; right: 0;">
                               <h2 class="text-lg md:text-2xl lg:text-4xl font-semibold relative text-white">
                                 \${slide.title}
                               </h2>
@@ -333,6 +338,7 @@ test.describe('WhyChooseUs Carousel Responsiveness Tests', () => {
                 --standard-card-height-desktop: var(--carousel-card-height-desktop);
                 --carousel-card-margin: 2vw;
                 --carousel-container-padding: 1rem;
+                --carousel-card-gap: 1rem;
                 --video-container-border-radius: 0.25rem;
                 --video-overlay-opacity: 0.5;
               }
@@ -347,6 +353,8 @@ test.describe('WhyChooseUs Carousel Responsiveness Tests', () => {
                 border-radius: var(--video-container-border-radius);
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 will-change: transform;
+                flex-shrink: 0;
+                margin: 0 var(--carousel-card-margin);
               }
               
               .carousel-card-standard,
@@ -388,6 +396,8 @@ test.describe('WhyChooseUs Carousel Responsiveness Tests', () => {
                 display: flex;
                 transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
                 will-change: transform;
+                gap: var(--carousel-card-gap);
+                padding: 0 var(--carousel-card-margin);
               }
               
               @media (min-width: 768px) {
@@ -464,7 +474,7 @@ test.describe('WhyChooseUs Carousel Responsiveness Tests', () => {
                       <div class="flex justify-center items-center mt-12">
                         <div class="w-full max-w-5xl">
                           <div class="carousel-container-enhanced relative mx-auto">
-                            <div class="carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out" id="carousel-list">
+                            <div class="carousel-list-enhanced absolute flex transition-transform duration-1000 ease-in-out" id="carousel-list" style="width: 300%; overflow: hidden;">
                               \${slideData.map((slide, index) => \`
                                 <div class="carousel-card carousel-card-standard" data-slide-index="\${index}">
                                   <div class="video-container rounded-[1%] overflow-hidden transition-all duration-150 ease-out">
@@ -487,7 +497,7 @@ test.describe('WhyChooseUs Carousel Responsiveness Tests', () => {
                                     <div class="absolute inset-0 transition-all duration-1000 bg-black/30" />
                                   </div>
                                   
-                                  <article class="relative p-[4vmin] transition-opacity duration-1000 ease-in-out opacity-100 visible">
+                                  <article class="relative p-[4vmin] transition-opacity duration-1000 ease-in-out opacity-100 visible z-20" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 0.25rem; backdrop-filter: blur(2px); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); position: absolute; bottom: 0; left: 0; right: 0;">
                                     <h2 class="text-lg md:text-2xl lg:text-4xl font-semibold relative text-white">
                                       \${slide.title}
                                     </h2>
