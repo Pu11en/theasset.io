@@ -1056,3 +1056,279 @@ img {
   animation: slide-announcement 3s ease-in-out;
   pointer-events: none;
 }
+
+/* Enhanced Mobile Touch Optimizations */
+
+/* Touch action properties to prevent conflicts with video playback */
+.carousel__viewport {
+touch-action: pan-y;
+-webkit-overflow-scrolling: touch;
+overscroll-behavior: contain;
+}
+
+.carousel__track {
+touch-action: pan-y;
+}
+
+/* Ensure proper scrolling behavior on mobile */
+html {
+scroll-behavior: smooth;
+-webkit-text-size-adjust: 100%;
+-ms-text-size-adjust: 100%;
+touch-action: manipulation;
+}
+
+/* Mobile-specific viewport handling */
+@viewport {
+width: device-width;
+zoom: 1.0;
+}
+
+/* Enhanced touch targets for mobile (minimum 44px) */
+@media (pointer: coarse) {
+.carousel__arrow {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+}
+
+.carousel__pagination-bullet {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+}
+
+/* Larger play/pause buttons on mobile */
+.video-card-container .play-overlay {
+  width: 60px;
+  height: 60px;
+}
+
+/* Enhanced tap targets for video controls */
+.video-controls button {
+  min-width: 44px;
+  min-height: 44px;
+}
+}
+
+/* Mobile-specific animations and transitions */
+@media (max-width: 767px) {
+/* Reduce motion for better performance on mobile */
+.carousel__track {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Smoother transitions for mobile */
+.carousel__slide {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Enhanced touch feedback */
+.carousel__arrow:active {
+  transform: translateY(-50%) scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+.carousel__pagination-bullet:active {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+}
+
+/* Small mobile devices (320px-375px) */
+@media (max-width: 375px) {
+.carousel__slide {
+  border-radius: 8px;
+}
+
+.carousel__arrow {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.carousel__arrow--prev {
+  left: 8px;
+}
+
+.carousel__arrow--next {
+  right: 8px;
+}
+
+.carousel__pagination {
+  bottom: 8px;
+}
+
+.carousel__pagination-bullet {
+  width: 8px;
+  height: 8px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+/* Smaller text overlays on small mobile */
+.carousel__slide-caption {
+  font-size: 0.75rem;
+  padding: 0.5rem;
+}
+
+/* Adjust video card overlays for small screens */
+.video-card-container .text-overlay {
+  padding: 0.5rem;
+}
+
+.video-card-container .text-overlay h3 {
+  font-size: 0.875rem;
+}
+
+.video-card-container .text-overlay p {
+  font-size: 0.75rem;
+}
+}
+
+/* Medium mobile devices (376px-414px) */
+@media (min-width: 376px) and (max-width: 414px) {
+.carousel__arrow {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.carousel__pagination-bullet {
+  width: 10px;
+  height: 10px;
+  min-width: 42px;
+  min-height: 42px;
+}
+}
+
+/* Large mobile/phablet devices (415px-767px) */
+@media (min-width: 415px) and (max-width: 767px) {
+.carousel__arrow {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.carousel__pagination-bullet {
+  width: 12px;
+  height: 12px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Larger play button on larger mobile devices */
+.video-card-container .play-overlay {
+  width: 70px;
+  height: 70px;
+}
+}
+
+/* Pull-to-refresh resistance for better mobile experience */
+.carousel__viewport {
+overscroll-behavior-y: contain;
+}
+
+/* Prevent elastic scrolling on iOS */
+.carousel {
+-webkit-overflow-scrolling: touch;
+overflow: hidden;
+}
+
+/* Enhanced video touch handling */
+.video-card-container video {
+touch-action: manipulation;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-specific focus management */
+@media (pointer: coarse) {
+.carousel:focus-within {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Enhanced focus indicators for keyboard navigation on mobile */
+.carousel__arrow:focus,
+.carousel__pagination-bullet:focus {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+}
+}
+
+/* Haptic feedback support indicators */
+@media (pointer: coarse) {
+.carousel__arrow:active,
+.carousel__pagination-bullet:active {
+  position: relative;
+}
+
+.carousel__arrow:active::after,
+.carousel__pagination-bullet:active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: haptic-pulse 0.2s ease-out;
+}
+}
+
+@keyframes haptic-pulse {
+0% {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 1;
+}
+100% {
+  transform: translate(-50%, -50%) scale(2);
+  opacity: 0;
+}
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 767px) {
+/* Reduce box shadows for better performance */
+.carousel__arrow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Simplify transitions for better performance */
+.carousel__slide:hover {
+  opacity: 1;
+}
+
+/* Optimize backdrop filters for mobile */
+.backdrop-blur-md {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+}
+
+/* Dark mode mobile optimizations */
+@media (prefers-color-scheme: dark) and (max-width: 767px) {
+.carousel__arrow {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.carousel__pagination-bullet {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.carousel__pagination-bullet--active {
+  background: white;
+}
+}

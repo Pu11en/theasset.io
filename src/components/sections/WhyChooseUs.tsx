@@ -146,6 +146,8 @@ const WhyChooseUs: React.FC = () => {
                     lazy={true}
                     sources={video.sources}
                     fallbackImage={video.fallbackImage}
+                    enableTouchGestures={true}
+                    enableFullscreenOnMobile={true}
                   />
                 )
               }))}

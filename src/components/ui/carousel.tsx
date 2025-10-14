@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, ReactNode, TouchEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, useRef, useCallback, ReactNode, TouchEvent, KeyboardEvent, MouseEvent } from 'react';
 import Image from 'next/image';
 
 // TypeScript interfaces
@@ -18,6 +18,19 @@ interface SlideData {
   lazy?: boolean; // Lazy loading
   ariaLabel?: string;
   ariaDescription?: string;
+}
+
+// Touch gesture state interface
+interface TouchGestureState {
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
+  startTime: number;
+  isDragging: boolean;
+  hasPassedThreshold: boolean;
+  velocity: number;
+  pullResistance: number;
 }
 
 interface CarouselProps {
@@ -132,41 +145,89 @@ interface CarouselState {
   visibleSlides: number[];
   isFocused: boolean;
   focusedElement: string | null;
+  touchGesture: TouchGestureState | null;
+  momentumScrolling: boolean;
+  isVideoPaused: boolean;
 }
 
-// Default breakpoints - optimized for 3 video cards display
+// Default breakpoints - optimized for mobile devices with enhanced touch support
 const defaultBreakpoints = {
-  320: {  // Extra small devices
+  320: {  // Extra small devices (iPhone SE)
     slidesPerView: 1,
-    spaceBetween: 10
+    spaceBetween: 8,
+    touchThreshold: 15, // Lower threshold for easier swiping on small screens
+    momentumRatio: 0.8, // Higher momentum for natural feel
+    pullResistance: 0.3
   },
-  480: {  // Small devices
+  375: {  // Small mobile devices (iPhone 12/13)
+    slidesPerView: 1.1,
+    spaceBetween: 10,
+    touchThreshold: 20,
+    momentumRatio: 0.7,
+    pullResistance: 0.25
+  },
+  414: {  // Medium mobile devices (iPhone 12/13 Plus)
     slidesPerView: 1.2,
-    spaceBetween: 15
+    spaceBetween: 12,
+    touchThreshold: 25,
+    momentumRatio: 0.6,
+    pullResistance: 0.2
   },
-  640: {  // Medium devices
+  480: {  // Large mobile devices
+    slidesPerView: 1.3,
+    spaceBetween: 15,
+    touchThreshold: 30,
+    momentumRatio: 0.5,
+    pullResistance: 0.15
+  },
+  640: {  // Medium devices (small tablets)
     slidesPerView: 1.5,
-    spaceBetween: 15
+    spaceBetween: 15,
+    touchThreshold: 35,
+    momentumRatio: 0.4,
+    pullResistance: 0.1
+  },
+  767: {  // Large mobile/phablet devices
+    slidesPerView: 1.7,
+    spaceBetween: 18,
+    touchThreshold: 40,
+    momentumRatio: 0.3,
+    pullResistance: 0.05
   },
   768: {  // Large tablets - fixed problematic range
     slidesPerView: 1.8,
-    spaceBetween: 20
+    spaceBetween: 20,
+    touchThreshold: 45,
+    momentumRatio: 0.2,
+    pullResistance: 0
   },
   896: {  // Small desktops - additional breakpoint
     slidesPerView: 2.2,
-    spaceBetween: 20
+    spaceBetween: 20,
+    touchThreshold: 50,
+    momentumRatio: 0.1,
+    pullResistance: 0
   },
   1024: { // Desktops
     slidesPerView: 2.5,
-    spaceBetween: 25
+    spaceBetween: 25,
+    touchThreshold: 50,
+    momentumRatio: 0.1,
+    pullResistance: 0
   },
   1280: { // Large desktops
     slidesPerView: 2.8,
-    spaceBetween: 30
+    spaceBetween: 30,
+    touchThreshold: 50,
+    momentumRatio: 0.1,
+    pullResistance: 0
   },
   1440: { // Extra large desktops
     slidesPerView: 3,
-    spaceBetween: 35
+    spaceBetween: 35,
+    touchThreshold: 50,
+    momentumRatio: 0.1,
+    pullResistance: 0
   }
 };
 
@@ -434,7 +495,10 @@ const Carousel: React.FC<CarouselProps> = ({
     isDragging: false,
     visibleSlides: [],
     isFocused: false,
-    focusedElement: null
+    focusedElement: null,
+    touchGesture: null,
+    momentumScrolling: false,
+    isVideoPaused: false
   });
   
   const [containerWidth, setContainerWidth] = useState(0);
@@ -450,7 +514,13 @@ const Carousel: React.FC<CarouselProps> = ({
   
   // Get responsive config based on container width
   const getResponsiveConfig = useCallback(() => {
-    let config = { slidesPerView, spaceBetween };
+    let config = {
+      slidesPerView,
+      spaceBetween,
+      touchThreshold: 50,
+      momentumRatio: 0.1,
+      pullResistance: 0
+    };
     
     // Find matching breakpoint
     const sortedBreakpoints = Object.keys(breakpoints)
@@ -649,56 +719,164 @@ const Carousel: React.FC<CarouselProps> = ({
     setState(prev => ({ ...prev, isFocused: false, focusedElement: null }));
   }, []);
   
-  // Touch handlers with enhanced accessibility
+  // Enhanced touch handlers with momentum scrolling and pull resistance
   const handleTouchStart = useCallback((e: TouchEvent) => {
+    const touch = e.touches[0];
+    const config = getResponsiveConfig();
+    
+    const newGesture: TouchGestureState = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      currentX: touch.clientX,
+      currentY: touch.clientY,
+      startTime: Date.now(),
+      isDragging: true,
+      hasPassedThreshold: false,
+      velocity: 0,
+      pullResistance: config.pullResistance || 0
+    };
+    
     setState(prev => ({
       ...prev,
-      touchStart: { x: e.touches[0].clientX, y: e.touches[0].clientY },
-      isDragging: true
+      touchStart: { x: touch.clientX, y: touch.clientY },
+      isDragging: true,
+      touchGesture: newGesture,
+      isVideoPaused: true // Pause videos during touch interaction
     }));
     
-    // Provide haptic feedback if available
-    if ('vibrate' in navigator) {
-      navigator.vibrate(10);
+    // Pause any playing videos to prevent conflicts
+    const videos = document.querySelectorAll('.carousel__slide--active video');
+    videos.forEach(video => {
+      const htmlVideo = video as HTMLVideoElement;
+      if (!htmlVideo.paused) {
+        htmlVideo.pause();
+      }
+    });
+    
+    // Provide light haptic feedback on touch start
+    if ('vibrate' in navigator && window.matchMedia('(pointer: coarse)').matches) {
+      navigator.vibrate(5);
     }
-  }, []);
+  }, [getResponsiveConfig]);
   
   const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!state.touchStart || !state.isDragging) return;
+    if (!state.touchGesture || !state.isDragging) return;
     
-    // Prevent default to enable smooth swiping
-    e.preventDefault();
-  }, [state.touchStart, state.isDragging]);
-  
-  const handleTouchEnd = useCallback((e: TouchEvent) => {
-    if (!state.touchStart || !state.isDragging) return;
+    const touch = e.touches[0];
+    const config = getResponsiveConfig();
+    const touchThreshold = config.touchThreshold || 50;
     
-    const touchEnd = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
-    const diffX = touchEnd.x - state.touchStart.x;
-    const diffY = touchEnd.y - state.touchStart.y;
+    // Update gesture state
+    const deltaX = touch.clientX - state.touchGesture.startX;
+    const deltaY = touch.clientY - state.touchGesture.startY;
+    const deltaTime = Date.now() - state.touchGesture.startTime;
     
-    // Determine if it's a horizontal swipe
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-      // Provide haptic feedback for successful swipe
-      if ('vibrate' in navigator) {
-        navigator.vibrate(20);
+    // Calculate velocity for momentum scrolling
+    const velocity = Math.abs(deltaX) / deltaTime;
+    
+    // Check if we've passed the threshold for drag initiation
+    const hasPassedThreshold = Math.abs(deltaX) > touchThreshold;
+    
+    // Only prevent default if we're actually dragging horizontally
+    if (hasPassedThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+      e.preventDefault();
+      
+      // Apply pull resistance at boundaries
+      let adjustedDeltaX = deltaX;
+      const isAtStart = state.currentIndex === 0 && deltaX > 0;
+      const isAtEnd = state.currentIndex === slides.length - 1 && deltaX < 0;
+      
+      if ((isAtStart || isAtEnd) && config.pullResistance) {
+        adjustedDeltaX = deltaX * (1 - config.pullResistance);
       }
       
-      if (diffX > 0) {
-        slidePrev(); // Swipe right - go to previous
-        announceSlideChange(state.currentIndex - 1);
-      } else {
-        slideNext(); // Swipe left - go to next
+      // Update track position for real-time feedback
+      if (trackRef.current) {
+        const currentTransform = getTranslateX();
+        trackRef.current.style.transform = `translateX(${currentTransform + adjustedDeltaX}px)`;
+      }
+      
+      setState(prev => ({
+        ...prev,
+        touchGesture: {
+          ...prev.touchGesture!,
+          currentX: touch.clientX,
+          currentY: touch.clientY,
+          hasPassedThreshold,
+          velocity,
+          pullResistance: config.pullResistance || 0
+        }
+      }));
+    }
+  }, [state.touchGesture, state.isDragging, state.currentIndex, slides.length, getResponsiveConfig, getTranslateX]);
+  
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
+    if (!state.touchGesture || !state.isDragging) return;
+    
+    const touch = e.changedTouches[0];
+    const config = getResponsiveConfig();
+    const touchThreshold = config.touchThreshold || 50;
+    const momentumRatio = config.momentumRatio || 0.1;
+    
+    const deltaX = touch.clientX - state.touchGesture.startX;
+    const deltaY = touch.clientY - state.touchGesture.startY;
+    const deltaTime = Date.now() - state.touchGesture.startTime;
+    const velocity = Math.abs(deltaX) / deltaTime;
+    
+    // Reset track position
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translateX(${getTranslateX()}px)`;
+    }
+    
+    // Determine if it's a horizontal swipe with momentum consideration
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+    const hasPassedThreshold = Math.abs(deltaX) > touchThreshold;
+    const hasMomentum = velocity > 0.3; // Minimum velocity for momentum
+    
+    if (isHorizontalSwipe && (hasPassedThreshold || hasMomentum)) {
+      // Provide haptic feedback for successful swipe
+      if ('vibrate' in navigator && window.matchMedia('(pointer: coarse)').matches) {
+        navigator.vibrate(10);
+      }
+      
+      // Determine direction based on delta and momentum
+      const shouldGoNext = deltaX < 0 || (deltaX < touchThreshold && velocity > 0.5);
+      
+      if (shouldGoNext) {
+        slideNext();
         announceSlideChange(state.currentIndex + 1);
+      } else {
+        slidePrev();
+        announceSlideChange(state.currentIndex - 1);
+      }
+      
+      // Apply momentum scrolling if enabled
+      if (hasMomentum && momentumRatio > 0) {
+        setState(prev => ({ ...prev, momentumScrolling: true }));
+        setTimeout(() => {
+          setState(prev => ({ ...prev, momentumScrolling: false }));
+        }, 300);
       }
     }
     
     setState(prev => ({
       ...prev,
       touchStart: null,
-      isDragging: false
+      isDragging: false,
+      touchGesture: null,
+      isVideoPaused: false // Resume video playback after touch ends
     }));
-  }, [state.touchStart, state.isDragging, slidePrev, slideNext, state.currentIndex, announceSlideChange]);
+    
+    // Resume video playback for active slide
+    setTimeout(() => {
+      const activeVideo = document.querySelector('.carousel__slide--active video') as HTMLVideoElement;
+      if (activeVideo && activeVideo.paused && activeVideo.autoplay) {
+        activeVideo.play().catch(() => {
+          // Ignore autoplay errors
+        });
+      }
+    }, 100);
+  }, [state.touchGesture, state.isDragging, state.currentIndex, slidePrev, slideNext, announceSlideChange, getResponsiveConfig, getTranslateX]);
   
   // Mouse handlers for grab cursor
   const handleMouseDown = useCallback(() => {
