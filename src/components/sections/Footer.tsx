@@ -11,10 +11,10 @@ const Footer: React.FC = () => {
     {
       title: "Company",
       links: [
-        { name: "About Us", href: "#" },
-        { name: "Case Studies", href: "#" },
-        { name: "Careers", href: "#" },
-        { name: "Blog", href: "#" }
+        { name: "Home", href: "#home" },
+        { name: "Solutions", href: "#solutions" },
+        { name: "Why Choose Us", href: "#why-choose-us" },
+        { name: "Pricing", href: "#pricing" }
       ]
     },
     {
@@ -29,19 +29,7 @@ const Footer: React.FC = () => {
     {
       title: "Resources",
       links: [
-        { name: "Marketing Guide", href: "#" },
-        { name: "ROI Calculator", href: "#" },
-        { name: "Free Audit", href: "#" },
         { name: "FAQ", href: "#faq" }
-      ]
-    },
-    {
-      title: "Legal",
-      links: [
-        { name: "Privacy Policy", href: "#" },
-        { name: "Terms of Service", href: "#" },
-        { name: "Cookie Policy", href: "#" },
-        { name: "Disclaimer", href: "#" }
       ]
     }
   ];
@@ -79,15 +67,15 @@ const Footer: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex items-center text-gray-300">
                     <Mail className="h-5 w-5 mr-3 text-blue-400" />
-                    <span>hello@assetmarketing.com</span>
+                    <span>theassetdrew@gmail.com</span>
                   </div>
                   <div className="flex items-center text-gray-300">
                     <Phone className="h-5 w-5 mr-3 text-blue-400" />
-                    <span>+1 (555) 123-4567</span>
+                    <span>+1 (979) 308-8889</span>
                   </div>
                   <div className="flex items-center text-gray-300">
                     <MapPin className="h-5 w-5 mr-3 text-blue-400" />
-                    <span>New York, NY</span>
+                    <span>Houston, Texas</span>
                   </div>
                 </div>
               </motion.div>
@@ -136,7 +124,7 @@ const Footer: React.FC = () => {
                 © {currentYear} The Asset Studio. All rights reserved.
               </p>
               <p className="text-gray-400 text-sm">
-                Website: <a href="https://wecreatebrand.com" className="text-blue-400 hover:text-blue-300 transition-colors duration-200">wecreatebrand.com</a>
+                Website: <a href="https://theasset.io" className="text-blue-400 hover:text-blue-300 transition-colors duration-200">theasset.io</a>
               </p>
             </motion.div>
 
