@@ -421,8 +421,8 @@ const Hero: React.FC = () => {
         style={{ backgroundColor: '#0a0a0a' }} // Dark fallback color
       >
         {/* Removed semi-transparent overlay to maintain full video brightness */}
-        {/* Static image fallback for mobile or when video fails */}
-        {(isMobile || videoError) && (
+        {/* Static image fallback only for desktop video error, not for mobile */}
+        {videoError && !isMobile && (
           <div
             className="absolute inset-0 z-0 w-full h-full bg-cover bg-center bg-no-repeat"
             style={{
@@ -504,9 +504,9 @@ const Hero: React.FC = () => {
         {/* Mobile video element - only rendered on mobile devices */}
         {isMobile && !mobileVideoError && shouldLoadMobileVideo && (
           <>
-            {/* Mobile loading indicator */}
+            {/* Mobile loading indicator with dark background */}
             {mobileLoadingState === 'loading' && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center">
+              <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ backgroundColor: '#0a0a0a' }}>
                 <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
@@ -519,7 +519,6 @@ const Hero: React.FC = () => {
               loop
               muted={isMuted}
               playsInline
-              poster={mobileVideoPoster}
               aria-label="Background video showing digital marketing animation for mobile"
               onError={handleMobileVideoError}
               onLoadedData={handleMobileVideoLoadedData}
@@ -530,7 +529,8 @@ const Hero: React.FC = () => {
                 objectFit: 'cover',
                 objectPosition: 'center',
                 opacity: mobileVideoLoaded ? 1 : 0,
-                transition: prefersReducedMotion ? 'none' : 'opacity 0.5s ease-in-out'
+                transition: prefersReducedMotion ? 'none' : 'opacity 0.5s ease-in-out',
+                backgroundColor: '#0a0a0a' // Dark background to prevent flash
               }}
             >
               <source src={mobileVideoUrl} type="video/mp4" />
