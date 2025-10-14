@@ -4,7 +4,6 @@ import Solutions from '@/components/sections/Solutions';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import Process from '@/components/sections/Process';
 import Testimonials from '@/components/sections/Testimonials';
-import CTA from '@/components/sections/CTA';
 import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
 
@@ -17,7 +16,6 @@ export default function Home() {
       <WhyChooseUs />
       <Process />
       <Testimonials />
-      <CTA />
       <FAQ />
       <Footer />
     </div>
