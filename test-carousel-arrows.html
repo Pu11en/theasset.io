@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Arrow Test</title>
+    <script src="http://localhost:4000/_next/static/chunks/webpack.js"></script>
+    <script src="http://localhost:4000/_next/static/chunks/framework.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .test-note {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Carousel Navigation Arrow Test</h1>
+        
+        <div class="test-note">
+            <h3>Test Objective</h3>
+            <p>Verify that the carousel navigation arrows are properly positioned, visible, and functional with the following changes:</p>
+            <ul>
+                <li>Repositioned to be vertically centered on the carousel (top-[20%])</li>
+                <li>Placed on opposite sides (left and right)</li>
+                <li>Improved visibility with brighter backgrounds, higher contrast, shadows, and hover effects</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Steps</h2>
+            <ol>
+                <li>Click the link below to open the main application</li>
+                <li>Navigate to the "Why Choose Us" section</li>
+                <li>Observe the carousel component and its navigation arrows</li>
+                <li>Test the following:
+                    <ul>
+                        <li>Arrow positioning (vertically centered at 20% from top)</li>
+                        <li>Arrow visibility against the background</li>
+                        <li>Navigation functionality (clicking arrows changes slides)</li>
+                        <li>Hover effects and transitions</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <a href="http://localhost:4000#why-choose-us" class="test-link" target="_blank">Open Application (Why Choose Us Section)</a>
+        </div>
+
+        <div class="test-section">
+            <h2>Expected Results</h2>
+            <ul>
+                <li>Arrows should be positioned at 20% from the top of the carousel</li>
+                <li>Left arrow should be on the left side, right arrow on the right side</li>
+                <li>Arrows should have a white/light background with good contrast</li>
+                <li>Arrows should have a shadow effect for depth</li>
+                <li>Hovering should cause the arrows to move up slightly and glow</li>
+                <li>Clicking arrows should navigate between slides smoothly</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <textarea id="testResults" rows="10" style="width: 100%;" placeholder="Enter your test results here..."></textarea>
+            <br><br>
+            <button onclick="saveResults()">Save Results</button>
+        </div>
+    </div>
+
+    <script>
+        function saveResults() {
+            const results = document.getElementById('testResults').value;
+            if (results.trim()) {
+                console.log('Test Results:', results);
+                alert('Test results saved to console. Please copy and paste them in your response.');
+            } else {
+                alert('Please enter test results before saving.');
+            }
+        }
+    </script>
+</body>
+</html>
