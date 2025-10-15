@@ -64,25 +64,29 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [showControls, setShowControls] = useState(false);
   const videoId = `video-${title.replace(/\s+/g, '-').toLowerCase()}`;
   
-  // Use our custom lazy loading hook
-  const {
-    isInView,
-    isLoaded,
-    isLoading,
-    hasError,
-    videoRef,
-    containerRef,
-    pauseVideo,
-    playVideo
-  } = useVideoLazyLoad({
+  // Use our custom lazy loading hook only for videos, not static images
+  const videoHook = isStaticImage ? null : useVideoLazyLoad({
     threshold: 0.1,
     rootMargin: '50px',
     preloadNext: true,
     pauseWhenNotVisible: !forceAutoplay, // Don't pause forceAutoplay videos
     forceAutoplay // Pass forceAutoplay to the hook
   });
+  
+  // For static images, we don't need video-related states
+  const isInView = isStaticImage ? true : videoHook?.isInView || false;
+  const isLoaded = isStaticImage ? true : videoHook?.isLoaded || false;
+  const isLoading = isStaticImage ? false : videoHook?.isLoading || false;
+  const hasError = isStaticImage ? false : videoHook?.hasError || false;
+  const videoRef = isStaticImage ? { current: null } : videoHook?.videoRef || { current: null };
+  const containerRef = isStaticImage ? React.useRef<HTMLDivElement>(null) : videoHook?.containerRef || { current: null };
+  const pauseVideo = isStaticImage ? () => {} : videoHook?.pauseVideo || (() => {});
+  const playVideo = isStaticImage ? () => {} : videoHook?.playVideo || (() => {});
 
   useEffect(() => {
+    // Skip all video-related logic for static images
+    if (isStaticImage) return;
+    
     const video = videoRef.current;
     if (!video) return;
 
@@ -156,20 +160,26 @@ const VideoCard: React.FC<VideoCardProps> = ({
         videoPerformanceMonitor.stopMonitoring(videoId);
       }
     };
-  }, [isLoaded, videoId, videoRef, title, forceAutoplay, loop]);
+  }, [isLoaded, videoId, videoRef, title, forceAutoplay, loop, isStaticImage]);
 
   // Show fallback image if video fails to load
   useEffect(() => {
+    // Skip for static images
+    if (isStaticImage) return;
+    
     if (hasError && fallbackImage) {
       setShowFallback(true);
       
       // Log error for debugging
       console.error(`Video failed to load: ${title} (${videoId})`);
     }
-  }, [hasError, fallbackImage, title, videoId]);
+  }, [hasError, fallbackImage, title, videoId, isStaticImage]);
 
   // Force autoplay videos to start playing immediately when loaded
   useEffect(() => {
+    // Skip for static images
+    if (isStaticImage) return;
+    
     if (forceAutoplay && isLoaded && videoRef.current) {
       const video = videoRef.current;
       
@@ -206,7 +216,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         }, 100);
       });
     }
-  }, [forceAutoplay, isLoaded, title, videoRef]);
+  }, [forceAutoplay, isLoaded, title, videoRef, isStaticImage]);
 
   // Enhanced video click handler with mobile considerations
   const handleVideoClick = useCallback(() => {
@@ -318,6 +328,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   // Handle fullscreen change events
   useEffect(() => {
+    // Skip for static images
+    if (isStaticImage) return;
+    
     // Only add event listeners on client side
     if (typeof document !== 'undefined') {
       const handleFullscreenChange = () => {
@@ -329,10 +342,13 @@ const VideoCard: React.FC<VideoCardProps> = ({
         document.removeEventListener('fullscreenchange', handleFullscreenChange);
       };
     }
-  }, []);
+  }, [isStaticImage]);
 
   // Auto-hide controls on mobile when playing
   useEffect(() => {
+    // Skip for static images
+    if (isStaticImage) return;
+    
     if (isPlaying && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
       const timer = setTimeout(() => {
         setShowControls(false);
@@ -340,7 +356,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
       
       return () => clearTimeout(timer);
     }
-  }, [isPlaying]);
+  }, [isPlaying, isStaticImage]);
 
   return (
     <div
@@ -388,8 +404,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
           alt={title}
           fill
           style={{ objectFit: 'cover' }}
-          className={`${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
-          loading={lazy ? 'lazy' : 'eager'}
+          className="opacity-100 transition-opacity duration-300"
+          loading="eager"
+          priority={true}
         />
       ) : (
         <video
@@ -517,14 +534,16 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
 
-      {/* Text overlay - positioned at the top as primary focal point */}
-      <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 via-black/60 to-transparent p-4 sm:p-6">
-        <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2 drop-shadow-lg">{title}</h3>
-        <p className="text-white/95 text-sm sm:text-base md:text-lg drop-shadow-md">{description}</p>
-        {caption && (
-          <p className="text-white/90 text-xs sm:text-sm mt-2 drop-shadow-md">{caption}</p>
-        )}
-      </div>
+      {/* Text overlay - positioned at the top as primary focal point - only show if title or description exists */}
+      {(title || description) && (
+        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 via-black/60 to-transparent p-4 sm:p-6">
+          <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2 drop-shadow-lg">{title}</h3>
+          <p className="text-white/95 text-sm sm:text-base md:text-lg drop-shadow-md">{description}</p>
+          {caption && (
+            <p className="text-white/90 text-xs sm:text-sm mt-2 drop-shadow-md">{caption}</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
