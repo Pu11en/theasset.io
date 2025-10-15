@@ -1,10 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@/components/ui/Accordion';
 import { motion } from 'framer-motion';
+import BookingForm from '@/components/BookingForm';
 
 const FAQ: React.FC = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  
   const faqItems = [
     {
       title: "What makes The Asset Studio different from other agencies?",
@@ -31,6 +34,14 @@ const FAQ: React.FC = () => {
       content: "Yes, all our plans are month-to-month with no long-term contracts. While we recommend working with us for at least 90 days to see optimal results, you can cancel anytime with no penalties."
     }
   ];
+
+  const openBookingModal = () => {
+    setIsBookingModalOpen(true);
+  };
+
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false);
+  };
 
   return (
     <section id="faq" className="py-20 bg-gray-50">
@@ -73,11 +84,22 @@ const FAQ: React.FC = () => {
             <p className="text-gray-700 mb-6">
               Schedule a free consultation with our marketing experts to discuss your specific needs and goals.
             </p>
-            <div className="inline-flex items-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 cursor-pointer">
+            <button
+              onClick={openBookingModal}
+              className="inline-flex items-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-50"
+              aria-label="Schedule a free consultation call"
+            >
               Schedule Your Free Call
-            </div>
+            </button>
           </div>
         </motion.div>
+        
+        {/* Booking Modal */}
+        <BookingForm
+          isOpen={isBookingModalOpen}
+          onClose={closeBookingModal}
+          ctaButton="Schedule Your Free Call"
+        />
       </div>
     </section>
   );

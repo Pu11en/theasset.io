@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Carousel Navigation Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .test-description {
+            margin-bottom: 20px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .mobile-preview {
+            width: 375px;
+            height: 667px;
+            border: 2px solid #333;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+            background: #000;
+        }
+        
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            overflow: hidden;
+        }
+        
+        .carousel-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-slide {
+            flex: 0 0 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+        
+        .slide-1 { background: linear-gradient(45deg, #3B82F6, #1D4ED8); }
+        .slide-2 { background: linear-gradient(45deg, #10B981, #059669); }
+        .slide-3 { background: linear-gradient(45deg, #F59E0B, #D97706); }
+        
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .carousel-arrow.prev {
+            left: 10px;
+        }
+        
+        .carousel-arrow.next {
+            right: 10px;
+        }
+        
+        .swipe-instruction {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out 1s forwards;
+            z-index: 15;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #3B82F6;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checklist li:before {
+            content: "✓";
+            color: #10B981;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .checklist li.pending:before {
+            content: "○";
+            color: #F59E0B;
+        }
+        
+        .responsive-test {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .device-frame {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .device-frame.mobile {
+            width: 375px;
+        }
+        
+        .device-frame.tablet {
+            width: 768px;
+        }
+        
+        .device-frame.desktop {
+            width: 1024px;
+        }
+        
+        .device-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .mini-carousel {
+            height: 200px;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        /* Hide arrows on mobile */
+        @media (max-width: 767px) {
+            .carousel-arrow {
+                display: none;
+            }
+        }
+        
+        /* Show arrows on larger screens */
+        @media (min-width: 768px) {
+            .carousel-arrow {
+                display: flex;
+            }
+            
+            .swipe-instruction {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Mobile Carousel Navigation Test</h1>
+        <p>This page tests the mobile-specific navigation enhancements for the carousel component.</p>
+        
+        <div class="test-section">
+            <h2 class="test-title">Mobile Preview (375px × 667px)</h2>
+            <div class="test-description">
+                This preview shows how the carousel appears on a mobile device. Note that:
+                <ul>
+                    <li>Navigation arrows are hidden on mobile</li>
+                    <li>Swipe instruction appears after 1 second</li>
+                    <li>Users can navigate by swiping left/right</li>
+                </ul>
+            </div>
+            
+            <div class="mobile-preview">
+                <div class="mobile-screen">
+                    <div class="carousel-container" id="testCarousel">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-slide slide-1">Slide 1</div>
+                            <div class="carousel-slide slide-2">Slide 2</div>
+                            <div class="carousel-slide slide-3">Slide 3</div>
+                        </div>
+                        <div class="carousel-arrow prev" id="prevArrow">‹</div>
+                        <div class="carousel-arrow next" id="nextArrow">›</div>
+                        <div class="swipe-instruction" id="swipeInstruction">Swipe to navigate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2 class="test-title">Responsive Behavior Test</h2>
+            <div class="test-description">
+                Test how the carousel behaves across different screen sizes:
+            </div>
+            
+            <div class="responsive-test">
+                <div class="device-frame mobile">
+                    <div class="device-label">Mobile (≤767px)</div>
+                    <div class="mini-carousel">
+                        <div style="padding: 80px 20px; text-align: center; color: #666;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">📱</div>
+                            <div>Arrows hidden</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Swipe instruction shown</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-frame tablet">
+                    <div class="device-label">Tablet (≥768px)</div>
+                    <div class="mini-carousel">
+                        <div style="padding: 80px 20px; text-align: center; color: #666;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">📱</div>
+                            <div>Arrows visible</div>
+                            <div style="font-size: 12px; margin-top: 5px;">No swipe instruction</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-frame desktop">
+                    <div class="device-label">Desktop (≥1024px)</div>
+                    <div class="mini-carousel">
+                        <div style="padding: 80px 20px; text-align: center; color: #666;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">🖥️</div>
+                            <div>Arrows visible</div>
+                            <div style="font-size: 12px; margin-top: 5px;">No swipe instruction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2 class="test-title">Implementation Checklist</h2>
+            <div class="test-description">
+                Verification of implemented features:
+            </div>
+            
+            <ul class="checklist">
+                <li>Hide traditional navigation on mobile devices (viewport width below 768px)</li>
+                <li>Add swipe instruction indicator at bottom center of carousel</li>
+                <li>Style swipe instruction with semi-transparent background</li>
+                <li>Add smooth fade-in animation for swipe instruction</li>
+                <li>Implement user interaction detection for touch/swipe events</li>
+                <li>Hide swipe instruction after user interacts with carousel</li>
+                <li>Preserve keyboard navigation functionality on mobile</li>
+                <li>Add appropriate ARIA labels for swipe instruction</li>
+                <li>Add CSS variables for swipe instruction theming</li>
+                <li>Make swipe instruction responsive and customizable</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2 class="test-title">Accessibility Test</h2>
+            <div class="test-description">
+                Test keyboard navigation and screen reader compatibility:
+            </div>
+            
+            <div class="test-results">
+                <h3>Keyboard Navigation Test</h3>
+                <p>Use the following keyboard commands to test navigation:</p>
+                <ul>
+                    <li><strong>Tab</strong> - Navigate to carousel</li>
+                    <li><strong>Arrow Left</strong> - Go to previous slide</li>
+                    <li><strong>Arrow Right</strong> - Go to next slide</li>
+                    <li><strong>Home</strong> - Go to first slide</li>
+                    <li><strong>End</strong> - Go to last slide</li>
+                </ul>
+                
+                <h3>Screen Reader Test</h3>
+                <p>Enable a screen reader to test:</p>
+                <ul>
+                    <li>Carousel announcements for slide changes</li>
+                    <li>ARIA labels for navigation elements</li>
+                    <li>Swipe instruction announcement</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2 class="test-title">Touch Interaction Test</h2>
+            <div class="test-description">
+                On a touch device or browser dev tools, test:
+            </div>
+            
+            <div class="test-results">
+                <ul>
+                    <li>Swipe left to go to next slide</li>
+                    <li>Swipe right to go to previous slide</li>
+                    <li>Swipe instruction disappears after first interaction</li>
+                    <li>Smooth transition between slides</li>
+                    <li>Momentum scrolling for natural feel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simple carousel functionality for testing
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        const track = document.getElementById('carouselTrack');
+        const swipeInstruction = document.getElementById('swipeInstruction');
+        let hasInteracted = false;
+        
+        function updateSlidePosition() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlidePosition();
+            hideSwipeInstruction();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlidePosition();
+            hideSwipeInstruction();
+        }
+        
+        function hideSwipeInstruction() {
+            if (!hasInteracted) {
+                hasInteracted = true;
+                swipeInstruction.style.opacity = '0';
+                swipeInstruction.style.transition = 'opacity 0.3s ease';
+            }
+        }
+        
+        // Arrow navigation (for desktop testing)
+        document.getElementById('prevArrow').addEventListener('click', prevSlide);
+        document.getElementById('nextArrow').addEventListener('click', nextSlide);
+        
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        const carousel = document.getElementById('testCarousel');
+        
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide(); // Swipe left, go to next
+                } else {
+                    prevSlide(); // Swipe right, go to prev
+                }
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.target.closest('.test-container')) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        prevSlide();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        nextSlide();
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        currentSlide = 0;
+                        updateSlidePosition();
+                        hideSwipeInstruction();
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        currentSlide = totalSlides - 1;
+                        updateSlidePosition();
+                        hideSwipeInstruction();
+                        break;
+                }
+            }
+        });
+        
+        // Mouse interaction for testing
+        carousel.addEventListener('mousedown', hideSwipeInstruction);
+        
+        // Check viewport size and update UI
+        function checkViewport() {
+            const isMobile = window.innerWidth < 768;
+            const arrows = document.querySelectorAll('.carousel-arrow');
+            
+            arrows.forEach(arrow => {
+                arrow.style.display = isMobile ? 'none' : 'flex';
+            });
+            
+            swipeInstruction.style.display = isMobile ? 'block' : 'none';
+        }
+        
+        window.addEventListener('resize', checkViewport);
+        checkViewport(); // Initial check
+    </script>
+</body>
+</html>

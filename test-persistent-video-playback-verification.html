@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Video Playback Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Test-specific styles */
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .test-instructions {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .test-pass {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .test-fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        
+        .test-pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+        
+        /* Carousel simulation styles */
+        .carousel-simulation {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-slide {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+        
+        .carousel-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-slide .text-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+            padding: 1.5rem;
+            z-index: 5;
+        }
+        
+        .carousel-slide .text-overlay h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .carousel-slide .text-overlay p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+        
+        .carousel-nav:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .carousel-nav.prev {
+            left: 10px;
+        }
+        
+        .carousel-nav.next {
+            right: 10px;
+        }
+        
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .carousel-slide {
+                width: 250px;
+                height: 333px;
+            }
+            
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .carousel-nav.prev {
+                left: 5px;
+            }
+            
+            .carousel-nav.next {
+                right: 5px;
+            }
+        }
+        
+        /* Video status indicator */
+        .video-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 15;
+        }
+        
+        .video-status.playing {
+            background: rgba(16, 185, 129, 0.8);
+        }
+        
+        .video-status.paused {
+            background: rgba(239, 68, 68, 0.8);
+        }
+        
+        .video-status.loading {
+            background: rgba(245, 158, 11, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="test-container">
+        <h1 class="text-3xl font-bold text-center mb-8">Persistent Video Playback Test</h1>
+        
+        <!-- Test Instructions -->
+        <div class="test-instructions">
+            <h2 class="text-xl font-semibold mb-4">Test Instructions</h2>
+            <ol class="list-decimal list-inside space-y-2">
+                <li>Play the videos in the carousel below</li>
+                <li>Navigate between slides using the arrow buttons</li>
+                <li>Verify that videos continue playing during navigation (persistent playback)</li>
+                <li>Test on both desktop and mobile devices</li>
+                <li>Check the test results below for verification</li>
+            </ol>
+        </div>
+        
+        <!-- Test Carousel -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4">Test Carousel with Persistent Video Playback</h2>
+            <div class="carousel-simulation" id="testCarousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Slide 1: ZeroRisk Video -->
+                    <div class="carousel-slide">
+                        <div class="video-status loading" id="status-1">Loading...</div>
+                        <video 
+                            id="video-1"
+                            autoplay 
+                            muted 
+                            loop 
+                            playsinline
+                            data-force-autoplay="true"
+                            data-persistent-playback="true"
+                            poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg">
+                            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4" type="video/mp4">
+                            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760415676/insta_post_2_1_xdaptq.mp4" type="video/mp4" media="(max-width: 640px)">
+                        </video>
+                        <div class="text-overlay">
+                            <h3>ZeroRisk</h3>
+                            <p>You Can't Lose Money - Our Offer Makes Your Investment Risk-Free</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2: Extensive Experience Video -->
+                    <div class="carousel-slide">
+                        <div class="video-status loading" id="status-2">Loading...</div>
+                        <video 
+                            id="video-2"
+                            autoplay 
+                            muted 
+                            loop 
+                            playsinline
+                            data-force-autoplay="true"
+                            data-persistent-playback="true"
+                            poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg">
+                            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4" type="video/mp4">
+                            <source src="https://res.cloudinary.com/dmdjagtkx/video/upload/c_scale,w_480/v1760470477/carosal_6_yzdvbj.mp4" type="video/mp4" media="(max-width: 640px)">
+                        </video>
+                        <div class="text-overlay">
+                            <h3>Extensive Experience</h3>
+                            <p>Proven Track Record Across Multiple Industries</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3: Static Image -->
+                    <div class="carousel-slide">
+                        <img 
+                            src="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png" 
+                            alt="Business Automations"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="text-overlay">
+                            <h3>Business Automations</h3>
+                            <p>Streamline Your Workflow with Our Solutions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <button class="carousel-nav prev" id="prevBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18L9 12L15 6"/>
+                    </svg>
+                </button>
+                <button class="carousel-nav next" id="nextBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18L15 12L9 6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Test Results -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4">Test Results</h2>
+            <div id="testResults">
+                <div class="test-result test-pending">Test in progress... Navigate through the carousel to see results.</div>
+            </div>
+        </div>
+        
+        <!-- Manual Test Checklist -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4">Manual Test Checklist</h2>
+            <div class="space-y-2">
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test1" class="form-checkbox">
+                    <span>Videos start playing automatically when loaded</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test2" class="form-checkbox">
+                    <span>Videos continue playing when navigating to next slide</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test3" class="form-checkbox">
+                    <span>Videos continue playing when navigating to previous slide</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test4" class="form-checkbox">
+                    <span>Video controls are hidden for persistent playback videos</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test5" class="form-checkbox">
+                    <span>Touch gestures work properly on mobile devices</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="test6" class="form-checkbox">
+                    <span>Responsive design works correctly on all screen sizes</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Device Information -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4">Device Information</h2>
+            <div id="deviceInfo">
+                <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+                <p><strong>Screen Size:</strong> <span id="screenSize"></span></p>
+                <p><strong>Device Type:</strong> <span id="deviceType"></span></p>
+                <p><strong>Touch Support:</strong> <span id="touchSupport"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test implementation
+        class PersistentVideoTest {
+            constructor() {
+                this.currentSlide = 0;
+                this.slides = document.querySelectorAll('.carousel-slide');
+                this.totalSlides = this.slides.length;
+                this.track = document.getElementById('carouselTrack');
+                this.videos = document.querySelectorAll('video');
+                this.testResults = [];
+                this.navigationCount = 0;
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.setupVideoMonitoring();
+                this.displayDeviceInfo();
+                this.startTest();
+            }
+            
+            setupEventListeners() {
+                document.getElementById('prevBtn').addEventListener('click', () => this.navigate(-1));
+                document.getElementById('nextBtn').addEventListener('click', () => this.navigate(1));
+                
+                // Touch support for mobile
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                this.track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                this.track.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe(touchStartX, touchEndX);
+                });
+            }
+            
+            handleSwipe(startX, endX) {
+                const swipeThreshold = 50;
+                const diff = startX - endX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        this.navigate(1); // Swipe left, go next
+                    } else {
+                        this.navigate(-1); // Swipe right, go prev
+                    }
+                }
+            }
+            
+            navigate(direction) {
+                this.navigationCount++;
+                const newSlide = this.currentSlide + direction;
+                
+                if (newSlide >= 0 && newSlide < this.totalSlides) {
+                    this.currentSlide = newSlide;
+                    this.updateCarousel();
+                    this.checkVideoPlayback();
+                }
+            }
+            
+            updateCarousel() {
+                const slideWidth = 320; // 300px + 20px margin
+                const offset = -this.currentSlide * slideWidth;
+                this.track.style.transform = `translateX(${offset}px)`;
+            }
+            
+            setupVideoMonitoring() {
+                this.videos.forEach((video, index) => {
+                    const statusElement = document.getElementById(`status-${index + 1}`);
+                    
+                    video.addEventListener('loadstart', () => {
+                        statusElement.textContent = 'Loading...';
+                        statusElement.className = 'video-status loading';
+                    });
+                    
+                    video.addEventListener('canplay', () => {
+                        statusElement.textContent = 'Ready';
+                        statusElement.className = 'video-status';
+                    });
+                    
+                    video.addEventListener('play', () => {
+                        statusElement.textContent = 'Playing';
+                        statusElement.className = 'video-status playing';
+                        this.logTestResult(`Video ${index + 1} started playing`);
+                    });
+                    
+                    video.addEventListener('pause', () => {
+                        statusElement.textContent = 'Paused';
+                        statusElement.className = 'video-status paused';
+                        this.logTestResult(`Video ${index + 1} paused`, false);
+                    });
+                    
+                    video.addEventListener('ended', () => {
+                        statusElement.textContent = 'Ended';
+                        statusElement.className = 'video-status';
+                        // For persistent playback, restart the video
+                        if (video.dataset.persistentPlayback === 'true') {
+                            video.currentTime = 0;
+                            video.play().catch(e => console.log('Autoplay restart failed:', e));
+                        }
+                    });
+                    
+                    video.addEventListener('error', () => {
+                        statusElement.textContent = 'Error';
+                        statusElement.className = 'video-status paused';
+                        this.logTestResult(`Video ${index + 1} failed to load`, false);
+                    });
+                });
+            }
+            
+            checkVideoPlayback() {
+                this.videos.forEach((video, index) => {
+                    const isPersistent = video.dataset.persistentPlayback === 'true';
+                    const shouldBePlaying = isPersistent;
+                    const isPlaying = !video.paused && !video.ended;
+                    
+                    if (isPersistent && !isPlaying) {
+                        this.logTestResult(`Video ${index + 1} should be playing but is paused (navigation #${this.navigationCount})`, false);
+                        // Try to restart the video
+                        video.play().catch(e => console.log('Failed to restart video:', e));
+                    } else if (isPersistent && isPlaying) {
+                        this.logTestResult(`Video ${index + 1} correctly continued playing during navigation #${this.navigationCount}`, true);
+                    }
+                });
+            }
+            
+            logTestResult(message, passed = null) {
+                const result = {
+                    message,
+                    passed: passed !== null ? passed : true,
+                    timestamp: new Date().toLocaleTimeString(),
+                    navigationCount: this.navigationCount
+                };
+                
+                this.testResults.push(result);
+                this.updateTestResults();
+            }
+            
+            updateTestResults() {
+                const resultsContainer = document.getElementById('testResults');
+                const latestResults = this.testResults.slice(-10); // Show last 10 results
+                
+                resultsContainer.innerHTML = latestResults.map(result => `
+                    <div class="test-result ${result.passed ? 'test-pass' : 'test-fail'}">
+                        <strong>${result.timestamp}</strong> (Nav #${result.navigationCount}): ${result.message}
+                    </div>
+                `).join('');
+            }
+            
+            displayDeviceInfo() {
+                document.getElementById('userAgent').textContent = navigator.userAgent;
+                document.getElementById('screenSize').textContent = `${window.screen.width}x${window.screen.height}`;
+                document.getElementById('deviceType').textContent = this.getDeviceType();
+                document.getElementById('touchSupport').textContent = 'ontouchstart' in window ? 'Yes' : 'No';
+            }
+            
+            getDeviceType() {
+                const width = window.screen.width;
+                if (width < 768) return 'Mobile';
+                if (width < 1024) return 'Tablet';
+                return 'Desktop';
+            }
+            
+            startTest() {
+                this.logTestResult('Test initialized - waiting for video loading...');
+                
+                // Check if videos have persistent playback attributes
+                this.videos.forEach((video, index) => {
+                    const hasPersistent = video.dataset.persistentPlayback === 'true';
+                    const hasForceAutoplay = video.dataset.forceAutoplay === 'true';
+                    
+                    this.logTestResult(`Video ${index + 1} - Persistent playback: ${hasPersistent}, Force autoplay: ${hasForceAutoplay}`, hasPersistent && hasForceAutoplay);
+                });
+                
+                // Start automatic testing after videos load
+                setTimeout(() => {
+                    this.logTestResult('Starting automatic test sequence...');
+                    this.runAutomaticTest();
+                }, 3000);
+            }
+            
+            runAutomaticTest() {
+                let testStep = 0;
+                const testSequence = [
+                    () => {
+                        this.logTestResult('Testing navigation to next slide...');
+                        this.navigate(1);
+                    },
+                    () => {
+                        this.logTestResult('Testing navigation to next slide...');
+                        this.navigate(1);
+                    },
+                    () => {
+                        this.logTestResult('Testing navigation to previous slide...');
+                        this.navigate(-1);
+                    },
+                    () => {
+                        this.logTestResult('Testing navigation to previous slide...');
+                        this.navigate(-1);
+                    },
+                    () => {
+                        this.logTestResult('Automatic test sequence completed');
+                    }
+                ];
+                
+                const runNextStep = () => {
+                    if (testStep < testSequence.length) {
+                        testSequence[testStep]();
+                        testStep++;
+                        setTimeout(runNextStep, 2000);
+                    }
+                };
+                
+                runNextStep();
+            }
+        }
+        
+        // Initialize test when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new PersistentVideoTest();
+        });
+    </script>
+</body>
+</html>

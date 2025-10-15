@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Video Playback Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-description {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .test-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .test-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background-color: #45a049;
+        }
+        .test-button.secondary {
+            background-color: #2196F3;
+        }
+        .test-button.secondary:hover {
+            background-color: #0b7dda;
+        }
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+        .carousel-slide.active {
+            display: block;
+        }
+        .carousel-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+        .carousel-button {
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .carousel-button:hover {
+            background-color: rgba(0,0,0,0.7);
+        }
+        .video-status {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .status-item {
+            margin-bottom: 5px;
+            font-family: monospace;
+        }
+        .status-playing {
+            color: #4CAF50;
+        }
+        .status-paused {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Persistent Video Playback Test</h1>
+        
+        <div class="test-description">
+            <h3>Test Objective</h3>
+            <p>This test verifies that videos continue playing continuously when persistentVideoPlayback is enabled, even when navigating between slides or during touch interactions.</p>
+            <p><strong>Expected behavior:</strong> All videos should keep playing in a loop regardless of slide navigation or user interactions.</p>
+        </div>
+        
+        <div class="test-controls">
+            <button class="test-button" onclick="togglePersistentPlayback()">Toggle Persistent Playback</button>
+            <button class="test-button secondary" onclick="goToSlide(0)">Go to Slide 1</button>
+            <button class="test-button secondary" onclick="goToSlide(1)">Go to Slide 2</button>
+            <button class="test-button secondary" onclick="goToSlide(2)">Go to Slide 3</button>
+            <button class="test-button secondary" onclick="simulateTouchInteraction()">Simulate Touch</button>
+        </div>
+        
+        <div class="carousel-container">
+            <div class="carousel-slide active">
+                <video id="video1" loop muted autoplay data-force-autoplay="true">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="carousel-slide">
+                <video id="video2" loop muted autoplay data-force-autoplay="true">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="carousel-slide">
+                <video id="video3" loop muted autoplay data-force-autoplay="true">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-button" onclick="previousSlide()">Previous</button>
+                <button class="carousel-button" onclick="nextSlide()">Next</button>
+            </div>
+        </div>
+        
+        <div class="video-status">
+            <h3>Video Status Monitor</h3>
+            <div id="status-container">
+                <div class="status-item">Initializing...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        let persistentPlayback = true;
+        const totalSlides = 3;
+        
+        // Get all video elements
+        const videos = [
+            document.getElementById('video1'),
+            document.getElementById('video2'),
+            document.getElementById('video3')
+        ];
+        
+        // Initialize videos
+        function initializeVideos() {
+            videos.forEach((video, index) => {
+                if (video) {
+                    video.muted = true;
+                    video.loop = true;
+                    
+                    // Add event listeners for monitoring
+                    video.addEventListener('play', () => {
+                        updateStatus(index, 'playing');
+                    });
+                    
+                    video.addEventListener('pause', () => {
+                        updateStatus(index, 'paused');
+                        
+                        // Auto-resume if persistent playback is enabled
+                        if (persistentPlayback) {
+                            setTimeout(() => {
+                                if (video.paused) {
+                                    video.play().catch(err => {
+                                        console.error(`Failed to resume video ${index + 1}:`, err);
+                                    });
+                                }
+                            }, 100);
+                        }
+                    });
+                    
+                    video.addEventListener('ended', () => {
+                        // Restart video when it ends
+                        video.currentTime = 0;
+                        video.play().catch(err => {
+                            console.error(`Failed to restart video ${index + 1}:`, err);
+                        });
+                    });
+                    
+                    // Start playing
+                    video.play().catch(err => {
+                        console.error(`Failed to start video ${index + 1}:`, err);
+                    });
+                }
+            });
+        }
+        
+        // Update status display
+        function updateStatus(videoIndex, status) {
+            const statusContainer = document.getElementById('status-container');
+            const statusItem = document.getElementById(`status-${videoIndex}`);
+            
+            if (statusItem) {
+                statusItem.textContent = `Video ${videoIndex + 1}: ${status}`;
+                statusItem.className = `status-item status-${status}`;
+            } else {
+                const newStatusItem = document.createElement('div');
+                newStatusItem.id = `status-${videoIndex}`;
+                newStatusItem.textContent = `Video ${videoIndex + 1}: ${status}`;
+                newStatusItem.className = `status-item status-${status}`;
+                statusContainer.appendChild(newStatusItem);
+            }
+        }
+        
+        // Carousel navigation functions
+        function showSlide(index) {
+            // Hide all slides
+            document.querySelectorAll('.carousel-slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Show current slide
+            document.querySelectorAll('.carousel-slide')[index].classList.add('active');
+            currentSlide = index;
+            
+            // In persistent mode, don't pause any videos
+            if (!persistentPlayback) {
+                // Pause all videos except the current one
+                videos.forEach((video, i) => {
+                    if (video && i !== index) {
+                        video.pause();
+                    } else if (video && i === index) {
+                        video.play().catch(err => {
+                            console.error(`Failed to play video ${i + 1}:`, err);
+                        });
+                    }
+                });
+            }
+        }
+        
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            showSlide(nextIndex);
+        }
+        
+        function previousSlide() {
+            const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prevIndex);
+        }
+        
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                showSlide(index);
+            }
+        }
+        
+        function togglePersistentPlayback() {
+            persistentPlayback = !persistentPlayback;
+            alert(`Persistent playback is now ${persistentPlayback ? 'ENABLED' : 'DISABLED'}`);
+            
+            if (persistentPlayback) {
+                // Resume all videos when enabling persistent playback
+                videos.forEach((video, index) => {
+                    if (video) {
+                        video.play().catch(err => {
+                            console.error(`Failed to resume video ${index + 1}:`, err);
+                        });
+                    }
+                });
+            }
+        }
+        
+        function simulateTouchInteraction() {
+            // Simulate touch interaction that would normally pause videos
+            console.log('Simulating touch interaction...');
+            
+            if (!persistentPlayback) {
+                // In normal mode, pause the current video
+                const currentVideo = videos[currentSlide];
+                if (currentVideo) {
+                    currentVideo.pause();
+                    
+                    // Resume after 2 seconds
+                    setTimeout(() => {
+                        currentVideo.play().catch(err => {
+                            console.error(`Failed to resume video ${currentSlide + 1}:`, err);
+                        });
+                    }, 2000);
+                }
+            } else {
+                // In persistent mode, videos should continue playing
+                alert('In persistent playback mode, videos continue during touch interactions!');
+            }
+        }
+        
+        // Monitor video status every second
+        function monitorVideos() {
+            videos.forEach((video, index) => {
+                if (video) {
+                    const status = video.paused ? 'paused' : 'playing';
+                    updateStatus(index, status);
+                }
+            });
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initializeVideos();
+            setInterval(monitorVideos, 1000);
+        });
+    </script>
+</body>
+</html>

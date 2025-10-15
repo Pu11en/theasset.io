@@ -115,6 +115,7 @@ const WhyChooseUs: React.FC = () => {
         >
           <div className="w-full max-w-6xl">
             <Carousel
+              persistentVideoPlayback={true}
               slides={videoData.map(video => ({
                 ...video,
                 type: 'custom' as const,
@@ -135,6 +136,7 @@ const WhyChooseUs: React.FC = () => {
                     enableTouchGestures={video.id !== "zero-risk" && video.id !== "extensive-experience" && video.id !== "business-automations"}
                     enableFullscreenOnMobile={video.id !== "zero-risk" && video.id !== "extensive-experience" && video.id !== "business-automations"}
                     forceAutoplay={video.id === "zero-risk" || video.id === "extensive-experience"}
+                    persistentVideoPlayback={video.id === "zero-risk" || video.id === "extensive-experience"}
                     isStaticImage={video.id === "business-automations"}
                   />
                 )

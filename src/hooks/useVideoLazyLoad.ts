@@ -7,6 +7,7 @@ interface VideoLazyLoadOptions {
   rootMargin?: string;
   preloadNext?: boolean;
   pauseWhenNotVisible?: boolean;
+  persistentPlayback?: boolean; // New option to prevent video pausing
 }
 
 interface VideoLazyLoadState {
@@ -33,7 +34,8 @@ export const useVideoLazyLoad = (
     threshold = 0.1,
     rootMargin = '50px',
     pauseWhenNotVisible = true,
-    forceAutoplay = false
+    forceAutoplay = false,
+    persistentPlayback = false
   } = options;
 
   const [state, setState] = useState<VideoLazyLoadState>({
@@ -79,16 +81,16 @@ export const useVideoLazyLoad = (
         hasError: false
       }));
 
-      // Auto-play if in viewport or if forceAutoplay is enabled
-      if (state.isInView || forceAutoplay) {
+      // Auto-play if in viewport or if forceAutoplay or persistentPlayback is enabled
+      if (state.isInView || forceAutoplay || persistentPlayback) {
         // Ensure video is muted for autoplay compatibility
         video.muted = true;
         
         // Try to play immediately
         video.play().catch(err => {
           console.warn('Video autoplay failed:', err);
-          // For forceAutoplay videos, try alternative methods
-          if (forceAutoplay) {
+          // For forceAutoplay or persistentPlayback videos, try alternative methods
+          if (forceAutoplay || persistentPlayback) {
             // Try to play with user interaction simulation
             setTimeout(() => {
               video.muted = true; // Ensure muted for autoplay
@@ -191,8 +193,8 @@ export const useVideoLazyLoad = (
             video.muted = true; // Ensure muted for autoplay compatibility
             video.play().catch(err => {
               console.warn('Video autoplay failed:', err);
-              // For forceAutoplay videos, try alternative methods
-              if (forceAutoplay) {
+              // For forceAutoplay or persistentPlayback videos, try alternative methods
+              if (forceAutoplay || persistentPlayback) {
                 setTimeout(() => {
                   video.muted = true; // Ensure muted for autoplay
                   video.play().catch(err => {
@@ -208,8 +210,8 @@ export const useVideoLazyLoad = (
                 }, 100);
               }
             });
-          } else if (!isIntersecting && pauseWhenNotVisible && state.isLoaded && !forceAutoplay) {
-            // Don't pause forceAutoplay videos when not visible
+          } else if (!isIntersecting && pauseWhenNotVisible && state.isLoaded && !(forceAutoplay || persistentPlayback)) {
+            // Don't pause forceAutoplay or persistentPlayback videos when not visible
             video.pause();
           }
         }
@@ -223,19 +225,20 @@ export const useVideoLazyLoad = (
         observerRef.current.disconnect();
       }
     };
-  }, [threshold, rootMargin, loadVideo, pauseWhenNotVisible, state.isLoaded]);
+  }, [threshold, rootMargin, loadVideo, pauseWhenNotVisible, state.isLoaded, forceAutoplay, persistentPlayback]);
 
   // Cleanup on unmount
   useEffect(() => {
     const currentVideo = videoRef.current;
     return () => {
-      if (currentVideo) {
+      // Only pause and cleanup videos that don't have persistentPlayback
+      if (currentVideo && !(forceAutoplay || persistentPlayback)) {
         currentVideo.pause();
         currentVideo.src = '';
         currentVideo.load();
       }
     };
-  }, []);
+  }, [forceAutoplay, persistentPlayback]);
 
   return {
     ...state,

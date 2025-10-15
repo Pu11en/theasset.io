@@ -1,0 +1,435 @@
+'use client';
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+
+interface BookingFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  ctaButton: string;
+}
+
+interface FormData {
+  name: string;
+  businessName: string;
+  contactMethod: 'email' | 'phone';
+  contactInfo: string;
+  industry: string;
+  targetAudience: string;
+  keyMessage: string;
+  visualReferences: string;
+}
+
+interface FormErrors {
+  name?: string;
+  businessName?: string;
+  contactInfo?: string;
+  industry?: string;
+  submission?: string;
+}
+
+
+const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton }) => {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    businessName: '',
+    contactMethod: 'email',
+    contactInfo: '',
+    industry: '',
+    targetAudience: '',
+    keyMessage: '',
+    visualReferences: ''
+  });
+
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  const modalTitle = ctaButton === 'Book Now' ? 'Book Your Campaign' : 'Schedule Your Free Call';
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Validate name
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters long';
+    }
+
+    // Validate business name
+    if (!formData.businessName.trim()) {
+      newErrors.businessName = 'Business name is required';
+    } else if (formData.businessName.trim().length < 2) {
+      newErrors.businessName = 'Business name must be at least 2 characters long';
+    }
+
+    // Validate contact information
+    if (!formData.contactInfo.trim()) {
+      newErrors.contactInfo = `Contact ${formData.contactMethod} is required`;
+    } else if (formData.contactMethod === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.contactInfo)) {
+        newErrors.contactInfo = 'Please enter a valid email address';
+      }
+    } else if (formData.contactMethod === 'phone') {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+      if (!phoneRegex.test(formData.contactInfo)) {
+        newErrors.contactInfo = 'Please enter a valid phone number';
+      } else if (formData.contactInfo.replace(/\D/g, '').length < 10) {
+        newErrors.contactInfo = 'Phone number must be at least 10 digits';
+      }
+    }
+
+    // Validate industry
+    if (!formData.industry.trim()) {
+      newErrors.industry = 'Industry is required';
+    } else if (formData.industry.trim().length < 2) {
+      newErrors.industry = 'Industry must be at least 2 characters long';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Clear error for this field when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Clear previous submission errors
+    setSubmissionError(null);
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Prepare data for webhook
+      const webhookData = {
+        name: formData.name,
+        businessName: formData.businessName,
+        contactType: formData.contactMethod,
+        contactInfo: formData.contactInfo,
+        industry: formData.industry,
+        targetAudience: formData.targetAudience || '',
+        keyMessage: formData.keyMessage || '',
+        visualReferences: formData.visualReferences || '',
+        ctaButton: ctaButton,
+        timestamp: new Date().toISOString()
+      };
+
+      // Send data to webhook
+      const response = await fetch('https://drewp.app.n8n.cloud/webhook/de92f751-0138-4303-b1c6-434349a84d02', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Successfully submitted
+      setIsSubmitted(true);
+      
+      // Reset form after 3 seconds and close modal
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          businessName: '',
+          contactMethod: 'email',
+          contactInfo: '',
+          industry: '',
+          targetAudience: '',
+          keyMessage: '',
+          visualReferences: ''
+        });
+        setIsSubmitted(false);
+        onClose();
+      }, 3000);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmissionError(
+        error instanceof Error
+          ? `Failed to submit form: ${error.message}`
+          : 'Failed to submit form. Please try again later.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (!isSubmitting) {
+      onClose();
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleClose}
+            />
+            
+            {/* Modal */}
+            <motion.div
+              className="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-900">{modalTitle}</h2>
+                <button
+                  onClick={handleClose}
+                  disabled={isSubmitting}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {isSubmitted ? (
+                  <div className="text-center py-12">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4"
+                    >
+                      <CheckCircle className="h-8 w-8 text-green-600" />
+                    </motion.div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank You!</h3>
+                    <p className="text-gray-600">
+                      {ctaButton === 'Book Now' 
+                        ? 'Your campaign booking has been received. We\'ll be in touch soon!' 
+                        : 'Your free call has been scheduled. We\'ll contact you shortly to confirm the details.'
+                      }
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Name */}
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-1">
+                        Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.name ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Your full name"
+                      />
+                      {errors.name && (
+                        <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                      )}
+                    </div>
+
+                    {/* Business Name */}
+                    <div>
+                      <label htmlFor="businessName" className="block text-sm font-medium text-gray-900 mb-1">
+                        Business Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="businessName"
+                        name="businessName"
+                        value={formData.businessName}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.businessName ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Your business name"
+                      />
+                      {errors.businessName && (
+                        <p className="mt-1 text-sm text-red-600">{errors.businessName}</p>
+                      )}
+                    </div>
+
+                    {/* Contact Method */}
+                    <div>
+                      <label htmlFor="contactMethod" className="block text-sm font-medium text-gray-900 mb-1">
+                        Preferred Contact Method <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        id="contactMethod"
+                        name="contactMethod"
+                        value={formData.contactMethod}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                      </select>
+                    </div>
+
+                    {/* Contact Information */}
+                    <div>
+                      <label htmlFor="contactInfo" className="block text-sm font-medium text-gray-900 mb-1">
+                        {formData.contactMethod === 'email' ? 'Email Address' : 'Phone Number'} <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type={formData.contactMethod === 'email' ? 'email' : 'tel'}
+                        id="contactInfo"
+                        name="contactInfo"
+                        value={formData.contactInfo}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.contactInfo ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder={formData.contactMethod === 'email' ? 'your@email.com' : '+1 (555) 123-4567'}
+                      />
+                      {errors.contactInfo && (
+                        <p className="mt-1 text-sm text-red-600">{errors.contactInfo}</p>
+                      )}
+                    </div>
+
+                    {/* Industry */}
+                    <div>
+                      <label htmlFor="industry" className="block text-sm font-medium text-gray-900 mb-1">
+                        Industry <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="industry"
+                        name="industry"
+                        value={formData.industry}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.industry ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="e.g., Technology, Retail, Healthcare"
+                      />
+                      {errors.industry && (
+                        <p className="mt-1 text-sm text-red-600">{errors.industry}</p>
+                      )}
+                    </div>
+
+                    {/* Target Audience */}
+                    <div>
+                      <label htmlFor="targetAudience" className="block text-sm font-medium text-gray-900 mb-1">
+                        Current Target Audience
+                      </label>
+                      <textarea
+                        id="targetAudience"
+                        name="targetAudience"
+                        value={formData.targetAudience}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Describe your current target audience..."
+                      />
+                    </div>
+
+                    {/* Key Message */}
+                    <div>
+                      <label htmlFor="keyMessage" className="block text-sm font-medium text-gray-900 mb-1">
+                        Key Message to Communicate
+                      </label>
+                      <textarea
+                        id="keyMessage"
+                        name="keyMessage"
+                        value={formData.keyMessage}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="What's the main message you want to convey?"
+                      />
+                    </div>
+
+                    {/* Visual References */}
+                    <div>
+                      <label htmlFor="visualReferences" className="block text-sm font-medium text-gray-900 mb-1">
+                        Visual References/Examples
+                      </label>
+                      <textarea
+                        id="visualReferences"
+                        name="visualReferences"
+                        value={formData.visualReferences}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Links to examples or references you like..."
+                      />
+                    </div>
+
+                    {/* Submission Error */}
+                    {submissionError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                        <div className="flex items-start">
+                          <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <h4 className="text-sm font-medium text-red-800">Submission Error</h4>
+                            <p className="text-sm text-red-700 mt-1">{submissionError}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Submit Button */}
+                    <div className="pt-4">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          ctaButton === 'Book Now' ? 'Book Campaign' : 'Schedule Call'
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default BookingForm;

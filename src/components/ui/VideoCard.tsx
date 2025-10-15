@@ -37,6 +37,7 @@ interface VideoCardProps {
   enableFullscreenOnMobile?: boolean;
   forceAutoplay?: boolean; // New prop for continuous autoplay without controls
   isStaticImage?: boolean; // New prop to render static image instead of video
+  persistentVideoPlayback?: boolean; // New prop to prevent any video pausing
 }
 
 // Inner component for video functionality
@@ -66,6 +67,7 @@ const VideoCardContent: React.FC<VideoCardProps & {
   enableFullscreenOnMobile = true,
   forceAutoplay = false,
   isStaticImage = false,
+  persistentVideoPlayback = false,
   isInView,
   isLoaded,
   isLoading,
@@ -92,6 +94,25 @@ const VideoCardContent: React.FC<VideoCardProps & {
 
     const handlePause = () => {
       setIsPlaying(false);
+      
+      // Immediately restart videos with forceAutoplay or persistentVideoPlayback
+      if ((forceAutoplay || persistentVideoPlayback) && video) {
+        setTimeout(() => {
+          if (video.paused) {
+            video.play().catch(err => {
+              console.warn(`Failed to restart paused video for ${title}:`, err);
+              // Try again with a longer delay
+              setTimeout(() => {
+                if (video.paused) {
+                  video.play().catch(err2 => {
+                    console.error(`Second attempt to restart video failed for ${title}:`, err2);
+                  });
+                }
+              }, 1000);
+            });
+          }
+        }, 100);
+      }
     };
 
     const handleError = (e: Event) => {
@@ -101,29 +122,33 @@ const VideoCardContent: React.FC<VideoCardProps & {
 
     const handleStalled = () => {
       console.warn(`Video stalled for ${title}, attempting to restart...`);
-      if (forceAutoplay && video) {
+      if ((forceAutoplay || persistentVideoPlayback) && video) {
         setTimeout(() => {
-          video.play().catch(err => {
-            console.error('Failed to restart stalled video:', err);
-          });
+          if (video.paused) {
+            video.play().catch(err => {
+              console.error('Failed to restart stalled video:', err);
+            });
+          }
         }, 500);
       }
     };
 
     const handleSuspend = () => {
       console.warn(`Video suspended for ${title}`);
-      if (forceAutoplay && video) {
+      if ((forceAutoplay || persistentVideoPlayback) && video) {
         setTimeout(() => {
-          video.play().catch(err => {
-            console.error('Failed to resume suspended video:', err);
-          });
+          if (video.paused) {
+            video.play().catch(err => {
+              console.error('Failed to resume suspended video:', err);
+            });
+          }
         }, 300);
       }
     };
 
     const handleEnded = () => {
-      // For forceAutoplay videos, restart immediately when ended
-      if (forceAutoplay && video) {
+      // For forceAutoplay or persistentVideoPlayback videos, restart immediately when ended
+      if ((forceAutoplay || persistentVideoPlayback) && video) {
         // Always restart for forceAutoplay videos, regardless of loop attribute
         setTimeout(() => {
           video.currentTime = 0;
@@ -141,12 +166,26 @@ const VideoCardContent: React.FC<VideoCardProps & {
       }
     };
 
+    const handleVisibilityChange = () => {
+      // Ensure videos with forceAutoplay or persistentVideoPlayback continue playing even when tab is not visible
+      if ((forceAutoplay || persistentVideoPlayback) && video && video.paused) {
+        video.play().catch(err => {
+          console.warn(`Failed to resume video after visibility change for ${title}:`, err);
+        });
+      }
+    };
+
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
     video.addEventListener('error', handleError);
     video.addEventListener('stalled', handleStalled);
     video.addEventListener('suspend', handleSuspend);
     video.addEventListener('ended', handleEnded);
+    
+    // Add visibility change listener for persistent playback
+    if (forceAutoplay || persistentVideoPlayback) {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
 
     // Start performance monitoring when video is ready
     if (isLoaded) {
@@ -161,12 +200,16 @@ const VideoCardContent: React.FC<VideoCardProps & {
       video.removeEventListener('suspend', handleSuspend);
       video.removeEventListener('ended', handleEnded);
       
+      if (forceAutoplay || persistentVideoPlayback) {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
+      
       // Stop monitoring when component unmounts
       if (isLoaded) {
         videoPerformanceMonitor.stopMonitoring(videoId);
       }
     };
-  }, [isLoaded, videoId, videoRef, title, forceAutoplay, loop, isStaticImage]);
+  }, [isLoaded, videoId, videoRef, title, forceAutoplay, persistentVideoPlayback, loop, isStaticImage]);
 
   // Show fallback image if video fails to load
   useEffect(() => {
@@ -184,7 +227,7 @@ const VideoCardContent: React.FC<VideoCardProps & {
   useEffect(() => {
     if (isStaticImage) return;
     
-    if (forceAutoplay && isLoaded && videoRef.current) {
+    if ((forceAutoplay || persistentVideoPlayback) && isLoaded && videoRef.current) {
       const video = videoRef.current;
       
       // Ensure video is muted for autoplay compatibility
@@ -243,12 +286,15 @@ const VideoCardContent: React.FC<VideoCardProps & {
       
       return () => clearInterval(playAttempts);
     }
-  }, [forceAutoplay, isLoaded, title, videoRef, isStaticImage]);
+  }, [forceAutoplay, persistentVideoPlayback, isLoaded, title, videoRef, isStaticImage]);
 
   // Enhanced video click handler with mobile considerations
   const handleVideoClick = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    
+    // Prevent interaction with videos that have forceAutoplay or persistentVideoPlayback
+    if (forceAutoplay || persistentVideoPlayback) return;
 
     // Check if this is a mobile device
     const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
@@ -272,7 +318,7 @@ const VideoCardContent: React.FC<VideoCardProps & {
     if (isMobile && typeof navigator !== 'undefined' && 'vibrate' in navigator) {
       navigator.vibrate(5);
     }
-  }, [isPlaying, pauseVideo, playVideo, videoRef]);
+  }, [isPlaying, pauseVideo, playVideo, videoRef, forceAutoplay, persistentVideoPlayback]);
 
   // Touch gesture handlers for mobile interactions
   const handleTouchStart = useCallback((e: TouchEvent) => {
@@ -436,25 +482,26 @@ const VideoCardContent: React.FC<VideoCardProps & {
       ) : (
         <video
           ref={videoRef}
-          className={`w-full h-full object-cover ${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 ${enableTouchGestures ? 'touch-manipulation' : ''} ${forceAutoplay ? 'pointer-events-none' : ''}`}
+          className={`w-full h-full object-cover ${lazy && !isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 ${enableTouchGestures ? 'touch-manipulation' : ''} ${(forceAutoplay || persistentVideoPlayback) ? 'pointer-events-none' : ''}`}
           preload={lazy && !isInView ? 'none' : 'auto'}
           src={src}
           poster={poster}
-          muted={forceAutoplay ? true : muted}
-          loop={forceAutoplay ? true : loop}
+          muted={(forceAutoplay || persistentVideoPlayback) ? true : muted}
+          loop={(forceAutoplay || persistentVideoPlayback) ? true : loop}
           playsInline
-          controls={forceAutoplay ? false : (showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)}
-          onClick={forceAutoplay ? undefined : handleVideoClick}
-          onTouchStart={forceAutoplay ? undefined : handleTouchStart}
-          onTouchMove={forceAutoplay ? undefined : handleTouchMove}
-          onTouchEnd={forceAutoplay ? undefined : handleTouchEnd}
-          autoPlay={forceAutoplay ? true : undefined}
+          controls={(forceAutoplay || persistentVideoPlayback) ? false : (showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)}
+          onClick={(forceAutoplay || persistentVideoPlayback) ? undefined : handleVideoClick}
+          onTouchStart={(forceAutoplay || persistentVideoPlayback) ? undefined : handleTouchStart}
+          onTouchMove={(forceAutoplay || persistentVideoPlayback) ? undefined : handleTouchMove}
+          onTouchEnd={(forceAutoplay || persistentVideoPlayback) ? undefined : handleTouchEnd}
+          autoPlay={(forceAutoplay || persistentVideoPlayback) ? true : undefined}
+          data-force-autoplay={(forceAutoplay || persistentVideoPlayback) ? "true" : "false"}
           x-webkit-airplay="deny"
           x5-video-player-type="h5"
           x5-video-player-fullscreen="true"
           x5-video-orientation="portraint"
           style={{
-            cursor: forceAutoplay ? 'default' : 'pointer',
+            cursor: (forceAutoplay || persistentVideoPlayback) ? 'default' : 'pointer',
             // Ensure proper touch handling on mobile
             touchAction: enableTouchGestures ? 'pan-y' : 'auto',
             // Optimize for mobile playback
@@ -478,8 +525,8 @@ const VideoCardContent: React.FC<VideoCardProps & {
         </video>
       )}
 
-      {/* Enhanced Play/Pause overlay with mobile optimizations - hidden for forceAutoplay and static images */}
-      {isLoaded && !hasError && !forceAutoplay && !isStaticImage && (
+      {/* Enhanced Play/Pause overlay with mobile optimizations - hidden for forceAutoplay, persistentVideoPlayback and static images */}
+      {isLoaded && !hasError && !forceAutoplay && !persistentVideoPlayback && !isStaticImage && (
         <div
           className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${
             isPlaying ? 'opacity-0' : 'opacity-70'
@@ -497,8 +544,8 @@ const VideoCardContent: React.FC<VideoCardProps & {
         </div>
       )}
 
-      {/* Mobile-specific controls overlay - hidden for forceAutoplay and static images */}
-      {isLoaded && !hasError && !forceAutoplay && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && (
+      {/* Mobile-specific controls overlay - hidden for forceAutoplay, persistentVideoPlayback and static images */}
+      {isLoaded && !hasError && !forceAutoplay && !persistentVideoPlayback && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && (
         <div
           className={`absolute top-4 right-4 flex flex-col gap-2 transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
@@ -542,8 +589,8 @@ const VideoCardContent: React.FC<VideoCardProps & {
         </div>
       )}
 
-      {/* Touch gesture hints for mobile - hidden for forceAutoplay and static images */}
-      {enableTouchGestures && !forceAutoplay && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
+      {/* Touch gesture hints for mobile - hidden for forceAutoplay, persistentVideoPlayback and static images */}
+      {enableTouchGestures && !forceAutoplay && !persistentVideoPlayback && !isStaticImage && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && !isPlaying && (
         <div className="absolute bottom-4 left-4 right-4 text-center">
           <p className="text-white text-xs bg-black bg-opacity-50 rounded-full px-3 py-1 backdrop-blur-sm">
             Tap to play • Double tap for fullscreen
@@ -575,7 +622,7 @@ const VideoCardContent: React.FC<VideoCardProps & {
 
 // Main VideoCard component that handles conditional rendering
 const VideoCard: React.FC<VideoCardProps> = (props) => {
-  const { isStaticImage, forceAutoplay = false } = props;
+  const { isStaticImage, forceAutoplay = false, persistentVideoPlayback = false } = props;
   
   // Always call hooks unconditionally at the top level
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -583,8 +630,9 @@ const VideoCard: React.FC<VideoCardProps> = (props) => {
     threshold: 0.1,
     rootMargin: '50px',
     preloadNext: true,
-    pauseWhenNotVisible: !forceAutoplay,
-    forceAutoplay
+    pauseWhenNotVisible: !(forceAutoplay || persistentVideoPlayback),
+    forceAutoplay: forceAutoplay || persistentVideoPlayback,
+    persistentPlayback: persistentVideoPlayback
   });
   
   // For static images, render a simple image component without video functionality

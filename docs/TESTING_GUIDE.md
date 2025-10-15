@@ -264,7 +264,7 @@ describe('Navigation Component', () => {
 
   test('renders desktop CTA button', () => {
     render(<Navigation />);
-    const ctaButton = screen.getByText('Book Call');
+    const ctaButton = screen.getByText('Book Now');
     expect(ctaButton).toBeInTheDocument();
     expect(ctaButton).toHaveAttribute('href', '#contact');
   });
@@ -280,7 +280,7 @@ describe('Navigation Component', () => {
     const menuButton = screen.getByRole('button', { name: /open main menu/i });
     
     // Menu should be closed initially
-    expect(screen.queryByText('Book Call')).toBeInTheDocument();
+    expect(screen.queryByText('Book Now')).toBeInTheDocument();
     
     // Click to open menu
     fireEvent.click(menuButton);
@@ -336,7 +336,7 @@ describe('Hero Component', () => {
 
   test('renders CTA buttons', () => {
     render(<Hero />);
-    const bookCallButton = screen.getByText('Book Call');
+    const bookCallButton = screen.getByText('Book Now');
     const learnMoreButton = screen.getByText('Learn More');
     
     expect(bookCallButton).toBeInTheDocument();
@@ -407,9 +407,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Navigation from '../sections/Navigation';
 
 describe('Navigation and Button Integration', () => {
-  test('Book Call button navigates to contact section', () => {
+  test('Book Now button navigates to contact section', () => {
     render(<Navigation />);
-    const bookCallButton = screen.getByText('Book Call');
+    const bookCallButton = screen.getByText('Book Now');
     
     // Mock scrollIntoView
     Element.prototype.scrollIntoView = jest.fn();
@@ -420,15 +420,15 @@ describe('Navigation and Button Integration', () => {
     expect(bookCallButton.closest('a')).toHaveAttribute('href', '#contact');
   });
 
-  test('Mobile menu closes after clicking Book Call', () => {
+  test('Mobile menu closes after clicking Book Now', () => {
     render(<Navigation />);
     
     // Open mobile menu
     const menuButton = screen.getByRole('button', { name: /open main menu/i });
     fireEvent.click(menuButton);
     
-    // Click Book Call in mobile menu
-    const mobileBookCall = screen.getAllByText('Book Call')[1]; // Mobile version
+    // Click Book Now in mobile menu
+    const mobileBookCall = screen.getAllByText('Book Now')[1]; // Mobile version
     fireEvent.click(mobileBookCall);
     
     // Menu should close (implementation depends on state management)
@@ -563,7 +563,7 @@ describe('Complete User Journey', () => {
     cy.get('#home').should('be.visible');
     cy.contains('Double your sells in 90 days').should('be.visible');
 
-    // Click Book Call button in hero
+    // Click Book Now button in hero
     cy.get('#home a[href="#contact"]').click();
 
     // Should scroll to contact section

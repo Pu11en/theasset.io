@@ -110,7 +110,7 @@ interface ButtonProps {
 
 // CTA button with special styling
 <Button variant="cta" size="lg">
-  Book Call
+  Book Now
 </Button>
 
 // Loading state

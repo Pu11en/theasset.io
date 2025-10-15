@@ -736,17 +736,9 @@ img {
 
 /* Responsive Design */
 @media (max-width: 640px) {
+  /* Hide navigation arrows on mobile devices */
   .carousel__arrow {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  
-  .carousel__arrow--prev {
-    left: 0.5rem;
-  }
-  
-  .carousel__arrow--next {
-    right: 0.5rem;
+    display: none;
   }
   
   /* Pagination styles for mobile removed */
@@ -1168,12 +1160,10 @@ zoom: 1.0;
 
 /* Enhanced touch targets for mobile (minimum 44px) */
 @media (pointer: coarse) {
-.carousel__arrow {
-  min-width: 44px;
-  min-height: 44px;
-  width: 44px;
-  height: 44px;
-}
+  /* Hide navigation arrows on touch devices */
+  .carousel__arrow {
+    display: none;
+  }
 
 /* Enhanced touch targets for mobile pagination styles removed */
 /*
@@ -1231,19 +1221,9 @@ zoom: 1.0;
   border-radius: 8px;
 }
 
+/* Navigation arrows are hidden on mobile devices */
 .carousel__arrow {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
-}
-
-.carousel__arrow--prev {
-  left: 8px;
-}
-
-.carousel__arrow--next {
-  right: 8px;
+  display: none;
 }
 
 /* Small mobile devices pagination styles removed */
@@ -1370,11 +1350,9 @@ zoom: 1.0;
 
 /* Medium mobile devices (376px-414px) */
 @media (min-width: 376px) and (max-width: 414px) {
+/* Navigation arrows are hidden on mobile devices */
 .carousel__arrow {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  min-height: 42px;
+  display: none;
 }
 
 /* Medium mobile devices pagination styles removed */
@@ -1390,11 +1368,9 @@ zoom: 1.0;
 
 /* Large mobile/phablet devices (415px-767px) */
 @media (min-width: 415px) and (max-width: 767px) {
+/* Navigation arrows are hidden on mobile devices */
 .carousel__arrow {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
+  display: none;
 }
 
 /* Large mobile/phablet devices pagination styles removed */
@@ -1444,9 +1420,9 @@ user-select: none;
 
 /* Enhanced focus indicators for keyboard navigation on mobile */
 /* Mobile-specific focus management pagination styles removed */
-.carousel__arrow:focus {
-  outline: 3px solid #3B82F6;
-  outline-offset: 2px;
+/* Navigation arrows are hidden on mobile devices */
+.carousel__arrow {
+  display: none;
 }
 }
 

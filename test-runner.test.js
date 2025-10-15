@@ -1,5 +1,5 @@
 /**
- * Test Runner for Book Call Buttons
+ * Test Runner for Book Now Buttons
  * This script injects our test functions into the browser console for testing
  */
 
@@ -23,7 +23,7 @@ script.onload = function() {
 `;
 
 console.log(`
-To test the Book Call buttons:
+To test the Book Now buttons:
 
 1. Open http://localhost:3001 in your browser
 2. Open the browser console (F12 or Ctrl+Shift+I)

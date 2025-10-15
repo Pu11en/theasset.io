@@ -1,6 +1,6 @@
 /**
- * Test Script for Book Call Buttons
- * This script tests the visual appearance, functionality, and accessibility of the Book Call buttons
+ * Test Script for Book Now Buttons
+ * This script tests the visual appearance, functionality, and accessibility of the Book Now buttons
  */
 
 // Expected color values based on implementation
@@ -14,15 +14,15 @@ const EXPECTED_COLORS = {
 const BUTTON_LOCATIONS = {
   desktopNav: {
     selector: 'nav a[href="#contact"]',
-    description: 'Desktop navigation Book Call button'
+    description: 'Desktop navigation Book Now button'
   },
   mobileNav: {
     selector: '.md:hidden a[href="#contact"]',
-    description: 'Mobile navigation Book Call button'
+    description: 'Mobile navigation Book Now button'
   },
   heroSection: {
     selector: '#home a[href="#contact"]',
-    description: 'Hero section Book Call button with arrow'
+    description: 'Hero section Book Now button with arrow'
   }
 };
 
@@ -271,7 +271,7 @@ function testAccessibility() {
 
 // Run all tests
 function runAllTests() {
-  console.log('🧪 Starting Book Call Button Tests\n');
+  console.log('🧪 Starting Book Now Button Tests\n');
   
   testButtonAppearance();
   testButtonHover();
@@ -284,5 +284,5 @@ function runAllTests() {
 }
 
 // Export for use in browser console
-window.testBookCallButtons = runAllTests;
-console.log('To run tests, type: testBookCallButtons() in the console');
+window.testBookNowButtons = runAllTests;
+console.log('To run tests, type: testBookNowButtons() in the console');

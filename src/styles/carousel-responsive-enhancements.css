@@ -525,3 +525,111 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* ==========================================================================
+   Swipe Instruction Indicator for Mobile
+   ========================================================================== */
+
+/* CSS variables for swipe instruction theming */
+:root {
+  /* Swipe Instruction Variables */
+  --carousel-swipe-text: "Swipe to navigate";
+  --carousel-swipe-bg: rgba(0, 0, 0, 0.7);
+  --carousel-swipe-color: #ffffff;
+  --carousel-swipe-font-size: 0.875rem;
+  --carousel-swipe-padding: 0.5rem 1rem;
+  --carousel-swipe-border-radius: 1rem;
+  --carousel-swipe-animation-duration: 0.3s;
+  --carousel-swipe-animation-delay: 1s;
+  --carousel-swipe-bottom-position: 1rem;
+}
+
+.carousel__swipe-instruction {
+  position: absolute;
+  bottom: var(--carousel-swipe-bottom-position);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--carousel-swipe-bg);
+  color: var(--carousel-swipe-color);
+  font-size: var(--carousel-swipe-font-size);
+  padding: var(--carousel-swipe-padding);
+  border-radius: var(--carousel-swipe-border-radius);
+  z-index: 15;
+  opacity: 0;
+  animation: swipe-instruction-fade-in var(--carousel-swipe-animation-duration) ease-out;
+  animation-delay: var(--carousel-swipe-animation-delay);
+  animation-fill-mode: forwards;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Fade-in animation for swipe instruction */
+@keyframes swipe-instruction-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Hide swipe instruction on larger screens */
+@media (min-width: 768px) {
+  .carousel__swipe-instruction {
+    display: none;
+  }
+}
+
+/* Enhanced swipe instruction for small mobile devices */
+@media (max-width: 374px) {
+  .carousel__swipe-instruction {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    bottom: 0.75rem;
+  }
+}
+
+/* Dark mode swipe instruction */
+@media (prefers-color-scheme: dark) {
+  .carousel__swipe-instruction {
+    --carousel-swipe-bg: rgba(255, 255, 255, 0.15);
+    --carousel-swipe-color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* High contrast mode swipe instruction */
+@media (prefers-contrast: high) {
+  .carousel__swipe-instruction {
+    --carousel-swipe-bg: #000000;
+    --carousel-swipe-color: #ffffff;
+    border: 2px solid #ffffff;
+    font-weight: 600;
+  }
+}
+
+/* Reduced motion for swipe instruction */
+@media (prefers-reduced-motion: reduce) {
+  .carousel__swipe-instruction {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Focus styles for swipe instruction when it becomes visible */
+.carousel__swipe-instruction:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Ensure swipe instruction is above other elements */
+.carousel__swipe-instruction {
+  z-index: 20;
+}

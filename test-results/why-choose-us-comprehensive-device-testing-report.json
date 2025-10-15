@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-14T21:35:47.160Z",
+  "timestamp": "2025-10-14T21:45:55.425Z",
   "title": "WhyChooseUs Carousel Comprehensive Device Testing Report",
   "summary": {
     "total": 3,
@@ -35,10 +35,10 @@
   },
   "results": [
     {
-      "test": "tabletSmall - Videos have responsive sources",
+      "test": "desktopLarge - Videos have responsive sources",
       "passed": true,
-      "timestamp": "2025-10-14T21:35:43.357Z",
-      "viewport": "768x1024",
+      "timestamp": "2025-10-14T21:45:52.711Z",
+      "viewport": "1920x1080",
       "category": "videoFunctionality",
       "responsiveSourceResults": [
         {
@@ -125,10 +125,10 @@
       ]
     },
     {
-      "test": "tabletSmall - Video error handling works",
+      "test": "desktopLarge - Video error handling works",
       "passed": true,
-      "timestamp": "2025-10-14T21:35:44.671Z",
-      "viewport": "768x1024",
+      "timestamp": "2025-10-14T21:45:53.696Z",
+      "viewport": "1920x1080",
       "category": "videoFunctionality",
       "errorHandlingResults": [
         {
@@ -158,10 +158,10 @@
       ]
     },
     {
-      "test": "tabletSmall - Swipe navigation works",
+      "test": "desktopLarge - Swipe navigation works",
       "passed": true,
-      "timestamp": "2025-10-14T21:35:45.861Z",
-      "viewport": "768x1024",
+      "timestamp": "2025-10-14T21:45:54.600Z",
+      "viewport": "1920x1080",
       "category": "touchGestures",
       "swipeResults": [
         {

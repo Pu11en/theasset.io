@@ -48,6 +48,7 @@ interface CarouselProps {
   autoplay?: boolean | AutoplayOptions;
   initialSlide?: number;
   grabCursor?: boolean;
+  persistentVideoPlayback?: boolean; // New prop to prevent video pausing during navigation
   
   // Navigation
   navigation?: boolean | NavigationOptions;
@@ -149,6 +150,8 @@ interface CarouselState {
   touchGesture: TouchGestureState | null;
   momentumScrolling: boolean;
   isVideoPaused: boolean;
+  hasUserInteracted: boolean; // Track if user has interacted with carousel
+  showSwipeInstruction: boolean; // Control swipe instruction visibility
 }
 
 // Default breakpoints - optimized for mobile devices with enhanced touch support
@@ -465,6 +468,7 @@ const Carousel: React.FC<CarouselProps> = ({
   autoplay = false,
   initialSlide = 0,
   grabCursor = true,
+  persistentVideoPlayback = false,
   navigation = true,
   pagination = true,
   breakpoints = defaultBreakpoints,
@@ -500,7 +504,9 @@ const Carousel: React.FC<CarouselProps> = ({
     focusedElement: null,
     touchGesture: null,
     momentumScrolling: false,
-    isVideoPaused: false
+    isVideoPaused: false,
+    hasUserInteracted: false,
+    showSwipeInstruction: true
   });
   
   const [containerWidth, setContainerWidth] = useState(0);
@@ -514,6 +520,9 @@ const Carousel: React.FC<CarouselProps> = ({
   const nextButtonRef = useRef<HTMLButtonElement>(null);
   // Pagination reference removed as pagination is no longer used
   // const paginationRef = useRef<HTMLDivElement>(null);
+  
+  // Check if we're on mobile device
+  const [isMobile, setIsMobile] = useState(false);
   
   // Get responsive config based on container width
   const getResponsiveConfig = useCallback(() => {
@@ -552,11 +561,19 @@ const Carousel: React.FC<CarouselProps> = ({
         }
       };
       
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      
       updateWidth();
+      checkMobile();
+      
       window.addEventListener('resize', updateWidth);
+      window.addEventListener('resize', checkMobile);
       
       return () => {
         window.removeEventListener('resize', updateWidth);
+        window.removeEventListener('resize', checkMobile);
       };
     }
   }, [getResponsiveConfig]);
@@ -588,12 +605,15 @@ const Carousel: React.FC<CarouselProps> = ({
       ? (index + slides.length) % slides.length
       : Math.max(0, Math.min(index, slides.length - 1));
     
-    // Pause videos in slides that are no longer visible
-    if (typeof document !== 'undefined') {
+    // Only pause videos if persistentVideoPlayback is disabled
+    if (!persistentVideoPlayback && typeof document !== 'undefined') {
       const videosToPause = document.querySelectorAll('.carousel__slide:not(.carousel__slide--active) video');
       videosToPause.forEach(video => {
         const htmlVideo = video as HTMLVideoElement;
-        if (!htmlVideo.paused) {
+        // Check if this video has forceAutoplay attribute
+        const hasForceAutoplay = htmlVideo.hasAttribute('data-force-autoplay') ||
+                                htmlVideo.closest('[data-force-autoplay="true"]');
+        if (!htmlVideo.paused && !hasForceAutoplay) {
           htmlVideo.pause();
         }
       });
@@ -613,7 +633,7 @@ const Carousel: React.FC<CarouselProps> = ({
     if (onSlideChange) {
       onSlideChange(newIndex);
     }
-  }, [state.isAnimating, loop, slides.length, onSlideChange]);
+  }, [state.isAnimating, loop, slides.length, onSlideChange, persistentVideoPlayback]);
   
   const slideNext = useCallback(() => {
     slideTo(state.currentIndex + 1);
@@ -681,6 +701,15 @@ const Carousel: React.FC<CarouselProps> = ({
   
   // Keyboard navigation handler
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Mark user interaction when using keyboard navigation
+    if (['ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', 'Enter'].includes(e.key)) {
+      setState(prev => ({
+        ...prev,
+        hasUserInteracted: true,
+        showSwipeInstruction: false
+      }));
+    }
+    
     switch (e.key) {
       case 'ArrowLeft':
         e.preventDefault();
@@ -749,15 +778,20 @@ const Carousel: React.FC<CarouselProps> = ({
       touchStart: { x: touch.clientX, y: touch.clientY },
       isDragging: true,
       touchGesture: newGesture,
-      isVideoPaused: true // Pause videos during touch interaction
+      isVideoPaused: !persistentVideoPlayback, // Only pause videos if persistentVideoPlayback is disabled
+      hasUserInteracted: true, // Mark that user has interacted
+      showSwipeInstruction: false // Hide swipe instruction after first interaction
     }));
     
-    // Pause any playing videos to prevent conflicts
-    if (typeof document !== 'undefined') {
+    // Only pause videos if persistentVideoPlayback is disabled
+    if (!persistentVideoPlayback && typeof document !== 'undefined') {
       const videos = document.querySelectorAll('.carousel__slide--active video');
       videos.forEach(video => {
         const htmlVideo = video as HTMLVideoElement;
-        if (!htmlVideo.paused) {
+        // Check if this video has forceAutoplay attribute
+        const hasForceAutoplay = htmlVideo.hasAttribute('data-force-autoplay') ||
+                                htmlVideo.closest('[data-force-autoplay="true"]');
+        if (!htmlVideo.paused && !hasForceAutoplay) {
           htmlVideo.pause();
         }
       });
@@ -767,7 +801,7 @@ const Carousel: React.FC<CarouselProps> = ({
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
       navigator.vibrate(5);
     }
-  }, [getResponsiveConfig]);
+  }, [getResponsiveConfig, persistentVideoPlayback]);
   
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!state.touchGesture || !state.isDragging) return;
@@ -877,14 +911,20 @@ const Carousel: React.FC<CarouselProps> = ({
       isVideoPaused: false // Resume video playback after touch ends
     }));
     
-    // Resume video playback for active slide
-    if (typeof document !== 'undefined') {
+    // Only resume video playback for active slide if persistentVideoPlayback is disabled
+    // Videos with persistentVideoPlayback or forceAutoplay should continue playing
+    if (!persistentVideoPlayback && typeof document !== 'undefined') {
       setTimeout(() => {
         const activeVideo = document.querySelector('.carousel__slide--active video') as HTMLVideoElement;
         if (activeVideo && activeVideo.paused && activeVideo.autoplay) {
-          activeVideo.play().catch(() => {
-            // Ignore autoplay errors
-          });
+          // Check if this video has forceAutoplay attribute
+          const hasForceAutoplay = activeVideo.hasAttribute('data-force-autoplay') ||
+                                  activeVideo.closest('[data-force-autoplay="true"]');
+          if (!hasForceAutoplay) {
+            activeVideo.play().catch(() => {
+              // Ignore autoplay errors
+            });
+          }
         }
       }, 100);
     }
@@ -893,7 +933,12 @@ const Carousel: React.FC<CarouselProps> = ({
   // Mouse handlers for grab cursor
   const handleMouseDown = useCallback(() => {
     if (grabCursor) {
-      setState(prev => ({ ...prev, isDragging: true }));
+      setState(prev => ({
+        ...prev,
+        isDragging: true,
+        hasUserInteracted: true,
+        showSwipeInstruction: false
+      }));
     }
   }, [grabCursor]);
   
@@ -965,12 +1010,13 @@ const Carousel: React.FC<CarouselProps> = ({
           poster={slide.poster}
           loop={slide.loop}
           muted={slide.muted}
-          autoPlay={slide.autoplay && isActive}
+          autoPlay={slide.autoplay && (isActive || persistentVideoPlayback)}
           playsInline
-          controls={isActive} // Only show controls on active slide
-          preload={isVisible ? 'auto' : 'none'} // Preload current and adjacent slides
+          controls={isActive && !persistentVideoPlayback} // Hide controls when persistentVideoPlayback is enabled
+          preload={isVisible || persistentVideoPlayback ? 'auto' : 'none'} // Preload all videos if persistentVideoPlayback is enabled
           className={`transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-75'}`}
           style={{ objectFit: 'cover' }}
+          data-force-autoplay={slide.autoplay ? "true" : "false"}
         />
       );
     }
@@ -1081,22 +1127,27 @@ const Carousel: React.FC<CarouselProps> = ({
       
       {navigation && (
         <>
-          <NavigationButton
-            ref={prevButtonRef}
-            direction="prev"
-            onClick={slidePrev}
-            disabled={isPrevDisabled}
-            ariaLabel={isPrevDisabled ? firstSlideMessage : prevSlideMessage}
-            tabIndex={state.isFocused ? 0 : -1}
-          />
-          <NavigationButton
-            ref={nextButtonRef}
-            direction="next"
-            onClick={slideNext}
-            disabled={isNextDisabled}
-            ariaLabel={isNextDisabled ? lastSlideMessage : nextSlideMessage}
-            tabIndex={state.isFocused ? 0 : -1}
-          />
+          {/* Hide navigation arrows on mobile devices */}
+          {!isMobile && (
+            <>
+              <NavigationButton
+                ref={prevButtonRef}
+                direction="prev"
+                onClick={slidePrev}
+                disabled={isPrevDisabled}
+                ariaLabel={isPrevDisabled ? firstSlideMessage : prevSlideMessage}
+                tabIndex={state.isFocused ? 0 : -1}
+              />
+              <NavigationButton
+                ref={nextButtonRef}
+                direction="next"
+                onClick={slideNext}
+                disabled={isNextDisabled}
+                ariaLabel={isNextDisabled ? lastSlideMessage : nextSlideMessage}
+                tabIndex={state.isFocused ? 0 : -1}
+              />
+            </>
+          )}
         </>
       )}
       
@@ -1121,6 +1172,18 @@ const Carousel: React.FC<CarouselProps> = ({
         >
           {state.isPaused ? 'Play' : 'Pause'}
         </button>
+      )}
+      
+      {/* Swipe instruction indicator for mobile */}
+      {isMobile && state.showSwipeInstruction && (
+        <div
+          className="carousel__swipe-instruction"
+          role="status"
+          aria-live="polite"
+          aria-label="Swipe to navigate carousel"
+        >
+          Swipe to navigate
+        </div>
       )}
     </CarouselContainer>
   );

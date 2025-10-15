@@ -21,5 +21,5 @@
       - button [ref=e31] [cursor=pointer]:
         - img [ref=e32]
       - generic: Swipe to navigate
-      - generic [ref=e34]: "FPS: 60 | Memory: 0MB"
+      - generic [ref=e34]: "FPS: 60 | Memory: 10MB"
 ```

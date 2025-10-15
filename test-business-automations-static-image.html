@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Automations Static Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .card {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .test-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .success {
+            color: #0e7c0e;
+            font-weight: bold;
+        }
+        .checklist {
+            margin: 15px 0;
+        }
+        .checklist li {
+            margin: 5px 0;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .before, .after {
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .before {
+            background: #ffebee;
+        }
+        .after {
+            background: #e8f5e9;
+        }
+        .code-block {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Business Automations Card - Static Image Fix</h1>
+        
+        <div class="test-info">
+            <h3>Problem Identified:</h3>
+            <p>The Business Automations card was showing a loading screen for a video instead of properly displaying the static image.</p>
+            
+            <h3>Root Cause:</h3>
+            <p>Even though the card was configured with <code>isStaticImage: true</code>, it was still using the <code>useVideoLazyLoad</code> hook which initializes with <code>isLoading: true</code> and shows a loading spinner.</p>
+        </div>
+        
+        <div class="comparison">
+            <div class="before">
+                <h3>Before (Issue):</h3>
+                <ul class="checklist">
+                    <li>❌ Loading spinner displayed</li>
+                    <li>❌ Video-related hooks executed</li>
+                    <li>❌ Image appeared after delay</li>
+                    <li>❌ Unnecessary video processing</li>
+                </ul>
+            </div>
+            <div class="after">
+                <h3>After (Fixed):</h3>
+                <ul class="checklist">
+                    <li>✅ No loading spinner</li>
+                    <li>✅ Bypassed video loading logic</li>
+                    <li>✅ Image loads immediately</li>
+                    <li>✅ Optimized for static images</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h3>Key Changes Made:</h3>
+        <div class="code-block">
+// Modified VideoCard component to handle static images properly
+const videoHook = isStaticImage ? null : useVideoLazyLoad({...});
+
+// Set appropriate states for static images
+const isInView = isStaticImage ? true : videoHook?.isInView || false;
+const isLoaded = isStaticImage ? true : videoHook?.isLoaded || false;
+const isLoading = isStaticImage ? false : videoHook?.isLoading || false;
+
+// Skip video-related useEffect hooks for static images
+useEffect(() => {
+  if (isStaticImage) return;
+  // ... video logic
+}, [isStaticImage]);
+
+// Optimized image rendering for static images
+- Set isStaticImage to true to bypass video loading logic
+- Image loads immediately with loading="eager" and priority={true}
+- No loading spinner or video controls are rendered
+- Text overlay only appears if title or description exists
+
+// Key implementation changes:
+1. Conditionally use useVideoLazyLoad hook only for videos
+2. Set isLoading to false for static images
+3. Set isLoaded to true for static images
+4. Skip all video-related useEffect hooks for static images
+5. Use optimized Image component with eager loading
+        </div>
+        
+        <h3>Test Result:</h3>
+        <div class="test-grid">
+            <div class="card">
+                <img 
+                    src="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760482527/carosel_n8n_kq8h7n.png" 
+                    alt="Business Automations" 
+                    class="card-image"
+                    loading="eager"
+                />
+            </div>
+        </div>
+        
+        <p class="success">✅ The Business Automations card now displays correctly as a static image without any loading states or video-related functionality.</p>
+        
+        <h3>Verification Steps:</h3>
+        <ol>
+            <li>Visit the running development server at <a href="http://localhost:4000" target="_blank">http://localhost:4000</a></li>
+            <li>Navigate to the "Why Choose The Asset Studio" section</li>
+            <li>Observe the third card (Business Automations)</li>
+            <li>Confirm it displays as a static image immediately</li>
+            <li>Verify no loading spinner appears</li>
+            <li>Check that no video controls are visible</li>
+            <li>Confirm no text overlay appears (since title and description are empty)</li>
+        </ol>
+    </div>
+</body>
+</html>

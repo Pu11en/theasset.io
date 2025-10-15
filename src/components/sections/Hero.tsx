@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '@/styles/hero-button-styles.css';
+import BookingForm from '@/components/BookingForm';
 
 // Type definitions for browser APIs that don't have proper TypeScript definitions
 interface NetworkInformation {
@@ -37,6 +38,7 @@ const Hero: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showVideoControls, setShowVideoControls] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   
   // Mobile-specific video state
   const [mobileVideoLoaded, setMobileVideoLoaded] = useState(false);
@@ -404,6 +406,14 @@ const Hero: React.FC = () => {
     }
   }, []);
 
+  const openBookingModal = () => {
+    setIsBookingModalOpen(true);
+  };
+
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false);
+  };
+
   return (
     <>
       {/* Skip to main content link for screen readers */}
@@ -633,18 +643,18 @@ const Hero: React.FC = () => {
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.4 }}
           >
-            <a
-              href="#contact"
+            <button
+              onClick={openBookingModal}
               className="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium rounded-md transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black"
               style={{
                 color: 'black',
                 backgroundColor: '#FFD700'
               }}
-              aria-label="Book a call with our team"
+              aria-label="Book a campaign with us"
             >
-              Book Call
+              Book Now
               <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" style={{ color: 'black' }} aria-hidden="true" />
-            </a>
+            </button>
             <a
               href="#solutions"
               className="btn-learn-more inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-lg border-2 border-black bg-black text-white hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white"
@@ -655,6 +665,13 @@ const Hero: React.FC = () => {
           </motion.div>
         </div>
       </div>
+      
+      {/* Booking Modal */}
+      <BookingForm
+        isOpen={isBookingModalOpen}
+        onClose={closeBookingModal}
+        ctaButton="Book Now"
+      />
     </section>
     </>
   );

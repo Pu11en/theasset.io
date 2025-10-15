@@ -173,7 +173,7 @@ type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 
 // CTA button with special styling
 <Button variant="cta" size="lg">
-  Book Call
+  Book Now
 </Button>
 ```
 
