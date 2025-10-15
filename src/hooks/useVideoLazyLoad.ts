@@ -81,6 +81,10 @@ export const useVideoLazyLoad = (
 
       // Auto-play if in viewport or if forceAutoplay is enabled
       if (state.isInView || forceAutoplay) {
+        // Ensure video is muted for autoplay compatibility
+        video.muted = true;
+        
+        // Try to play immediately
         video.play().catch(err => {
           console.warn('Video autoplay failed:', err);
           // For forceAutoplay videos, try alternative methods
@@ -90,6 +94,13 @@ export const useVideoLazyLoad = (
               video.muted = true; // Ensure muted for autoplay
               video.play().catch(err => {
                 console.error('Force autoplay failed even with fallback:', err);
+                // Try again with additional delay
+                setTimeout(() => {
+                  video.muted = true;
+                  video.play().catch(err2 => {
+                    console.error('Second force autoplay attempt failed:', err2);
+                  });
+                }, 500);
               });
             }, 100);
           }
@@ -177,6 +188,7 @@ export const useVideoLazyLoad = (
         if (video) {
           if (isIntersecting && state.isLoaded) {
             // Play video when it becomes visible
+            video.muted = true; // Ensure muted for autoplay compatibility
             video.play().catch(err => {
               console.warn('Video autoplay failed:', err);
               // For forceAutoplay videos, try alternative methods
@@ -185,6 +197,13 @@ export const useVideoLazyLoad = (
                   video.muted = true; // Ensure muted for autoplay
                   video.play().catch(err => {
                     console.error('Force autoplay failed even with fallback:', err);
+                    // Try again with additional delay
+                    setTimeout(() => {
+                      video.muted = true;
+                      video.play().catch(err2 => {
+                        console.error('Second force autoplay attempt failed:', err2);
+                      });
+                    }, 500);
                   });
                 }, 100);
               }

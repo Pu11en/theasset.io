@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensive Experience Video Autoplay Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .video-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .video-card {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 15px;
+        }
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-item {
+            margin-bottom: 10px;
+        }
+        .playing {
+            color: green;
+        }
+        .paused {
+            color: red;
+        }
+        .error {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Autoplay Test: ZeroRisk vs Extensive Experience</h1>
+        
+        <div class="video-container">
+            <div class="video-card">
+                <video 
+                    id="zeroRiskVideo"
+                    autoplay 
+                    muted 
+                    loop 
+                    playsinline
+                    src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760415676/insta_post_2_1_xdaptq.mp4"
+                    poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760415676/insta_post_2_1_poster_xdaptq.jpg"
+                ></video>
+                <div class="video-info">
+                    <div class="video-title">ZeroRisk</div>
+                    <div>Expected: Autoplay and loop</div>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <video 
+                    id="extensiveExperienceVideo"
+                    autoplay 
+                    muted 
+                    loop 
+                    playsinline
+                    src="https://res.cloudinary.com/dmdjagtkx/video/upload/v1760470477/carosal_6_yzdvbj.mp4"
+                    poster="https://res.cloudinary.com/dmdjagtkx/image/upload/v1760470477/carosal_6_poster_yzdvbj.jpg"
+                ></video>
+                <div class="video-info">
+                    <div class="video-title">Extensive Experience</div>
+                    <div>Expected: Autoplay and loop</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status">
+            <h2>Video Status</h2>
+            <div class="status-item">
+                <strong>ZeroRisk Video:</strong> 
+                <span id="zeroRiskStatus" class="paused">Checking...</span>
+            </div>
+            <div class="status-item">
+                <strong>Extensive Experience Video:</strong> 
+                <span id="extensiveExperienceStatus" class="paused">Checking...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check video status after page loads
+        window.addEventListener('load', function() {
+            const zeroRiskVideo = document.getElementById('zeroRiskVideo');
+            const extensiveExperienceVideo = document.getElementById('extensiveExperienceVideo');
+            const zeroRiskStatus = document.getElementById('zeroRiskStatus');
+            const extensiveExperienceStatus = document.getElementById('extensiveExperienceStatus');
+            
+            // Function to update video status
+            function updateVideoStatus(video, statusElement, name) {
+                if (video.paused) {
+                    statusElement.textContent = 'Paused';
+                    statusElement.className = 'paused';
+                    console.log(`${name} is paused`);
+                } else if (video.ended) {
+                    statusElement.textContent = 'Ended';
+                    statusElement.className = 'error';
+                    console.log(`${name} has ended`);
+                } else {
+                    statusElement.textContent = 'Playing';
+                    statusElement.className = 'playing';
+                    console.log(`${name} is playing`);
+                }
+            }
+            
+            // Initial status check
+            setTimeout(() => {
+                updateVideoStatus(zeroRiskVideo, zeroRiskStatus, 'ZeroRisk');
+                updateVideoStatus(extensiveExperienceVideo, extensiveExperienceStatus, 'Extensive Experience');
+            }, 1000);
+            
+            // Update status every 2 seconds
+            setInterval(() => {
+                updateVideoStatus(zeroRiskVideo, zeroRiskStatus, 'ZeroRisk');
+                updateVideoStatus(extensiveExperienceVideo, extensiveExperienceStatus, 'Extensive Experience');
+            }, 2000);
+            
+            // Try to play videos if they're not playing
+            zeroRiskVideo.play().catch(error => {
+                console.error('ZeroRisk autoplay failed:', error);
+                zeroRiskStatus.textContent = 'Autoplay failed: ' + error.message;
+                zeroRiskStatus.className = 'error';
+            });
+            
+            extensiveExperienceVideo.play().catch(error => {
+                console.error('Extensive Experience autoplay failed:', error);
+                extensiveExperienceStatus.textContent = 'Autoplay failed: ' + error.message;
+                extensiveExperienceStatus.className = 'error';
+            });
+            
+            // Log video events
+            [zeroRiskVideo, extensiveExperienceVideo].forEach(video => {
+                video.addEventListener('play', () => console.log(`${video.id} started playing`));
+                video.addEventListener('pause', () => console.log(`${video.id} paused`));
+                video.addEventListener('ended', () => console.log(`${video.id} ended`));
+                video.addEventListener('error', (e) => console.error(`${video.id} error:`, e));
+                video.addEventListener('stalled', () => console.warn(`${video.id} stalled`));
+                video.addEventListener('suspend', () => console.warn(`${video.id} suspended`));
+            });
+        });
+    </script>
+</body>
+</html>

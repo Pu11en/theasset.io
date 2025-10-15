@@ -123,11 +123,21 @@ const VideoCardContent: React.FC<VideoCardProps & {
 
     const handleEnded = () => {
       // For forceAutoplay videos, restart immediately when ended
-      if (forceAutoplay && video && !loop) {
-        video.currentTime = 0;
-        video.play().catch(err => {
-          console.error('Failed to restart video after end:', err);
-        });
+      if (forceAutoplay && video) {
+        // Always restart for forceAutoplay videos, regardless of loop attribute
+        setTimeout(() => {
+          video.currentTime = 0;
+          video.play().catch(err => {
+            console.error('Failed to restart video after end:', err);
+            // Try again after a short delay
+            setTimeout(() => {
+              video.currentTime = 0;
+              video.play().catch(err2 => {
+                console.error('Second attempt to restart video failed:', err2);
+              });
+            }, 500);
+          });
+        }, 100); // Small delay to ensure the video is ready to restart
       }
     };
 
@@ -180,35 +190,58 @@ const VideoCardContent: React.FC<VideoCardProps & {
       // Ensure video is muted for autoplay compatibility
       video.muted = true;
       
-      // Try to play immediately
-      video.play().catch(err => {
-        console.warn(`Initial autoplay failed for ${title}, trying fallback...`, err);
+      // Set a flag to ensure video plays continuously
+      const ensurePlayback = () => {
+        if (!video.paused) return;
         
-        // Fallback strategies for autoplay
-        setTimeout(() => {
-          // Try again with a small delay
-          video.play().catch(err2 => {
-            console.error(`Fallback autoplay failed for ${title}`, err2);
-            
-            // Last resort: try to play with user interaction simulation
-            const simulateUserInteraction = () => {
-              video.play().catch(err3 => {
-                console.error(`Simulated interaction autoplay failed for ${title}`, err3);
-              });
-            };
-            
-            // Add a one-time click listener to the document as last resort
-            const enableAutoplay = () => {
-              simulateUserInteraction();
-              document.removeEventListener('click', enableAutoplay);
-              document.removeEventListener('touchstart', enableAutoplay);
-            };
-            
-            document.addEventListener('click', enableAutoplay, { once: true });
-            document.addEventListener('touchstart', enableAutoplay, { once: true });
-          });
-        }, 100);
-      });
+        video.play().catch(err => {
+          console.warn(`Initial autoplay failed for ${title}, trying fallback...`, err);
+          
+          // Fallback strategies for autoplay
+          setTimeout(() => {
+            // Try again with a small delay
+            video.play().catch(err2 => {
+              console.error(`Fallback autoplay failed for ${title}`, err2);
+              
+              // Last resort: try to play with user interaction simulation
+              const simulateUserInteraction = () => {
+                video.play().catch(err3 => {
+                  console.error(`Simulated interaction autoplay failed for ${title}`, err3);
+                });
+              };
+              
+              // Add a one-time click listener to the document as last resort
+              const enableAutoplay = () => {
+                simulateUserInteraction();
+                document.removeEventListener('click', enableAutoplay);
+                document.removeEventListener('touchstart', enableAutoplay);
+              };
+              
+              document.addEventListener('click', enableAutoplay, { once: true });
+              document.addEventListener('touchstart', enableAutoplay, { once: true });
+            });
+          }, 100);
+        });
+      };
+      
+      // Try to play immediately
+      ensurePlayback();
+      
+      // Set up additional attempts to ensure playback
+      const playAttempts = setInterval(() => {
+        if (video.paused && !video.ended) {
+          ensurePlayback();
+        } else if (!video.paused) {
+          clearInterval(playAttempts);
+        }
+      }, 1000);
+      
+      // Clear interval after 10 seconds to prevent infinite attempts
+      setTimeout(() => {
+        clearInterval(playAttempts);
+      }, 10000);
+      
+      return () => clearInterval(playAttempts);
     }
   }, [forceAutoplay, isLoaded, title, videoRef, isStaticImage]);
 
@@ -407,8 +440,8 @@ const VideoCardContent: React.FC<VideoCardProps & {
           preload={lazy && !isInView ? 'none' : 'auto'}
           src={src}
           poster={poster}
-          muted={muted}
-          loop={loop}
+          muted={forceAutoplay ? true : muted}
+          loop={forceAutoplay ? true : loop}
           playsInline
           controls={forceAutoplay ? false : (showControls && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)}
           onClick={forceAutoplay ? undefined : handleVideoClick}
