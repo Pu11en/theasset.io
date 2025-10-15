@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { X, Loader2, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface BookingFormProps {
   isOpen: boolean;
@@ -208,11 +208,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
             
             {/* Modal */}
             <motion.div
-              className="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto z-10"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -259,7 +260,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        autoFocus
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 ${
                           errors.name ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="Your full name"
@@ -280,7 +282,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         name="businessName"
                         value={formData.businessName}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 ${
                           errors.businessName ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="Your business name"
@@ -301,7 +303,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 ${
                           errors.email ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="your@email.com"
@@ -322,7 +324,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 ${
                           errors.phone ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="+1 (555) 123-4567"
@@ -343,7 +345,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         name="industry"
                         value={formData.industry}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 ${
                           errors.industry ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="e.g., Technology, Retail, Healthcare"
@@ -364,7 +366,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         value={formData.targetAudience}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 resize-none"
                         placeholder="Describe your current target audience..."
                       />
                     </div>
@@ -380,7 +382,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         value={formData.keyMessage}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 resize-none"
                         placeholder="What's the main message you want to convey?"
                       />
                     </div>
@@ -396,7 +398,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                         value={formData.visualReferences}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:z-10 resize-none"
                         placeholder="Links to examples or references you like..."
                       />
                     </div>
@@ -427,7 +429,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                             Submitting...
                           </>
                         ) : (
-                          ctaButton === 'Book Now' ? 'Book Campaign' : 'Schedule Call'
+                          <>
+                            Submit Now
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </>
                         )}
                       </button>
                     </div>

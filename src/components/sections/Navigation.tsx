@@ -3,12 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import BookingForm from '@/components/BookingForm';
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     // Only add scroll listener on client side
@@ -28,15 +26,6 @@ const Navigation: React.FC = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
-
-  const openBookingModal = () => {
-    setIsBookingModalOpen(true);
-    setIsOpen(false); // Close mobile menu if open
-  };
-
-  const closeBookingModal = () => {
-    setIsBookingModalOpen(false);
   };
 
   const navItems: Array<{ name: string; href: string }> = [];
@@ -75,17 +64,29 @@ const Navigation: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <button
-              onClick={openBookingModal}
-              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-transparent"
+            <a
+              href="https://www.youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-5 py-2.5 text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
               style={{
                 color: 'black',
-                backgroundColor: '#FFD700'
+                backgroundColor: 'white',
+                border: '1px solid black',
+                borderRadius: '5px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'black';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
               }}
               aria-label="Book a campaign with us"
             >
               Book Now
-            </button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -123,29 +124,35 @@ const Navigation: React.FC = () => {
                 </a>
               ))}
               <div className="pt-4 pb-2">
-                <button
-                  onClick={openBookingModal}
-                  className="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-white"
+                <a
+                  href="https://www.youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center px-5 py-2.5 text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
                   style={{
                     color: 'black',
-                    backgroundColor: '#FFD700'
+                    backgroundColor: 'white',
+                    border: '1px solid black',
+                    borderRadius: '5px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'black';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.color = 'black';
                   }}
                   aria-label="Book a campaign with us"
                 >
                   Book Now
-                </button>
+                </a>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
       
-      {/* Booking Modal */}
-      <BookingForm
-        isOpen={isBookingModalOpen}
-        onClose={closeBookingModal}
-        ctaButton="Book Now"
-      />
     </motion.nav>
   );
 };

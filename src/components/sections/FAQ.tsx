@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Accordion from '@/components/ui/Accordion';
 import { motion } from 'framer-motion';
-import BookingForm from '@/components/BookingForm';
 
 const FAQ: React.FC = () => {
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   
   const faqItems = [
     {
@@ -35,13 +33,6 @@ const FAQ: React.FC = () => {
     }
   ];
 
-  const openBookingModal = () => {
-    setIsBookingModalOpen(true);
-  };
-
-  const closeBookingModal = () => {
-    setIsBookingModalOpen(false);
-  };
 
   return (
     <section id="faq" className="py-20 bg-gray-50">
@@ -84,22 +75,33 @@ const FAQ: React.FC = () => {
             <p className="text-gray-700 mb-6">
               Schedule a free consultation with our marketing experts to discuss your specific needs and goals.
             </p>
-            <button
-              onClick={openBookingModal}
-              className="inline-flex items-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-50"
+            <a
+              href="https://www.youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center py-2.5 px-5 text-black font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+              style={{
+                color: 'black',
+                backgroundColor: 'white',
+                border: '1px solid black',
+                borderRadius: '5px',
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'black';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
               aria-label="Schedule a free consultation call"
             >
               Schedule Your Free Call
-            </button>
+            </a>
           </div>
         </motion.div>
         
-        {/* Booking Modal */}
-        <BookingForm
-          isOpen={isBookingModalOpen}
-          onClose={closeBookingModal}
-          ctaButton="Schedule Your Free Call"
-        />
       </div>
     </section>
   );
