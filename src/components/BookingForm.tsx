@@ -13,8 +13,8 @@ interface BookingFormProps {
 interface FormData {
   name: string;
   businessName: string;
-  contactMethod: 'email' | 'phone';
-  contactInfo: string;
+  email: string;
+  phone: string;
   industry: string;
   targetAudience: string;
   keyMessage: string;
@@ -24,7 +24,8 @@ interface FormData {
 interface FormErrors {
   name?: string;
   businessName?: string;
-  contactInfo?: string;
+  email?: string;
+  phone?: string;
   industry?: string;
   submission?: string;
 }
@@ -34,8 +35,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
   const [formData, setFormData] = useState<FormData>({
     name: '',
     businessName: '',
-    contactMethod: 'email',
-    contactInfo: '',
+    email: '',
+    phone: '',
     industry: '',
     targetAudience: '',
     keyMessage: '',
@@ -66,20 +67,25 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
       newErrors.businessName = 'Business name must be at least 2 characters long';
     }
 
-    // Validate contact information
-    if (!formData.contactInfo.trim()) {
-      newErrors.contactInfo = `Contact ${formData.contactMethod} is required`;
-    } else if (formData.contactMethod === 'email') {
+    // Validate email
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email address is required';
+    } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.contactInfo)) {
-        newErrors.contactInfo = 'Please enter a valid email address';
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email address';
       }
-    } else if (formData.contactMethod === 'phone') {
+    }
+
+    // Validate phone
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else {
       const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-      if (!phoneRegex.test(formData.contactInfo)) {
-        newErrors.contactInfo = 'Please enter a valid phone number';
-      } else if (formData.contactInfo.replace(/\D/g, '').length < 10) {
-        newErrors.contactInfo = 'Phone number must be at least 10 digits';
+      if (!phoneRegex.test(formData.phone)) {
+        newErrors.phone = 'Please enter a valid phone number';
+      } else if (formData.phone.replace(/\D/g, '').length < 10) {
+        newErrors.phone = 'Phone number must be at least 10 digits';
       }
     }
 
@@ -127,8 +133,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
       const webhookData = {
         name: formData.name,
         businessName: formData.businessName,
-        contactType: formData.contactMethod,
-        contactInfo: formData.contactInfo,
+        email: formData.email,
+        phone: formData.phone,
         industry: formData.industry,
         targetAudience: formData.targetAudience || '',
         keyMessage: formData.keyMessage || '',
@@ -158,8 +164,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
         setFormData({
           name: '',
           businessName: '',
-          contactMethod: 'email',
-          contactInfo: '',
+          email: '',
+          phone: '',
           industry: '',
           targetAudience: '',
           keyMessage: '',
@@ -284,41 +290,45 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, ctaButton })
                       )}
                     </div>
 
-                    {/* Contact Method */}
+                    {/* Email Address */}
                     <div>
-                      <label htmlFor="contactMethod" className="block text-sm font-medium text-gray-900 mb-1">
-                        Preferred Contact Method <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        id="contactMethod"
-                        name="contactMethod"
-                        value={formData.contactMethod}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="email">Email</option>
-                        <option value="phone">Phone</option>
-                      </select>
-                    </div>
-
-                    {/* Contact Information */}
-                    <div>
-                      <label htmlFor="contactInfo" className="block text-sm font-medium text-gray-900 mb-1">
-                        {formData.contactMethod === 'email' ? 'Email Address' : 'Phone Number'} <span className="text-red-500">*</span>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
+                        Email Address <span className="text-red-500">*</span>
                       </label>
                       <input
-                        type={formData.contactMethod === 'email' ? 'email' : 'tel'}
-                        id="contactInfo"
-                        name="contactInfo"
-                        value={formData.contactInfo}
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
                         onChange={handleInputChange}
                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          errors.contactInfo ? 'border-red-500' : 'border-gray-300'
+                          errors.email ? 'border-red-500' : 'border-gray-300'
                         }`}
-                        placeholder={formData.contactMethod === 'email' ? 'your@email.com' : '+1 (555) 123-4567'}
+                        placeholder="your@email.com"
                       />
-                      {errors.contactInfo && (
-                        <p className="mt-1 text-sm text-red-600">{errors.contactInfo}</p>
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      )}
+                    </div>
+
+                    {/* Phone Number */}
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-1">
+                        Phone Number <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.phone ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="+1 (555) 123-4567"
+                      />
+                      {errors.phone && (
+                        <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
                       )}
                     </div>
 

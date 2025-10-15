@@ -1,0 +1,72 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "Booking Form Integration Test" [level=1] [ref=e4]
+    - paragraph [ref=e5]: Test page to verify the complete BookingForm implementation
+  - generic [ref=e6]:
+    - heading "Test Instructions" [level=2] [ref=e7]
+    - list [ref=e8]:
+      - listitem [ref=e9]: Click each button below to test the modal functionality
+      - listitem [ref=e10]: Verify that the correct modal title appears based on the button clicked
+      - listitem [ref=e11]: Test form validation by submitting empty forms
+      - listitem [ref=e12]: Fill out the form completely and test submission
+      - listitem [ref=e13]: Check browser console for any errors
+      - listitem [ref=e14]: Verify the webhook is called with the correct data (check network tab)
+  - generic [ref=e15]:
+    - heading "Test Results" [level=2] [ref=e16]
+    - generic [ref=e17]:
+      - generic [ref=e18]: Tests will appear here as you run them...
+      - generic [ref=e19]: "10:38:22 PM: Booking Form Integration Test Page loaded"
+      - generic [ref=e20]: "10:38:22 PM: Ready to run tests. Click the buttons above to begin."
+      - generic [ref=e21]: "10:38:22 PM: Book Now button clicked - should open modal with \"Book Your Campaign\" title"
+      - generic [ref=e22]: "10:38:23 PM: ✓ Book Now modal opens with correct title"
+  - generic [ref=e23]:
+    - heading "Button Tests" [level=2] [ref=e24]
+    - paragraph [ref=e25]: "Test each button to verify they open the correct modal:"
+    - generic [ref=e26]:
+      - button "Book Now" [active] [ref=e27] [cursor=pointer]
+      - button "Schedule Your Free Call" [ref=e28] [cursor=pointer]
+  - generic [ref=e29]:
+    - heading "Form Validation Tests" [level=2] [ref=e30]
+    - paragraph [ref=e31]: "Test form validation by clicking these buttons:"
+    - generic [ref=e32]:
+      - button "Test Empty Form Validation" [ref=e33] [cursor=pointer]
+      - button "Test Invalid Email Validation" [ref=e34] [cursor=pointer]
+      - button "Test Valid Form Submission" [ref=e35] [cursor=pointer]
+  - generic [ref=e36]:
+    - heading "Webhook Test" [level=2] [ref=e37]
+    - paragraph [ref=e38]: "Test that the webhook is called with correct data:"
+    - button "Test Webhook Data Structure" [ref=e40] [cursor=pointer]
+    - paragraph [ref=e42]:
+      - strong [ref=e43]: "Note:"
+      - text: Open the browser's Network tab (F12 → Network) to see the webhook request when submitting a valid form.
+  - generic [ref=e44]:
+    - heading "Manual Test Checklist" [level=2] [ref=e45]
+    - generic [ref=e46]:
+      - generic [ref=e47]:
+        - checkbox "Book Now button opens modal with \"Book Your Campaign\" title" [ref=e48]
+        - generic [ref=e49]: Book Now button opens modal with "Book Your Campaign" title
+      - generic [ref=e50]:
+        - checkbox "Schedule Your Free Call button opens modal with \"Schedule Your Free Call\" title" [ref=e51]
+        - generic [ref=e52]: Schedule Your Free Call button opens modal with "Schedule Your Free Call" title
+      - generic [ref=e53]:
+        - checkbox "Form validation shows appropriate error messages" [ref=e54]
+        - generic [ref=e55]: Form validation shows appropriate error messages
+      - generic [ref=e56]:
+        - checkbox "Valid form submission shows success message" [ref=e57]
+        - generic [ref=e58]: Valid form submission shows success message
+      - generic [ref=e59]:
+        - checkbox "Webhook is called with correct data structure" [ref=e60]
+        - generic [ref=e61]: Webhook is called with correct data structure
+      - generic [ref=e62]:
+        - checkbox "Modal closes automatically after successful submission" [ref=e63]
+        - generic [ref=e64]: Modal closes automatically after successful submission
+      - generic [ref=e65]:
+        - checkbox "Close button (X) closes the modal" [ref=e66]
+        - generic [ref=e67]: Close button (X) closes the modal
+      - generic [ref=e68]:
+        - checkbox "Clicking outside modal closes it" [ref=e69]
+        - generic [ref=e70]: Clicking outside modal closes it
+```

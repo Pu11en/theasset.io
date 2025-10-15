@@ -1,0 +1,300 @@
+{
+  "timestamp": "2025-10-15T03:38:02.299Z",
+  "component": {
+    "file": "c:\\Users\\drewp\\OneDrive\\Desktop\\asset.io\\theasset.io\\src\\components\\BookingForm.tsx",
+    "size": 17503,
+    "lines": 445
+  },
+  "summary": {
+    "totalRequirements": 8,
+    "passedRequirements": 8,
+    "failedRequirements": 0,
+    "successRate": 100
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "title": "All fields are typable",
+      "description": "Email, Phone, Industry, Current Audience, Key Messages, Visual References fields accept input",
+      "category": "Field Functionality",
+      "verification": "Check that all form fields have proper onChange handlers and are not readonly",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-001 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "title": "Email Address is required",
+      "description": "Email field must be filled out and validated",
+      "category": "Validation",
+      "verification": "Check that email field has required validation and email format validation",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-002 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-003",
+      "title": "Phone Number is required",
+      "description": "Phone field must be filled out and validated",
+      "category": "Validation",
+      "verification": "Check that phone field has required validation and phone format validation",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-003 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-004",
+      "title": "Preferred Contact Method removed",
+      "description": "Preferred Contact Method field should not be present in the form",
+      "category": "Field Changes",
+      "verification": "Check that Preferred Contact Method field is not in the form",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-004 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-005",
+      "title": "n8n webhook integration",
+      "description": "Form data is sent to n8n webhook with correct JSON payload",
+      "category": "Integration",
+      "verification": "Check that form submission sends data to the correct webhook URL",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-005 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-006",
+      "title": "Form validation for required fields",
+      "description": "Name, Business Name, Email, Phone, Industry fields are validated",
+      "category": "Validation",
+      "verification": "Check that all required fields have proper validation",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-006 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-007",
+      "title": "Error handling for invalid inputs",
+      "description": "Appropriate error messages are shown for invalid inputs",
+      "category": "Error Handling",
+      "verification": "Check that error messages are displayed for invalid inputs",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-007 - Code Analysis Verification"
+      ]
+    },
+    {
+      "id": "REQ-008",
+      "title": "Form reset after submission",
+      "description": "Form is reset and modal closes after successful submission",
+      "category": "Form Behavior",
+      "verification": "Check that form is reset and modal closes after successful submission",
+      "status": "PASS",
+      "covered": true,
+      "details": [],
+      "testCount": 1,
+      "testTitles": [
+        "REQ-008 - Code Analysis Verification"
+      ]
+    }
+  ],
+  "analysis": {
+    "imports": [
+      "import React, { useState } from 'react';",
+      "import { motion, AnimatePresence } from 'framer-motion';",
+      "import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';"
+    ],
+    "interfaces": [
+      {
+        "name": "BookingFormProps",
+        "properties": [
+          "isOpen: boolean;",
+          "onClose: () => void;",
+          "ctaButton: string;"
+        ]
+      },
+      {
+        "name": "FormData",
+        "properties": [
+          "name: string;",
+          "businessName: string;",
+          "email: string;",
+          "phone: string;",
+          "industry: string;",
+          "targetAudience: string;",
+          "keyMessage: string;",
+          "visualReferences: string;"
+        ]
+      },
+      {
+        "name": "FormErrors",
+        "properties": [
+          "name?: string;",
+          "businessName?: string;",
+          "email?: string;",
+          "phone?: string;",
+          "industry?: string;",
+          "submission?: string;"
+        ]
+      }
+    ],
+    "formFields": [
+      {
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "placeholder": "Your full name",
+        "tag": "input"
+      },
+      {
+        "name": "businessName",
+        "type": "text",
+        "required": false,
+        "placeholder": "Your business name",
+        "tag": "input"
+      },
+      {
+        "name": "email",
+        "type": "email",
+        "required": false,
+        "placeholder": "your@email.com",
+        "tag": "input"
+      },
+      {
+        "name": "phone",
+        "type": "tel",
+        "required": false,
+        "placeholder": "+1 (555) 123-4567",
+        "tag": "input"
+      },
+      {
+        "name": "industry",
+        "type": "text",
+        "required": false,
+        "placeholder": "e.g., Technology, Retail, Healthcare",
+        "tag": "input"
+      },
+      {
+        "name": "targetAudience",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Describe your current target audience...",
+        "tag": "textarea"
+      },
+      {
+        "name": "keyMessage",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "What",
+        "tag": "textarea"
+      },
+      {
+        "name": "visualReferences",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Links to examples or references you like...",
+        "tag": "textarea"
+      }
+    ],
+    "validationRules": [
+      {
+        "field": "name",
+        "type": "required",
+        "message": "Name is required"
+      },
+      {
+        "field": "businessName",
+        "type": "required",
+        "message": "Business name is required"
+      },
+      {
+        "field": "email",
+        "type": "required",
+        "message": "Email address is required"
+      },
+      {
+        "field": "phone",
+        "type": "required",
+        "message": "Phone number is required"
+      },
+      {
+        "field": "industry",
+        "type": "required",
+        "message": "Industry is required"
+      },
+      {
+        "field": "length check",
+        "type": "minLength",
+        "minLength": 2,
+        "message": "Minimum length validation (2 characters)"
+      },
+      {
+        "field": "length check",
+        "type": "minLength",
+        "minLength": 2,
+        "message": "Minimum length validation (2 characters)"
+      },
+      {
+        "field": "length check",
+        "type": "minLength",
+        "minLength": 10,
+        "message": "Minimum length validation (10 characters)"
+      },
+      {
+        "field": "length check",
+        "type": "minLength",
+        "minLength": 2,
+        "message": "Minimum length validation (2 characters)"
+      }
+    ],
+    "webhookIntegration": {
+      "url": "https://drewp.app.n8n.cloud/webhook/de92f751-0138-4303-b1c6-434349a84d02",
+      "method": "POST",
+      "hasHeaders": true,
+      "hasJSONBody": true
+    },
+    "formSubmission": {
+      "hasValidation": true,
+      "hasErrorHandling": false,
+      "hasSuccessState": false,
+      "hasLoadingState": false
+    },
+    "errorHandling": {
+      "hasErrorState": true,
+      "hasErrorMessageDisplay": true,
+      "hasValidationErrorDisplay": true
+    },
+    "formReset": {
+      "hasReset": true,
+      "resetObject": "\r\n          name: '',\r\n          businessName: '',\r\n          email: '',\r\n          phone: '',\r\n          industry: '',\r\n          targetAudience: '',\r\n          keyMessage: '',\r\n          visualReferences: ''\r\n        ",
+      "hasAutoClose": true
+    }
+  }
+}
