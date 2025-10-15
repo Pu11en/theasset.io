@@ -39,7 +39,17 @@ interface VideoCardProps {
   isStaticImage?: boolean; // New prop to render static image instead of video
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({
+// Inner component for video functionality
+const VideoCardContent: React.FC<VideoCardProps & {
+  isInView: boolean;
+  isLoaded: boolean;
+  isLoading: boolean;
+  hasError: boolean;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  pauseVideo: () => void;
+  playVideo: () => void;
+}> = ({
   src,
   poster,
   title,
@@ -54,8 +64,16 @@ const VideoCard: React.FC<VideoCardProps> = ({
   fallbackImage,
   enableTouchGestures = true,
   enableFullscreenOnMobile = true,
-  forceAutoplay = false, // Default to false
-  isStaticImage = false // Default to false
+  forceAutoplay = false,
+  isStaticImage = false,
+  isInView,
+  isLoaded,
+  isLoading,
+  hasError,
+  videoRef,
+  containerRef,
+  pauseVideo,
+  playVideo
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
@@ -63,32 +81,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [touchGesture, setTouchGesture] = useState<TouchGestureState | null>(null);
   const [showControls, setShowControls] = useState(false);
   const videoId = `video-${title.replace(/\s+/g, '-').toLowerCase()}`;
-  
-  // Use our custom lazy loading hook only for videos, not static images
-  const videoHook = isStaticImage ? null : useVideoLazyLoad({
-    threshold: 0.1,
-    rootMargin: '50px',
-    preloadNext: true,
-    pauseWhenNotVisible: !forceAutoplay, // Don't pause forceAutoplay videos
-    forceAutoplay // Pass forceAutoplay to the hook
-  });
-  
-  // For static images, we don't need video-related states
-  const isInView = isStaticImage ? true : videoHook?.isInView || false;
-  const isLoaded = isStaticImage ? true : videoHook?.isLoaded || false;
-  const isLoading = isStaticImage ? false : videoHook?.isLoading || false;
-  const hasError = isStaticImage ? false : videoHook?.hasError || false;
-  const videoRef = isStaticImage ? { current: null } : videoHook?.videoRef || { current: null };
-  const containerRef = isStaticImage ? React.useRef<HTMLDivElement>(null) : videoHook?.containerRef || { current: null };
-  const pauseVideo = isStaticImage ? () => {} : videoHook?.pauseVideo || (() => {});
-  const playVideo = isStaticImage ? () => {} : videoHook?.playVideo || (() => {});
 
   useEffect(() => {
-    // Skip all video-related logic for static images
-    if (isStaticImage) return;
-    
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || isStaticImage) return;
 
     const handlePlay = () => {
       setIsPlaying(true);
@@ -164,7 +160,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   // Show fallback image if video fails to load
   useEffect(() => {
-    // Skip for static images
     if (isStaticImage) return;
     
     if (hasError && fallbackImage) {
@@ -177,7 +172,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   // Force autoplay videos to start playing immediately when loaded
   useEffect(() => {
-    // Skip for static images
     if (isStaticImage) return;
     
     if (forceAutoplay && isLoaded && videoRef.current) {
@@ -328,7 +322,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   // Handle fullscreen change events
   useEffect(() => {
-    // Skip for static images
     if (isStaticImage) return;
     
     // Only add event listeners on client side
@@ -346,7 +339,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   // Auto-hide controls on mobile when playing
   useEffect(() => {
-    // Skip for static images
     if (isStaticImage) return;
     
     if (isPlaying && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
@@ -545,6 +537,77 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
       )}
     </div>
+  );
+};
+
+// Main VideoCard component that handles conditional rendering
+const VideoCard: React.FC<VideoCardProps> = (props) => {
+  const { isStaticImage, forceAutoplay = false } = props;
+  
+  // Always call hooks unconditionally at the top level
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const videoHook = useVideoLazyLoad({
+    threshold: 0.1,
+    rootMargin: '50px',
+    preloadNext: true,
+    pauseWhenNotVisible: !forceAutoplay,
+    forceAutoplay
+  });
+  
+  // For static images, render a simple image component without video functionality
+  if (isStaticImage) {
+    const {
+      src,
+      title,
+      description,
+      caption,
+      className = '',
+      aspectRatio = '3/4'
+    } = props;
+    
+    return (
+      <div
+        ref={containerRef}
+        className={`relative w-full h-full overflow-hidden rounded-lg bg-gray-100 ${className}`}
+        style={{ aspectRatio }}
+      >
+        <Image
+          src={src}
+          alt={title}
+          fill
+          style={{ objectFit: 'cover' }}
+          className="opacity-100 transition-opacity duration-300"
+          loading="eager"
+          priority={true}
+        />
+        
+        {/* Text overlay - positioned at the top as primary focal point */}
+        {(title || description) && (
+          <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 via-black/60 to-transparent p-4 sm:p-6">
+            <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2 drop-shadow-lg">{title}</h3>
+            <p className="text-white/95 text-sm sm:text-base md:text-lg drop-shadow-md">{description}</p>
+            {caption && (
+              <p className="text-white/90 text-xs sm:text-sm mt-2 drop-shadow-md">{caption}</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  // For videos, render the video content with full functionality
+  return (
+    <VideoCardContent
+      {...props}
+      isInView={videoHook?.isInView || false}
+      isLoaded={videoHook?.isLoaded || false}
+      isLoading={videoHook?.isLoading || false}
+      hasError={videoHook?.hasError || false}
+      videoRef={videoHook?.videoRef || { current: null }}
+      containerRef={videoHook?.containerRef || containerRef}
+      pauseVideo={videoHook?.pauseVideo || (() => {})}
+      playVideo={videoHook?.playVideo || (() => {})}
+    />
   );
 };
 
