@@ -76,7 +76,7 @@ const FAQ: React.FC = () => {
               Schedule a free consultation with our marketing experts to discuss your specific needs and goals.
             </p>
             <a
-              href="https://www.youtube.com"
+              href="https://next-booking-modal-drewp7.replit.app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center py-2.5 px-5 text-black font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"

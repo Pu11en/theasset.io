@@ -28,7 +28,14 @@ const Navigation: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  const navItems: Array<{ name: string; href: string }> = [];
+  const navItems: Array<{ name: string; href: string }> = [
+    { name: "Solutions", href: "#solutions" },
+    { name: "Why Choose Us", href: "#why-choose-us" },
+    { name: "Process", href: "#process" },
+    { name: "Testimonials", href: "#testimonials" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "FAQ", href: "#faq" }
+  ];
 
   return (
     <motion.nav
@@ -65,7 +72,7 @@ const Navigation: React.FC = () => {
           {/* Desktop CTA */}
           <div className="hidden md:block">
             <a
-              href="https://www.youtube.com"
+              href="https://next-booking-modal-drewp7.replit.app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-5 py-2.5 text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
@@ -125,7 +132,7 @@ const Navigation: React.FC = () => {
               ))}
               <div className="pt-4 pb-2">
                 <a
-                  href="https://www.youtube.com"
+                  href="https://next-booking-modal-drewp7.replit.app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center px-5 py-2.5 text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"

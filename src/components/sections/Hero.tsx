@@ -635,7 +635,7 @@ const Hero: React.FC = () => {
             transition={prefersReducedMotion ? {} : { duration: 0.8, delay: 0.4 }}
           >
             <a
-              href="https://www.youtube.com"
+              href="https://next-booking-modal-drewp7.replit.app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-5 py-2.5 text-sm sm:text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
