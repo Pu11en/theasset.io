@@ -56,6 +56,9 @@ services:
       - path: /*
         name: Referrer-Policy
         value: strict-origin-when-cross-origin
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.n8n.cloud https://res.cloudinary.com; frame-src 'self' https://www.youtube.com; media-src 'self' https://res.cloudinary.com;"
       # Cache static assets for better performance
       - path: /_next/static/*
         name: Cache-Control
@@ -108,5 +111,32 @@ services:
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: 1
+    # Add headers for security and performance
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-XSS-Protection
+        value: "1; mode=block"
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.n8n.cloud https://res.cloudinary.com; frame-src 'self' https://www.youtube.com; media-src 'self' https://res.cloudinary.com;"
+      # Cache static assets for better performance
+      - path: /_next/static/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /images/*
+        name: Cache-Control
+        value: "public, max-age=86400"
+      - path: /favicon.ico
+        name: Cache-Control
+        value: "public, max-age=86400"
     pullRequestPreview:
       enabled: true
