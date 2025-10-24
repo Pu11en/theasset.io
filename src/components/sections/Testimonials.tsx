@@ -7,9 +7,9 @@ import { motion } from 'framer-motion';
 const Testimonials: React.FC = () => {
   const testimonials = [
     {
-      name: "Lala's Brand",
+      name: "Sybil's",
       title: "Founder",
-      company: "Boxmeal",
+      company: "Drink Product",
       content: "Drew did an excellent job creating content for our new Boxmeal product. Everything was organized, simple, and easy to understand. He went above and beyond, and I honestly felt like I was underpaying for the value delivered.",
       rating: 5,
       image: null
